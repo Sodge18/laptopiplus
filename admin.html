@@ -140,7 +140,7 @@
   const lastUpdatedEl = document.getElementById('last-updated');
 
   function toast(title, text = '', icon = 'success') {
-    Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
+    Swal.fire({ title, text, icon, timer: 3500, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
   }
 
   function updateStats() {
@@ -151,28 +151,13 @@
   async function fetchProducts() {
     try {
       const res = await fetch(API_URL);
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error('Network error');
       products = await res.json();
-
-      // Ako stari podaci imaju stare ključeve – migriraj ih
-      products = products.map(p => ({
-        id: p.id || Date.now(),
-        title: p.title || 'Novi proizvod',
-        spec1: p.spec1 || '',
-        spec2: p.spec2 || '',
-        spec3: p.spec3 || '',
-        spec4: p.spec4 || '',
-        spec5: p.spec5 || '',
-        price: p.price || '0.00',
-        tag: p.tag || 'new',
-        image: p.image || p.images?.[0] || ''
-      }));
-
       render();
       updateStats();
     } catch (err) {
-      tbody.innerHTML = `<tr><td colspan="10" class="empty-state" style="color:#ef4444;">
-        <strong>Greška pri konekciji!</strong><br>Proveri Worker URL.
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color:#ef4444;">
+        <strong>Greška pri konekciji!</strong><br>Proveri Worker URL ili internet vezu.
       </td></tr>`;
     }
   }
@@ -185,10 +170,10 @@
 
   function render() {
     if (products.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="10" class="empty-state">
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        <div>Još nema proizvoda</div>
-        <div style="font-size:0.9rem;margin-top:0.5rem;">Klikni "New Product" da dodaš prvi</div>
+        <div>Još uvek nema proizvoda</div>
+        <div style="font-size:0.9rem; margin-top:0.5rem;">Klikni na "New Product" da dodaš prvi</div>
       </td></tr>`;
       updateStats();
       return;
@@ -197,14 +182,10 @@
     tbody.innerHTML = products.map((p, i) => `
       <tr data-index="${i}">
         <td><input type="text" value="${escapeHtml(p.title)}" data-field="title"></td>
-        <td><input type="text" value="${escapeHtml(p.spec1)}" data-field="spec1"></td>
-        <td><input type="text" value="${escapeHtml(p.spec2)}" data-field="spec2"></td>
-        <td><input type="text" value="${escapeHtml(p.spec3)}" data-field="spec3"></td>
-        <td><input type="text" value="${escapeHtml(p.spec4)}" data-field="spec4"></td>
-        <td><input type="text" value="${escapeHtml(p.spec5)}" data-field="spec5"></td>
-        <td><input type="text" value="${escapeHtml(p.price)}" data-field="price" style="width:90px;"></td>
-        <td><input type="text" value="${escapeHtml(p.tag)}" data-field="tag" style="width:100px;"></td>
-        <td><input type="text" value="${escapeHtml(p.image)}" data-field="image" placeholder="https://..."></td>
+        <td><input type="text" value="${escapeHtml(p.shortDesc)}" data-field="shortDesc"></td>
+        <td><input type="text" value="${escapeHtml(p.price)}" data-field="price" style="width:100px;"></td>
+        <td><input type="text" value="${escapeHtml(p.tag)}" data-field="tag" style="width:120px;"></td>
+        <td><textarea data-field="description">${escapeHtml(p.description)}</textarea></td>
         <td class="actions">
           <button class="btn btn-primary" onclick="saveRow(${i})">Sačuvaj</button>
           <button class="btn btn-danger" onclick="deleteRow(${i})">Obriši</button>
@@ -213,71 +194,89 @@
     `).join('');
   }
 
-  // Provera duplikata naziva
-  function hasDuplicateTitle(title, excludeIndex) {
-    const lower = title.toLowerCase().trim();
-    return products.some((p, i) => i !== excludeIndex && p.title && p.title.toLowerCase().trim() === lower);
+  // PROVERA DUPLIKATA NAZIVA
+  function hasDuplicateTitle(title, currentIndex) {
+    const lowerTitle = title.toLowerCase().trim();
+    return products.some((p, idx) => 
+      idx !== currentIndex && p.title && p.title.toLowerCase().trim() === lowerTitle
+    );
   }
 
+  // ČUVANJE JEDNOG REDA SA PROVEROM DUPLIKATA
   window.saveRow = async (index) => {
     const row = tbody.rows[index];
     if (!row) return;
 
-    const inputs = row.querySelectorAll('input');
+    const inputs = row.querySelectorAll('input, textarea');
     const newData = {};
+    let titleInput = null;
     let hasError = false;
 
-    inputs.forEach(input => {
-      const field = input.dataset.field;
-      const value = input.value.trim();
+    inputs.forEach(el => {
+      const field = el.dataset.field;
+      const value = el.value.trim();
       newData[field] = value;
 
       if (field === 'title') {
-        if (!value) {
-          input.style.borderColor = '#ef4444';
-          hasError = true;
-        } else if (hasDuplicateTitle(value, index)) {
-          input.style.borderColor = '#ef4444';
-          input.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
-          toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
+        titleInput = el;
+        if (value && hasDuplicateTitle(value, index)) {
+          el.style.borderColor = '#ef4444';
+          el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
           hasError = true;
         } else {
-          input.style.borderColor = '#d1d5db';
-          input.style.boxShadow = 'none';
+          el.style.borderColor = '#d1d5db';
+          el.style.boxShadow = 'none';
         }
       }
     });
 
-    if (hasError) return;
+    if (hasError) {
+      toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
+      return;
+    }
 
+    if (!newData.title) {
+      toast('Greška', 'Naziv proizvoda ne sme biti prazan!', 'warning');
+      return;
+    }
+
+    // Ažuriraj lokalni niz
     products[index] = { ...products[index], ...newData };
+
+    // Sačuvaj na server
     await saveAllToServer();
-    toast('Sačuvano!', `"${newData.title}" ažuriran`);
+    toast('Sačuvano!', `"${newData.title}" uspešno ažuriran`);
   };
 
+  // BRISANJE PROIZVODA
   window.deleteRow = (index) => {
     Swal.fire({
       title: 'Obrisati proizvod?',
-      text: products[index].title,
+      text: products[index].title || 'Ovaj proizvod',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Da, obriši',
-      cancelButtonText: 'Otkaži'
+      cancelButtonText: 'Otkaži',
+      reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
         products.splice(index, 1);
         await saveAllToServer();
         render();
         updateStats();
-        toast('Obrisan!', 'Proizvod uklonjen', 'success');
+        toast('Obrisan', 'Proizvod je uspešno uklonjen', 'success');
       }
     });
   };
 
+  // ČUVANJE SVIH PODATAKA NA SERVER (sa proverom pre slanja)
   async function saveAllToServer() {
-    const titles = products.map(p => p.title?.toLowerCase().trim()).filter(Boolean);
-    if (new Set(titles).size !== titles.length) {
-      toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
+    // Globalna provera duplikata pre slanja
+    const titles = products.map(p => (p.title || '').trim().toLowerCase());
+    const uniqueTitles = new Set(titles);
+    if (titles.length !== uniqueTitles.size && products.length > 0) {
+      toast('Greška!', 'Postoje proizvodi sa istim nazivom. Popravi pre čuvanja.', 'error');
+      render(); // osveži da vidi crvene okvire
       return;
     }
 
@@ -287,39 +286,51 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(products)
       });
-      if (res.ok) updateStats();
+
+      if (res.ok) {
+        updateStats();
+      } else {
+        throw new Error();
+      }
     } catch (err) {
-      toast('Greška', 'Neuspelo čuvanje', 'error');
+      toast('Greška', 'Neuspešno čuvanje na server', 'error');
     }
   }
 
+  // DODAVANJE NOVOG PROIZVODA (sa jedinstvenim nazivom)
   document.getElementById('add-product').onclick = () => {
-    let counter = products.filter(p => p.title?.startsWith('Novi proizvod')).length + 1;
-    let newTitle = `Novi proizvod ${counter}`;
+    let baseTitle = 'Novi proizvod';
+    let counter = 1;
+    let newTitle = baseTitle;
 
-    while (products.some(p => p.title === newTitle)) {
+    while (products.some(p => p.title && p.title.toLowerCase() === newTitle.toLowerCase())) {
+      newTitle = `${baseTitle} ${counter}`;
       counter++;
-      newTitle = `Novi proizvod ${counter}`;
     }
 
     products.push({
       id: Date.now(),
       title: newTitle,
-      spec1: '', spec2: '', spec3: '', spec4: '', spec5: '',
-      price: '0.00',
+      shortDesc: 'Kratak opis...',
+      price: '99.00',
       tag: 'new',
-      image: ''
+      description: 'Ovde opiši proizvod detaljno...',
+      images: []
     });
 
     render();
     updateStats();
-    toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'info');
+    toast('Dodato', 'Novi proizvod kreiran – izmeni i sačuvaj!', 'info');
   };
 
   // Auto-save svakih 30 sekundi
-  setInterval(() => products.length > 0 && saveAllToServer(), 30000);
+  setInterval(() => {
+    if (products.length > 0) {
+      saveAllToServer();
+    }
+  }, 30000);
 
-  // Start
+  // Pokretanje aplikacije
   fetchProducts();
 </script>
 </body>
