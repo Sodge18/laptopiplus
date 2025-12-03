@@ -421,74 +421,76 @@
 
 
 <!--MODAL ZA BIRANJE-->
-        <!-- MODAL ZA ODABIR LAPTOPA – ISPRAVLJENO (ne otvara se sam) -->
-<div x-data="laptopSelectorModal()" 
-     @click.away="modalOpen = false" 
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4" 
-     x-cloak 
-     x-show="modalOpen">
+        <!-- MODAL ZA ODABIR LAPTOPA – KONAČNO RJEŠENJE -->
+<div x-data="laptopModal" 
+     x-show="isOpen" 
+     x-cloak
+     @click.away="close()" 
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
 
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-xl font-semibold">Odaberite Laptop</h3>
-            <button @click="modalOpen = false" class="text-gray-400 hover:text-gray-600">
-                <span class="material-icons">close</span>
-            </button>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="flex justify-between items-center p-6 border-b">
+            <h3 class="text-2xl font-bold">Odaberite Laptop</h3>
+            <button @click="close()" class="text-gray-500 hover:text-gray-700 text-3xl">×</button>
         </div>
 
         <div class="p-6 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template x-for="laptop in laptops" :key="laptop.id || laptop.title">
-                    <div @click="selectModalLaptop(laptop.title); modalOpen = false" 
-                         class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-indigo-500 transition-all">
-                        
-                        <img :src="laptop.image || laptop.images?.[0] || 'https://via.placeholder.com/400x300.png?text=No+Image'" 
-                             alt="laptop"
-                             class="w-full h-40 object-contain mb-4 bg-white rounded-lg">
-                        
-                        <h4 class="font-semibold" x-text="laptop.title"></h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400" x-text="laptop.shortDesc || 'Premium laptop'"></p>
-                        <p class="font-bold text-lg mt-2" x-text="laptop.price ? laptop.price + '€' : 'Upit'"></p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="laptop in laptops" :key="laptop.title">
+                    <div @click="selectLaptop(laptop.title); close()" 
+                         class="group cursor-pointer bg-gray-50 dark:bg-gray-700 rounded-xl p-5 hover:ring-4 hover:ring-indigo-400 transition-all text-center">
+                        <img :src="laptop.image || laptop.images?.[0] || 'https://via.placeholder.com/300?text=No+Image'" 
+                             class="w-full h-48 object-contain mb-4 bg-white rounded-lg">
+                        <h4 class="font-bold text-lg" x-text="laptop.title"></h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1" x-text="laptop.shortDesc || 'Opis nedostupan'"></p>
+                        <p class="text-2xl font-bold text-indigo-600 mt-3" x-text="laptop.price + '€'"></p>
                     </div>
                 </template>
 
-                <!-- Ako nema laptopa -->
-                <template x-if="laptops.length === 0">
-                    <p class="col-span-full text-center text-gray-500 py-8">Nema dostupnih laptopova.</p>
-                </template>
+                <div x-show="laptops.length === 0" class="col-span-full text-center py-12 text-gray-500">
+                    Nema dostupnih laptopova.
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-function laptopSelectorModal() {
-    return {
-        modalOpen: false,    // ← OVO JE BILO GLAVNO – sada je false po defaultu!
+// Jedinstveni Alpine store – ne može se pokvariti
+document.addEventListener('alpine:init', () => {
+    Alpine.data('laptopModal', () => ({
+        isOpen: false,
         laptops: [],
 
         init() {
-            this.loadLaptops();
+            this.loadLaptops()
         },
 
         async loadLaptops() {
             try {
-                const res = await fetch('https://products-api.sergej-kaldesic.workers.dev/');
-                const data = await res.json();
-                const products = (data.products || data) || [];
-                this.laptops = products.filter(p => p.title && p.price);
-            } catch (err) {
-                console.error('Greška pri učitavanju laptopova za modal:', err);
-                this.laptops = [];
+                const res = await fetch('https://products-api.sergej-kaldesic.workers.dev/')
+                const data = await res.json()
+                const products = data.products || data || []
+                this.laptops = products.filter(p => p.title && p.price)
+            } catch (e) {
+                console.error('Greška učitavanja laptopova:', e)
+                this.laptops = []
             }
         },
 
-        // Ovu funkciju pozivaš sa dugmeta "Izaberite laptop" negdje na stranici
         open() {
-            this.modalOpen = true;
+            this.isOpen = true
+        },
+
+        close() {
+            this.isOpen = false
+        },
+
+        selectLaptop(title) {
+            selectModalLaptop(title)  // ova funkcija već postoji negdje kod tebe
         }
-    }
-}
+    }))
+})
 </script>
 
         
