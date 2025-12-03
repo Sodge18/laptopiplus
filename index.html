@@ -716,26 +716,6 @@
       container.style.padding = '2rem';
       container.style.justifyItems = 'center';
 
-      // POTPUNO UKLANJA TREPERENJE ALT TEKSTA
-      document.querySelectorAll('.product-img').forEach(img => {
-        const fallback = img.nextElementSibling; // .img-fallback div
-
-        img.addEventListener('error', () => {
-          img.src = 'https://via.placeholder.com/300x300.png?text=___';
-          img.style.objectFit = 'contain';
-          fallback.style.opacity = '1';
-        });
-
-        img.addEventListener('load', () => {
-          if (img.naturalWidth === 0) {
-            // slika je broken iako je "učitana" (npr. 404 koji vrati HTML)
-            img.dispatchEvent(new Event('error'));
-          } else {
-            fallback.style.opacity = '0';
-          }
-        });
-      });
-
     })
     .catch(err => {
       console.error('Greška:', err);
