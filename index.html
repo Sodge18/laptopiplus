@@ -641,32 +641,97 @@
     </script>
 <script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<div id="products-container"></div>
+<div id="products-container">
+  <p style="text-align:center; padding:2rem; color:#666;">Učitavanje proizvoda...</p>
+</div>
 
 <script>
-const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
+  const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
 
-fetch(API_URL)
-  .then(res => res.json())
-  .then(products => {
-    const container = document.getElementById('products-container');
-    container.innerHTML = products.map(p => `
-      <div class="product-card">
-        <img src="${p.images[0] || ''}" alt="${p.title}">
-        <h3>${p.title}</h3>
-        <p>${p.shortDesc}</p>
-        <span>${p.price}</span>
-        <span>${p.tag}</span>
-      </div>
-    `).join('');
-  })
-  .catch(err => {
-    console.error('Failed to load products:', err);
-    document.getElementById('products-container').innerHTML = '<p>Unable to load products.</p>';
-  });
+  fetch(API_URL)
+    .then(res => {
+      if (!res.ok) throw new Error('Neuspešno učitavanje');
+      return res.json();
+    })
+    .then(products => {
+      const container = document.getElementById('products-container');
+
+      if (!products || products.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:4rem; color:#999;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="64" height="64">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-3.5m-9 0H4"/>
+            </svg>
+            <p style="margin-top:1rem; font-size:1.2rem;">Još uvek nema proizvoda</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        const imageUrl = p.image && p.image.trim() ? p.image.trim() : 'https://via.placeholder.com/300x300.png?text=No+Image';
+
+        return `
+          <div class="product-card" style="
+            background:#fff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 4px 15px rgba(0,0,0,0.1);
+            transition:transform 0.3s, box-shadow 0.3s;
+            margin:1rem;
+            max-width:320px;
+            text-align:center;
+          " onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.15)'"
+             onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+            
+            <div style="height:200px; overflow:hidden; background:#f8f9fa;">
+              <img src="${imageUrl}" 
+                   alt="${p.title || 'Proizvod'}"
+                   style="width:100%; height:100%; object-fit:cover;"
+                   onerror="this.src='https://via.placeholder.com/300x300.png?text=Slika+Nedostaje'; this.style.objectFit='contain';">
+            </div>
+
+            <div style="padding:1.2rem;">
+              <h3 style="margin:0 0 0.5rem 0; font-size:1.3rem; color:#1f2937;">
+                ${p.title || 'Bez naziva'}
+              </h3>
+              
+              ${p.shortDesc ? `<p style="color:#6b7280; margin:0.5rem 0; font-size:0.95rem;">${p.shortDesc}</p>` : ''}
+
+              <div style="margin:1rem 0; font-size:1.5rem; font-weight:700; color:#6366f1;">
+                ${p.price ? p.price + ' RSD' : 'Cena na upit'}
+              </div>
+
+              ${p.tag ? `<span style="
+                background:#e0e7ff;
+                color:#6366f1;
+                padding:0.35rem 0.75rem;
+                border-radius:50px;
+                font-size:0.8rem;
+                font-weight:600;
+                text-transform:uppercase;
+              ">${p.tag}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Responsive grid
+      container.style.display = 'grid';
+      container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
+      container.style.gap = '1.5rem';
+      container.style.padding = '2rem';
+      container.style.justifyItems = 'center';
+    })
+    .catch(err => {
+      console.error('Greška pri učitavanju proizvoda:', err);
+      document.getElementById('products-container').innerHTML = `
+        <p style="text-align:center; color:#ef4444; padding:3rem;">
+          Ne mogu da učitam proizvode. Proveri internet vezu.
+        </p>
+      `;
+    });
 </script>
-
-
 
 
     
