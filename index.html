@@ -369,106 +369,108 @@
     </script>
     <!--KRAJ CAROUSEL-->
 
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16" id="contact-form-section" x-data="{ modalOpen: false }">
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16" 
+        id="contact-form-section" 
+        x-data="{ modalOpen: false }">
+    
         <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
+    
                 <div class="lg:w-1/3">
                     <h2 class="text-4xl font-bold mb-4">Spremni da kupite jedan od naših laptopa?</h2>
                     <p class="text-gray-300">Popunite formu i mi ćemo Vas kontaktirati u najkraćem mogućem roku.</p>
                 </div>
+    
                 <div class="lg:w-2/3">
-                    <form class="space-y-6" id="contact-form" novalidate="">
+                    <form class="space-y-6" id="contact-form" novalidate>
+    
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-200 mb-2" for="ime">Ime</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white border-transparent focus:ring-2 focus:ring-white focus:border-transparent" id="ime" placeholder="Unesite Vaše ime" required="" type="text"/>
+                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="ime" placeholder="Unesite Vaše ime" required type="text"/>
                                 <p class="error-hint hidden">Popunite ostala polja</p>
                             </div>
+    
                             <div>
                                 <label class="block text-sm font-medium text-gray-200 mb-2" for="prezime">Prezime</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white border-transparent focus:ring-2 focus:ring-white focus:border-transparent" id="prezime" placeholder="Unesite Vaše prezime" required="" type="text"/>
+                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="prezime" placeholder="Unesite Vaše prezime" required type="text"/>
                                 <p class="error-hint hidden">Popunite ostala polja</p>
                             </div>
                         </div>
+    
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-200 mb-2" for="kontakt-broj">Vaš Kontakt broj</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white border-transparent focus:ring-2 focus:ring-white focus:border-transparent" id="kontakt-broj" placeholder="Npr. 061 123 4567" required="" type="tel"/>
+                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="kontakt-broj" placeholder="Npr. 061 123 4567" required type="tel"/>
                                 <p class="error-hint hidden">Popunite ostala polja</p>
                             </div>
+    
                             <div>
                                 <label class="block text-sm font-medium text-gray-200 mb-2" for="email">Email</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white border-transparent focus:ring-2 focus:ring-white focus:border-transparent" id="email" placeholder="vas.email@example.com" required="" type="email"/>
+                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="email" placeholder="vas.email@example.com" required type="email"/>
                                 <p class="error-hint hidden">Popunite ostala polja</p>
                             </div>
                         </div>
+    
                         <div>
                             <label class="block text-sm font-medium text-gray-200 mb-2" for="laptop-select">Koji laptop želite</label>
-                            <input id="laptop-select-hidden" name="laptop" required="" type="hidden"/>
-                            <button @click.prevent="modalOpen = true" class="w-full p-3 rounded-lg bg-gray-700 text-white border-transparent text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-white" id="laptop-select" type="button">
-                            <span class="text-white" id="selected-laptop-text">Odaberite laptop</span>
-                            <span class="material-icons">expand_more</span>
+    
+                            <input id="laptop-select-hidden" name="laptop" required type="hidden"/>
+    
+                            <button 
+                                @click.prevent="modalOpen = true" 
+                                type="button"
+                                id="laptop-select"
+                                class="w-full p-3 rounded-lg bg-gray-700 text-white text-left flex justify-between items-center">
+                                <span id="selected-laptop-text">Odaberite laptop</span>
+                                <span class="material-icons">expand_more</span>
                             </button>
+    
                             <p class="error-hint hidden">Popunite ostala polja</p>
                         </div>
+    
                         <div class="text-right">
-                            <button class="bg-white text-primary font-semibold px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors shadow-md" type="submit">Pošalji</button>
+                            <button 
+                                class="bg-white text-primary font-semibold px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors shadow-md" 
+                                type="submit">
+                                Pošalji
+                            </button>
                         </div>
+    
                     </form>
                 </div>
+    
             </div>
         </div>
-        <div @click.away="modalOpen = false" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak="" x-show="modalOpen">
+    
+        <!-- MODAL -->
+        <div 
+            x-cloak 
+            x-show="modalOpen"
+            @click.away="modalOpen = false"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+    
             <div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+    
                 <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Odaberite Laptop</h3>
                     <button @click="modalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                    <span class="material-icons">close</span>
+                        <span class="material-icons">close</span>
                     </button>
                 </div>
+    
+                <!-- DINAMIČKI GRID -->
                 <div class="p-6 overflow-y-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div @click="selectModalLaptop('AeroBook Pro'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Sleek silver laptop" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">AeroBook Pro</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">13-inch, M2 chip...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">1299.90€</p>
-                        </div>
-                        <div @click="selectModalLaptop('ZenithBook Elite'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Black powerful gaming laptop" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">ZenithBook Elite</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">15-inch, i7-12700H...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">999.00€</p>
-                        </div>
-                        <div @click="selectModalLaptop('NovaSlim 13'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Slim and lightweight ultrabook" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">NovaSlim 13</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">13.3-inch, Ryzen 7...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">849.50€</p>
-                        </div>
-                        <div @click="selectModalLaptop('AeroBook Pro'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Sleek silver laptop" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">AeroBook Pro</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">13-inch, M2 chip...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">1299.90€</p>
-                        </div>
-                        <div @click="selectModalLaptop('ZenithBook Pro Business'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Black powerful business laptop" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">ZenithBook Pro Business</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">15-inch, i7-12700H...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">1199.00€</p>
-                        </div>
-                        <div @click="selectModalLaptop('NovaSlim 13'); modalOpen = false" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-                            <img alt="Slim and lightweight ultrabook" class="w-full h-40 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8"/>
-                            <h4 class="font-semibold text-gray-900 dark:text-white">NovaSlim 13</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 flex-grow">13.3-inch, Ryzen 7...</p>
-                            <p class="font-bold text-lg text-gray-900 dark:text-white mt-2">849.50€</p>
-                        </div>
+                    <div id="modal-laptop-grid" 
+                         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         <!-- JS će ovde ubaciti laptopove -->
                     </div>
                 </div>
+    
             </div>
         </div>
     </section>
+
 
 
     
