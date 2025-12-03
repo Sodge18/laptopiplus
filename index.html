@@ -68,36 +68,92 @@
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-gray-700 dark:text-gray-300">
-    <div class="w-full mx-auto" x-data="{ 
-        detailModalOpen: false, 
-        selectedProduct: {},
-        searchModalOpen: false,
+    <div class="w-full mx-auto" 
+     x-data="productsStore" 
+     x-init="fetchProducts()">
+
+    <!-- Pretraga -->
+    <div class="mb-8">
+        <input type="text" 
+               x-model="searchQuery" 
+               @keyup.enter="performSearch" 
+               placeholder="Pretraži proizvode..." 
+               class="w-full px-4 py-3 border rounded-lg">
+    </div>
+
+    <!-- Lista proizvoda -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <template x-for="product in displayedProducts" :key="product.id">
+            <div @click="openProductDetails(product)" 
+                 class="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition">
+                <img :src="product.image || product.images[0]" 
+                     alt="" 
+                     class="w-full h-64 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold" x-text="product.name"></h3>
+                    <p class="text-gray-600 mt-2" x-text="product.shortDesc"></p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-3xl font-bold text-indigo-600" x-text="product.price"></span>
+                        <span x-if="product.tag" 
+                              class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm"
+                              x-text="product.tag"></span>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <!-- Modal za detalje -->
+    <template x-if="detailModalOpen">
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <!-- ovdje ide tvoj detaljan modal, možeš kopirati iz starog koda -->
+        </div>
+    </template>
+</div>
+
+<script>
+function productsStore() {
+    return {
+        products: [],
         searchQuery: '',
-        searchResults: [],
-        products: [
-            {name: 'AeroBook Pro', tag: 'nov', price: '1299.90€', description: 'Ovaj laptop predstavlja vrhunac tehnologije i dizajna. Sa svojim tankim i laganim kućištem, idealan je za profesionalce u pokretu. Opremljen je najnovijim M2 čipom koji pruža izvanredne performanse uz minimalnu potrošnju energije.', specs: [{label: 'Procesor', value: 'M2 čip'},{label: 'RAM', value: '8GB'},{label: 'Memorija', value: '256GB SSD'},{label: 'Ekran', value: '13-inčni Retina'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD'], shortDesc: '13-inch, M2 chip, 8GB RAM, 256GB SSD', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD'},
-            {name: 'ZenithBook Elite', tag: 'gejming', price: '999.00€', description: 'ZenithBook Elite je zver od laptopa, dizajniran za najzahtevnije gejmere i kreatore. Sa moćnim Intel i7 procesorom i NVIDIA RTX 3060 grafikom, nijedan zadatak nije pretežak. RGB osvetljenje tastature i agresivan dizajn čine ga pravim izborom za one koji žele da se istaknu.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'Grafika', value: 'NVIDIA RTX 3060'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Ekran', value: '15-inčni QHD 165Hz'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp'], shortDesc: '15-inch, i7-12700H, RTX 3060, 16GB RAM', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp'},
-            {name: 'NovaSlim 13', tag: '', price: '849.50€', description: 'NovaSlim 13 je savršen spoj prenosivosti i snage. Pokreće ga efikasan Ryzen 7 procesor koji nudi odlične performanse za svakodnevne zadatke i rad. Njegov elegantan i tanak dizajn čini ga idealnim saputnikom, bilo da ste na poslovnom putu ili u kafiću.', specs: [{label: 'Procesor', value: 'AMD Ryzen 7 5800U'}, {label: 'RAM', value: '16GB'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '13.3-inčni Full HD IPS'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu'], shortDesc: '13.3-inch, Ryzen 7 5800U, 16GB RAM', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu'},
-            {name: 'ZenithBook Pro Business', tag: 'poslovni', price: '1199.00€', description: 'ZenithBook Pro Business je radna stanica za profesionalce. Sa Intel i7 procesorom, 16GB RAM-a i brzim SSD-om, multitasking je lagan. Elegantan dizajn i dugotrajna baterija čine ga idealnim za poslovne korisnike.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '15-inčni Full HD'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp'], shortDesc: '15-inch, i7-12700H, 16GB RAM, 512GB SSD', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy'},
-        ],
-        performSearch() {
-            if (!this.searchQuery.trim()) {
-                this.searchResults = [];
-                return;
-            }
-            const lowerCaseQuery = this.searchQuery.toLowerCase();
-            this.searchResults = this.products.filter(p =&gt; 
-                p.name.toLowerCase().includes(lowerCaseQuery) || 
-                p.shortDesc.toLowerCase().includes(lowerCaseQuery)
-            );
-            this.searchModalOpen = true;
+        displayedProducts: [],
+        detailModalOpen: false,
+        selectedProduct: {},
+
+        fetchProducts() {
+            fetch('https://products-api.sergej-kaldesic.workers.dev/')
+                .then(r => r.json())
+                .then(data => {
+                    this.products = (data.products || data) || [];
+                    this.displayedProducts = this.products;
+                })
+                .catch(err => {
+                    console.error('Greška pri učitavanju proizvoda:', err);
+                    this.displayedProducts = [];
+                });
         },
+
+        get displayedProducts() {
+            if (!this.searchQuery.trim()) return this.products;
+            const q = this.searchQuery.toLowerCase();
+            return this.products.filter(p => 
+                p.name?.toLowerCase().includes(q) || 
+                p.shortDesc?.toLowerCase().includes(q) ||
+                p.description?.toLowerCase().includes(q)
+            );
+        },
+
         openProductDetails(product) {
             this.selectedProduct = product;
-            this.searchModalOpen = false;
             this.detailModalOpen = true;
+        },
+
+        closeModal() {
+            this.detailModalOpen = false;
         }
-    }">
+    }
+}
+</script>
     <header class="py-6 px-4 sm:px-6 lg:px-8">
         <div class="container mx-auto flex justify-between items-center relative">
             <a class="text-2xl font-bold text-gray-900 dark:text-white" href="#">Laptopi Plus</a>
