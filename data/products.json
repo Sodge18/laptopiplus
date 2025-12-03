@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Laptop X",
+    "shortDesc": "Super laptop za sve potrebe",
+    "price": "1200€",
+    "images": ["/images/laptop1.png"],
+    "tag": "NOVO",
+    "description": "Detaljniji opis laptopa..."
+  },
+  {
+    "id": 2,
+    "title": "Laptop Y",
+    "shortDesc": "Odličan laptop za rad i igru",
+    "price": "900€",
+    "images": ["/images/laptop2.png"],
+    "tag": "POPULARNO",
+    "description": "Detaljniji opis laptopa..."
+  }
+]
