@@ -1,23 +1,21 @@
 export default {
   async fetch(request, env) {
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*', // Change to your site's origin for security, e.g., 'https://your-site.com'
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      "Access-Control-Allow-Origin": "*",           // ← change to your domain later if you want
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
     };
 
-    // Handle preflight OPTIONS request
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: corsHeaders,
-        status: 204,
-      });
+    // Handle preflight
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders, status: 204 });
     }
 
     const key = "products";
 
+    // ←←← ONLY THESE TWO LINES CHANGED ←←←
     if (request.method === "GET") {
-      const products = await env.PRODUCTS.get(key); // Reading from KV
+      const products = await env.KV_BINDING.get(key);
       return new Response(products || "[]", {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -25,7 +23,7 @@ export default {
 
     if (request.method === "POST") {
       const body = await request.json();
-      await env.PRODUCTS.put(key, JSON.stringify(body, null, 2)); // Writing to KV
+      await env.KV_BINDING.put(key, JSON.stringify(body, null, 2));
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
