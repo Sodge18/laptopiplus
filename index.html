@@ -123,112 +123,175 @@
         </div>
     </section>
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">Odaberite laptop koji vama najviše odgovara</h2>
-        </div>
-        <div class="relative max-w-4xl mx-auto">
-            <div class="carousel-container flex overflow-x-auto snap-x snap-mandatory scroll-smooth" id="carousel">
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'AeroBook Pro', price: '1299.90€', description: 'Ovaj laptop predstavlja vrhunac tehnologije i dizajna. Sa svojim tankim i laganim kućištem, idealan je za profesionalce u pokretu. Opremljen je najnovijim M2 čipom koji pruža izvanredne performanse uz minimalnu potrošnju energije.', specs: [{label: 'Procesor', value: 'M2 čip'},{label: 'RAM', value: '8GB'},{label: 'Memorija', value: '256GB SSD'},{label: 'Ekran', value: '13-inčni Retina'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Sleek silver laptop" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD"/>
-                            <span class="absolute top-4 left-4 bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">Nov</span>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">AeroBook Pro</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">13-inch, M2 chip, 8GB RAM, 256GB SSD</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">1299.90€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('AeroBook Pro')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'AeroBook Pro', price: '1299.90€', description: 'Ovaj laptop predstavlja vrhunac tehnologije i dizajna. Sa svojim tankim i laganim kućištem, idealan je za profesionalce u pokretu. Opremljen je najnovijim M2 čipom koji pruža izvanredne performanse uz minimalnu potrošnju energije.', specs: [{label: 'Procesor', value: 'M2 čip'},{label: 'RAM', value: '8GB'},{label: 'Memorija', value: '256GB SSD'},{label: 'Ekran', value: '13-inčni Retina'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'ZenithBook Elite', price: '999.00€', description: 'ZenithBook Elite je zver od laptopa, dizajniran za najzahtevnije gejmere i kreatore. Sa moćnim Intel i7 procesorom i NVIDIA RTX 3060 grafikom, nijedan zadatak nije pretežak. RGB osvetljenje tastature i agresivan dizajn čine ga pravim izborom za one koji žele da se istaknu.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'Grafika', value: 'NVIDIA RTX 3060'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Ekran', value: '15-inčni QHD 165Hz'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Black powerful gaming laptop" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp"/>
-                            <span class="absolute top-4 left-4 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-200">Gejming</span>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">ZenithBook Elite</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">15-inch, i7-12700H, RTX 3060, 16GB RAM</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">999.00€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('ZenithBook Elite')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'ZenithBook Elite', price: '999.00€', description: 'ZenithBook Elite je zver od laptopa, dizajniran za najzahtevnije gejmere i kreatore. Sa moćnim Intel i7 procesorom i NVIDIA RTX 3060 grafikom, nijedan zadatak nije pretežak. RGB osvetljenje tastature i agresivan dizajn čine ga pravim izborom za one koji žele da se istaknu.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'Grafika', value: 'NVIDIA RTX 3060'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Ekran', value: '15-inčni QHD 165Hz'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'NovaSlim 13', price: '849.50€', description: 'NovaSlim 13 je savršen spoj prenosivosti i snage. Pokreće ga efikasan Ryzen 7 procesor koji nudi odlične performanse za svakodnevne zadatke i rad. Njegov elegantan i tanak dizajn čini ga idealnim saputnikom, bilo da ste na poslovnom putu ili u kafiću.', specs: [{label: 'Procesor', value: 'AMD Ryzen 7 5800U'}, {label: 'RAM', value: '16GB'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '13.3-inčni Full HD IPS'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Slim and lightweight ultrabook" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu"/>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">NovaSlim 13</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">13.3-inch, Ryzen 7 5800U, 16GB RAM</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">849.50€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('NovaSlim 13')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'NovaSlim 13', price: '849.50€', description: 'NovaSlim 13 je savršen spoj prenosivosti i snage. Pokreće ga efikasan Ryzen 7 procesor koji nudi odlične performanse za svakodnevne zadatke i rad. Njegov elegantan i tanak dizajn čini ga idealnim saputnikom, bilo da ste na poslovnom putu ili u kafiću.', specs: [{label: 'Procesor', value: 'AMD Ryzen 7 5800U'}, {label: 'RAM', value: '16GB'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '13.3-inčni Full HD IPS'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'AeroBook Pro', price: '1299.90€', description: 'Ovaj laptop predstavlja vrhunac tehnologije i dizajna. Sa svojim tankim i laganim kućištem, idealan je za profesionalce u pokretu. Opremljen je najnovijim M2 čipom koji pruža izvanredne performanse uz minimalnu potrošnju energije.', specs: [{label: 'Procesor', value: 'M2 čip'},{label: 'RAM', value: '8GB'},{label: 'Memorija', value: '256GB SSD'},{label: 'Ekran', value: '13-inčni Retina'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Sleek silver laptop" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23"/>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">AeroBook Pro</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">13-inch, M2 chip, 8GB RAM, 256GB SSD</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">1299.90€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('AeroBook Pro')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'AeroBook Pro', price: '1299.90€', description: 'Ovaj laptop predstavlja vrhunac tehnologije i dizajna. Sa svojim tankim i laganim kućištem, idealan je za profesionalce u pokretu. Opremljen je najnovijim M2 čipom koji pruža izvanredne performanse uz minimalnu potrošnju energije.', specs: [{label: 'Procesor', value: 'M2 čip'},{label: 'RAM', value: '8GB'},{label: 'Memorija', value: '256GB SSD'},{label: 'Ekran', value: '13-inčni Retina'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAxBzr9Hdh1-SfiDQzT9gcplh2qDPNNbuVFHKtFMyTTD3ie_UsPwhVvvTnDRulYLbfCb91eBP_wQ64wwHnPwHeLFtGs46U6z_a6mxUZijialAkIp-cZ5VWCl-sbVAd8ADrLFXv9O8EQXNCcycMXOWluGTdofmQbLQ2YdiJFYn2EETfHw_iJGd5iIEHg4zS35hIUFs4u9VAQKCXTTDgbhyJ28tFuQ3dVuyRYTioN4MDKw_v6YvluarTPBQdxnfj7RCpUhyLCaY7jv23', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjPVBSstAMrcf8weFQ6P0_1PxnqYr-Fl-qKtG8oawr-ZXNqsGmCtZmbcXSZjiGvZuYRC2hKOTr4yeo15IVTV1IKktCVxcnPgrC27FEpHUvw37DgDrJxE46Twzoyy0kA-yvereb_QuyBRLyyO1HkVJo0ClxT1ppgf71LpX6kNG0JWDmkQ70Bxl2_ibVjF4kBW0tl9cWLgWjWCBpcUQl1-pcehN8kuHfMfwHWyO54W_rp1VagBkcGkNMx0N7o-iuAJ2rTg3fuTiWykD']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'ZenithBook Pro Business', price: '1199.00€', description: 'ZenithBook Pro Business je radna stanica za profesionalce. Sa Intel i7 procesorom, 16GB RAM-a i brzim SSD-om, multitasking je lagan. Elegantan dizajn i dugotrajna baterija čine ga idealnim za poslovne korisnike.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '15-inčni Full HD'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Black powerful business laptop" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy"/>
-                            <span class="absolute top-4 left-4 bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full dark:bg-yellow-900 dark:text-yellow-200">Poslovni</span>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">ZenithBook Pro Business</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">15-inch, i7-12700H, 16GB RAM, 512GB SSD</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">1199.00€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('ZenithBook Pro Business')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'ZenithBook Pro Business', price: '1199.00€', description: 'ZenithBook Pro Business je radna stanica za profesionalce. Sa Intel i7 procesorom, 16GB RAM-a i brzim SSD-om, multitasking je lagan. Elegantan dizajn i dugotrajna baterija čine ga idealnim za poslovne korisnike.', specs: [{label: 'Procesor', value: 'Intel i7-12700H'}, {label: 'RAM', value: '16GB DDR5'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '15-inčni Full HD'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMsU41uRlTP1clsZlsp-msnG4dAe_vFUEeDToG5poJ3H5XkvaY8eD3rbSHLvSY5Q-7ddIcpfOZNyxifvSQ8Cuu4U-uibLsGg5ee79NvBWybzzOx27PAzbkFE7jadfJS5hPQabJv3K0eoO5Qzn3b7h6ZCwveKnfwIMHFwzkbeu31HK3zTRISMD0pKWWKHlIrfYyb8fzX5WmvkeUlwrmx0aW71f6VsT7p4yBTN5jtFRoQP7F3bfEj5pJW4m9l3fwE-wbngQEh7hrxHy', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSP3KafvYTrKr-8FxyHvO9Yh19_v5iXikItLEGNomI0KulEYU8TghxSmfe42AEP71tsA4wjPXJbVn37vv8ubLf0CmBnTlVYIJ4doRO7QxvGmid2tD6SX4hKVgMh3YjerLA-ovDngXgTVFnrMtzWkqFDqUPsBSm_GzegI-XIDZeaaLvbzc9HFqH0O8wCm5KbymJos5DJCYJw5RcxQNPYIWipjV_cr0mUtz5VB_efj7wW5i21ufcRTlOoANubZ53KKhc1Y0BLHftHeIp']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                    <div class="group relative flex flex-col w-full max-w-sm">
-                        <div @click="openProductDetails({name: 'NovaSlim 13', price: '849.50€', description: 'NovaSlim 13 je savršen spoj prenosivosti i snage. Pokreće ga efikasan Ryzen 7 procesor koji nudi odlične performanse za svakodnevne zadatke i rad. Njegov elegantan i tanak dizajn čini ga idealnim saputnikom, bilo da ste na poslovnom putu ili u kafiću.', specs: [{label: 'Procesor', value: 'AMD Ryzen 7 5800U'}, {label: 'RAM', value: '16GB'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '13.3-inčni Full HD IPS'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu']})" class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
-                            <img alt="Slim and lightweight ultrabook" class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8"/>
-                        </div>
-                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">NovaSlim 13</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">13.3-inch, Ryzen 7 5800U, 16GB RAM</p>
-                        <div class="text-center">
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">849.50€</p>
-                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" onclick="selectLaptop('NovaSlim 13')">Izaberite Laptop</button>
-                            <button @click="openProductDetails({name: 'NovaSlim 13', price: '849.50€', description: 'NovaSlim 13 je savršen spoj prenosivosti i snage. Pokreće ga efikasan Ryzen 7 procesor koji nudi odlične performanse za svakodnevne zadatke i rad. Njegov elegantan i tanak dizajn čini ga idealnim saputnikom, bilo da ste na poslovnom putu ili u kafiću.', specs: [{label: 'Procesor', value: 'AMD Ryzen 7 5800U'}, {label: 'RAM', value: '16GB'}, {label: 'Memorija', value: '512GB NVMe SSD'}, {label: 'Ekran', value: '13.3-inčni Full HD IPS'}], images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAzKV1I6ZAwKjDzjqR-jY4JLaWAQYJLIE6Us814Vr9xU8dEXrthoNd_pEmp17nKcuCEe60gd0wtSIMHQu1FoFDJA2qty89-zGQvzuRzFjUFp7Np6XWMD3LDoA3xFAll21O0pfrcvfKI5uM7gq35MfEZrkj1HHtiAJWKwNPjd4KP44KULjezx_7BzdAi0JXMGAoeXjm-E4jqi29dmATWnP9uu9HyWhAabzBXYx32_hAZh2rYIkWFgIS8RTUSFQy8hU-LLBOFF0A4OCS8', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDG6OjjVJpGhfsRTI4b0GtoX89YpgfSFkftYwAFMz03FE5RxOjDv_kx0YJJTxq1S7HgnSO4ZoZZWv9fZA0XEZpZPOHAnHkA3NRTpDU8u_pimfSA41-Gj85lGGww3okTp1ohJcUroM0ptMUSCPEOho4PuWQ62-6kcknwPRMXPqCTj8sJFD34nb4oH85j4TEEaDEmsE5AdsgcY-dVWkAqw4fzgFqWwQiFoS1_-r3uzOP9qzvZ_uKyatc7bDiuV4p8mf5WAyHWUVGszrKu']})" class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">Detalji</button>
-                        </div>
-                    </div>
-                </div>
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">
+            Odaberite laptop koji vama najviše odgovara
+        </h2>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto">
+        <!-- Carousel container -->
+        <div class="carousel-container flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4" id="carousel">
+            <div class="w-full flex justify-center p-4">
+                <p class="text-gray-500">Učitavanje laptopova...</p>
             </div>
-            <div class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12">
-                <button class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" id="prev-btn">
+        </div>
+
+        <!-- Strelice -->
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12">
+            <button id="prev-btn" class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors opacity-70 hover:opacity-100">
                 <span class="material-icons text-gray-800 dark:text-white">arrow_back_ios_new</span>
-                </button>
-            </div>
-            <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12">
-                <button class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" id="next-btn">
-                <span class="material-icons text-gray-800 dark:text-white">arrow_forward_ios</span>
-                </button>
-            </div>
+            </button>
         </div>
-        <div class="flex justify-center items-center mt-12 space-x-2" id="pagination-dots"></div>
-    </main>
+        <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12">
+            <button id="next-btn" class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors opacity-70 hover:opacity-100">
+                <span class="material-icons text-gray-800 dark:text-white">arrow_forward_ios</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Pagination dots -->
+    <div class="flex justify-center items-center mt-12 space-x-2" id="pagination-dots"></div>
+</main>
+
+<script>
+const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
+const carousel = document.getElementById('carousel');
+const paginationDots = document.getElementById('pagination-dots');
+
+async function loadLaptops() {
+    try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('Neuspešno učitavanje');
+        const products = await res.json();
+
+        // Filtriramo samo laptopove (po tag-u ili po naslovu – prilagodi po potrebi)
+        const laptops = products.filter(p => 
+            p.tag === 'laptop' || 
+            p.title.toLowerCase().includes('book') || 
+            p.title.toLowerCase().includes('laptop') ||
+            p.category === 'laptop' // ako imaš polje category
+        );
+
+        if (laptops.length === 0) {
+            carousel.innerHTML = `<p class="text-center text-gray-500 py-10">Trenutno nema dostupnih laptopova.</p>`;
+            return;
+        }
+
+        // Generišemo kartice
+        carousel.innerHTML = laptops.map((laptop, index) => {
+            const primaryImage = laptop.images?.[0] || laptop.image || 'https://via.placeholder.com/600x600.png?text=Laptop';
+            const price = laptop.price ? `${parseFloat(laptop.price).toFixed(2)}€` : 'Cena na upit';
+            const tag = laptop.tag && laptop.tag !== 'laptop' ? laptop.tag : null;
+            const tagColor = {
+                'nov': 'blue', 'gejming': 'green', 'poslovni': 'yellow'
+            }[tag] || 'gray';
+
+            return `
+                <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
+                    <div class="group relative flex flex-col w-full max-w-sm">
+                        <div 
+                            onclick='openProductDetails(${JSON.stringify({
+                                name: laptop.title,
+                                price: price,
+                                description: laptop.description || laptop.shortDesc || 'Nema opisa.',
+                                specs: laptop.specs || [],
+                                images: laptop.images || [primaryImage]
+                            }).replace(/'/g, "\\'")})' 
+                            class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6 flex items-center justify-center cursor-pointer">
+                            <img 
+                                alt="${laptop.title}" 
+                                class="w-full h-full object-contain p-8 transform group-hover:scale-105 transition-transform duration-300" 
+                                src="${primaryImage}"
+                                loading="lazy">
+                            ${tag ? `<span class="absolute top-4 left-4 bg-${tagColor}-100 text-${tagColor}-800 text-xs font-semibold px-3 py-1 rounded-full dark:bg-${tagColor}-900 dark:text-${tagColor}-200">${tag.toUpperCase()}</span>` : ''}
+                        </div>
+                        <h3 class="font-semibold text-3xl text-gray-900 dark:text-white mb-2 text-center">${laptop.title}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-xl mb-4 flex-grow text-center">
+                            ${laptop.shortDesc || laptop.specs?.map(s => s.value).join(', ') || 'Detalji na upit'}
+                        </p>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white">${price}</p>
+                            <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors w-full" 
+                                    onclick="selectLaptop('${laptop.title.replace(/'/g, "\\'")}')">
+                                Izaberite Laptop
+                            </button>
+                            <button onclick='openProductDetails(${JSON.stringify({
+                                name: laptop.title,
+                                price: price,
+                                description: laptop.description || laptop.shortDesc || '',
+                                specs: laptop.specs || [],
+                                images: laptop.images || [primaryImage]
+                            }).replace(/'/g, "\\'")})' 
+                                class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors w-full">
+                                Detalji
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Pagination dots
+        paginationDots.innerHTML = laptops.map((_, i) => 
+            `<button class="w-3 h-3 rounded-full transition-all ${i === 0 ? 'bg-primary w-8' : 'bg-gray-300 dark:bg-gray-600'}" 
+                     onclick="scrollToSlide(${i})"></button>`
+        ).join('');
+
+        // Navigacija strelicama
+        document.getElementById('prev-btn').onclick = () => scrollCarousel(-1);
+        document.getElementById('next-btn').onclick = () => scrollCarousel(1);
+
+        // Scroll listener za aktivnu tačkicu
+        carousel.addEventListener('scroll', updateActiveDot);
+
+    } catch (err) {
+        console.error(err);
+        carousel.innerHTML = `<p class="text-center text-red-500 py-10">Greška pri učitavanju laptopova.</p>`;
+    }
+}
+
+function scrollCarousel(direction) {
+    const items = carousel.querySelectorAll('.carousel-item');
+    const currentScroll = carousel.scrollLeft;
+    const itemWidth = carousel.clientWidth;
+    const targetScroll = currentScroll + (direction * itemWidth);
+    
+    carousel.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+    });
+}
+
+function scrollToSlide(index) {
+    const itemWidth = carousel.clientWidth;
+    carousel.scrollTo({
+        left: index * itemWidth,
+        behavior: 'smooth'
+    });
+}
+
+function updateActiveDot() {
+    const items = carousel.querySelectorAll('.carousel-item');
+    const dots = paginationDots.querySelectorAll('button');
+    const scrollPosition = carousel.scrollLeft + carousel.clientWidth / 2;
+    const itemWidth = carousel.clientWidth;
+
+    let activeIndex = Math.round(scrollPosition / itemWidth);
+    activeIndex = Math.max(0, Math.min(activeIndex, items.length - 1));
+
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-primary', i === activeIndex);
+        dot.classList.toggle('w-8', i === activeIndex);
+        dot.classList.toggle('bg-gray-300', i !== activeIndex);
+        dot.classList.toggle('dark:bg-gray-600', i !== activeIndex);
+        dot.classList.toggle('w-3', i !== activeIndex);
+    });
+}
+
+// Pokreni učitavanje
+loadLaptops();
+</script>
 <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16" id="contact-form-section" x-data="{ modalOpen: false }">
 <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
 <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
