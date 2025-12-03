@@ -1,0 +1,22 @@
+backend:
+  name: github
+  repo: tvoj-korisnik/laptopiplus
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "products"
+    label: "Proizvodi"
+    folder: "data"
+    create: true
+    slug: "{{title}}"
+    extension: "json"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Short Description", name: "shortDesc", widget: "string" }
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Tag", name: "tag", widget: "string" }
+      - { label: "Images", name: "images", widget: "list", field: {label: "Image", name: "image", widget: "image"} }
+      - { label: "Description", name: "description", widget: "text" }
