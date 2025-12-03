@@ -3,5 +3,5 @@ main = "worker.js"
 compatibility_date = "2025-12-03"
 
 [[kv_namespaces]]
-binding = "PRODUCTS"
+binding = "KV_BINDING"          # ← must be KV_BINDING
 id = "37a3a42f579c4ed2a343f6a6034a8513"
