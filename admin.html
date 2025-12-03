@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Cockpit</title>
+  <title>Admin Cockpit - Prijava</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
@@ -22,119 +22,138 @@
     body {
       margin: 0; padding: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: var(--text);
-      line-height: 1.5;
+      min-height: 100vh;
     }
+    .login-container {
+      background: white; padding: 3rem 4rem; border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 100%; max-width: 420px;
+      text-align: center; margin: auto;
+    }
+    .logo { font-size: 2.8rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; }
+    .subtitle { color: #6b7280; margin-bottom: 2rem; font-size: 1.1rem; }
+    input[type="password"] {
+      width: 100%; padding: 1rem 1.2rem; border: 2px solid #e5e7eb; border-radius: 12px;
+      font-size: 1.1rem; margin-bottom: 1.5rem; transition: all 0.3s; box-sizing: border-box;
+    }
+    input[type="password"]:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
+    }
+    .btn-login {
+      width: 100%; padding: 1rem; background: var(--primary); color: white;
+      border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .btn-login:hover { background: var(--primary-hover); transform: translateY(-2px); }
+    .hidden { display: none !important; }
     .header {
-      background: var(--card);
-      padding: 1.5rem 2rem;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      position: sticky; top: 0; z-index: 10;
-      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card); padding: 1.5rem 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
     }
-    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
-    .toolbar {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;
+    .header .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .btn-logout {
+      margin-left: 1rem; background: var(--danger); color: white; border: none;
+      padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
     }
+    .btn-logout:hover { background: var(--danger-hover); }
+    .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; background: var(--bg); }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .toolbar h2 { margin: 0; font-weight: 600; font-size: 1.8rem; }
     .btn {
-      padding: 0.75rem 1.25rem;
-      border: none; border-radius: 8px;
-      font-weight: 600; cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.25rem; border: none; border-radius: 8px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
     }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
     .btn-danger { background: var(--danger); color: white; }
     .btn-danger:hover { background: var(--danger-hover); }
-    .stats {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;
-    }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
     .stat-card {
-      background: var(--card); padding: 1.5rem; border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      border: 1px solid var(--border);
+      background: var(--card); padding: 1.8rem; border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid var(--border); transition: transform 0.2s;
     }
-    .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
-    .stat-label { color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem; }
-    table {
-      width: 100%; background: var(--card); border-radius: 12px;
-      overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
-      border-collapse: collapse;
-    }
-    th {
-      background: #f8f9ff; text-align: left; padding: 1rem 1.5rem;
-      font-weight: 600; color: #374151; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    .stat-card:hover { transform: translateY(-4px); }
+    .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
+    .stat-label { color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem; }
+    table { width: 100%; background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); border-collapse: collapse; }
+    th { background: #f8f9ff; text-align: left; padding: 1.2rem 1.5rem; font-weight: 600; color: #374151; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.8px; }
     td { padding: 1rem 1.5rem; vertical-align: middle; border-top: 1px solid var(--border); }
     tr:hover { background: #f8faff; }
     input, textarea {
-      width: 100%; padding: 0.65rem 1rem;
-      border: 1px solid #d1d5db; border-radius: 8px;
+      width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 10px;
       font-size: 1rem; transition: border 0.2s; box-sizing: border-box;
     }
-    input:focus, textarea:focus {
-      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-    }
-    textarea { min-height: 80px; resize: vertical; }
-    .actions button { margin-right: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem; }
-    .empty-state {
-      text-align: center; padding: 4rem 2rem; color: var(--text-light);
-    }
-    .empty-state svg { width: 80px; height: 80px; margin-bottom: 1rem; opacity: 0.3; }
+    input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.15); }
+    textarea { min-height: 90px; resize: vertical; }
+    .actions button { margin-right: 0.5rem; padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; }
+    .empty-state { text-align: center; padding: 5rem 2rem; color: var(--text-light); }
+    .empty-state svg { width: 80px; height: 80px; margin-bottom: 1rem; opacity: 0.4; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">Cockpit</div>
-    <div style="font-size:0.9rem; color:#6b7280;">
-      Products API: <strong style="color:var(--primary)">LIVE</strong>
-    </div>
-  </div>
-  <div class="container">
-    <div class="toolbar">
-      <h2 style="margin:0; font-weight:600;">Upravljanje proizvodima</h2>
-      <button class="btn btn-primary" id="add-product">
-        + Novi proizvod
-      </button>
-    </div>
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-value" id="total-count">0</div>
-        <div class="stat-label">Ukupno proizvoda</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="last-updated">-</div>
-        <div class="stat-label">Poslednje ažuriranje</div>
-      </div>
-    </div>
 
-    <table id="products-table">
-      <thead>
-        <tr>
-          <th>Naziv proizvoda</th>
-          <th>Kratak opis</th>
-          <th>Cena</th>
-          <th>Tag</th>
-          <th>Opis</th>
-          <th style="width:150px;">Akcije</th>
-        </tr>
-      </thead>
-      <tbody id="products-list">
-        <tr><td colspan="6" class="empty-state">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-3.5m-9 0H4"/></svg>
-          <div>Učitavanje proizvoda...</div>
-        </td></tr>
-      </tbody>
-    </table>
+  <div id="login-screen" class="login-container">
+    <div class="logo">Cockpit</div>
+    <p class="subtitle">Unesi administratorsku lozinku za pristup</p>
+    <input type="password" id="password-input" placeholder="Lozinka..." autofocus />
+    <button class="btn-login" onclick="checkPassword()">Uloguj se</button>
+    <p style="margin-top: 1rem; color: #9ca3af; font-size: 0.9rem;">Samo ovlašćeni korisnici imaju pristup</p>
+  </div>
+
+  <div id="cockpit" class="hidden">
+    <div class="header">
+      <div class="logo">Dashboard</div>
+      <div style="font-size:0.9rem; color:#6b7280;">
+        Products API: <strong style="color:var(--primary)">LIVE</strong>
+        <button onclick="logout()" class="btn-logout">Izloguj se</button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="toolbar">
+        <h2>Upravljanje proizvodima</h2>
+        <button class="btn btn-primary" id="add-product">+ Novi proizvod</button>
+      </div>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="total-count">0</div>
+          <div class="stat-label">Ukupno proizvoda</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="last-updated">-</div>
+          <div class="stat-label">Poslednje ažuriranje</div>
+        </div>
+      </div>
+      <table id="products-table">
+        <thead>
+          <tr>
+            <th>Naziv proizvoda</th>
+            <th>Kratak opis</th>
+            <th>Cena</th>
+            <th>Tag</th>
+            <th>Opis</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+        <tbody id="products-list">
+          <tr>
+            <td colspan="6" class="empty-state">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-3.5m-9 0H4"/>
+              </svg>
+              <div>Učitavanje proizvoda...</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
+    const ADMIN_PASSWORD = "1234"; // ← PROMENI OVO ODMAH!
     const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
     let products = [];
+    let lastModified = null; // vreme iz baze
 
     const tbody = document.getElementById('products-list');
     const totalCountEl = document.getElementById('total-count');
@@ -146,7 +165,11 @@
 
     function updateStats() {
       totalCountEl.textContent = products.length;
-      lastUpdatedEl.textContent = new Date().toLocaleString('sr-RS');
+      if (lastModified) {
+        lastUpdatedEl.textContent = new Date(lastModified).toLocaleString('sr-RS');
+      } else {
+        lastUpdatedEl.textContent = 'Još nema izmena';
+      }
     }
 
     function escapeHtml(text) {
@@ -155,25 +178,20 @@
       return div.innerHTML;
     }
 
-    // JEDNA JEDINA FUNKCIJA ZA PROVERU DUPLIKATA – koristi se SVUDA
     function isTitleTaken(title, excludeIndex = -1) {
       const normalized = title.trim().toLowerCase();
-      return products.some((p, i) => 
-        i !== excludeIndex && p.title && p.title.trim().toLowerCase() === normalized
-      );
+      return products.some((p, i) => i !== excludeIndex && p.title?.trim().toLowerCase() === normalized);
     }
 
     function render() {
       if (products.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           <div>Još nema proizvoda</div>
           <div style="font-size:0.9rem;margin-top:0.5rem;">Klikni na "+ Novi proizvod" da dodaš prvi</div>
         </td></tr>`;
         updateStats();
         return;
       }
-
       tbody.innerHTML = products.map((p, i) => `
         <tr data-index="${i}">
           <td><input type="text" value="${escapeHtml(p.title || '')}" data-field="title"></td>
@@ -189,11 +207,40 @@
       `).join('');
     }
 
-    // ČUVANJE JEDNOG REDA
+    // ČUVAMO I VREME IZMENE U BAZI
+    async function saveAllToServer() {
+      if (products.some(p => !p.title?.trim())) {
+        toast('Greška!', 'Svi proizvodi moraju imati naziv!', 'error');
+        return;
+      }
+      if (products.length > 0 && new Set(products.map(p => p.title.trim().toLowerCase())).size !== products.length) {
+        toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
+        return;
+      }
+
+      const dataToSave = {
+        products: products,
+        lastModified: Date.now()  // OVDE ČUVAMO VREME U BAZI
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataToSave)
+        });
+        if (res.ok) {
+          lastModified = Date.now();
+          updateStats();
+        }
+      } catch (err) {
+        toast('Greška!', 'Neuspešno čuvanje na server', 'error');
+      }
+    }
+
     window.saveRow = async (index) => {
       const row = tbody.rows[index];
       if (!row) return;
-
       const inputs = row.querySelectorAll('input, textarea');
       const newData = {};
       let hasError = false;
@@ -202,23 +249,17 @@
         const field = el.dataset.field;
         const value = el.value.trim();
         newData[field] = value;
-
         if (field === 'title') {
-          if (!value) {
+          if (!value) { el.style.borderColor = '#ef4444'; hasError = true; }
+          else if (isTitleTaken(value, index)) {
             el.style.borderColor = '#ef4444';
-            hasError = true;
-          } else if (isTitleTaken(value, index)) {
-            el.style.borderColor = '#ef4444';
-            el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
             toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
             hasError = true;
           } else {
             el.style.borderColor = '#d1d5db';
-            el.style.boxShadow = 'none';
           }
         }
       });
-
       if (hasError) return;
 
       products[index] = { ...products[index], ...newData };
@@ -226,7 +267,6 @@
       toast('Sačuvano!', `"${newData.title}" je ažuriran`);
     };
 
-    // BRISANJE
     window.deleteRow = (index) => {
       Swal.fire({
         title: 'Obrisati proizvod?',
@@ -240,44 +280,16 @@
           products.splice(index, 1);
           await saveAllToServer();
           render();
-          updateStats();
           toast('Obrisan!', 'Proizvod je uklonjen', 'success');
         }
       });
     };
 
-    // ČUVANJE SVIH NA SERVER
-    async function saveAllToServer() {
-      if (products.some(p => !p.title?.trim())) {
-        toast('Greška!', 'Svi proizvodi moraju imati naziv!', 'error');
-        return;
-      }
-
-      if (products.length > 0 && new Set(products.map(p => p.title.trim().toLowerCase())).size !== products.length) {
-        toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
-        render();
-        return;
-      }
-
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(products)
-        });
-        if (res.ok) updateStats();
-      } catch (err) {
-        toast('Greška!', 'Neuspešno čuvanje na server', 'error');
-      }
-    }
-
-    // DODAVANJE NOVOG PROIZVODA – NIKAD VIŠE DUPLIKATA
     document.getElementById('add-product').onclick = () => {
       let counter = 1;
       let newTitle;
       do {
-        newTitle = `Novi proizvod ${counter}`;
-        counter++;
+        newTitle = `Novi proizvod ${counter++}`;
       } while (isTitleTaken(newTitle));
 
       products.push({
@@ -289,21 +301,25 @@
         description: '',
         images: []
       });
-
       render();
-      updateStats();
+      saveAllToServer();
       toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'success');
     };
 
-    // Auto-save svakih 30 sekundi
-    setInterval(() => products.length > 0 && saveAllToServer(), 30000);
-
-    // Učitavanje proizvoda
     async function fetchProducts() {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error();
-        products = await res.json();
+        const data = await res.json();
+
+        // Podrška za novi i stari format
+        if (data && data.products) {
+          products = data.products;
+          lastModified = data.lastModified || null;
+        } else if (Array.isArray(data)) {
+          products = data;
+        }
+
         render();
         updateStats();
       } catch (err) {
@@ -313,8 +329,28 @@
       }
     }
 
-    // Pokretanje
-    fetchProducts();
+    function checkPassword() {
+      const input = document.getElementById('password-input').value;
+      if (input === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('cockpit').classList.remove('hidden');
+        fetchProducts();
+      } else {
+        Swal.fire({ icon: 'error', title: 'Pogrešna lozinka!', timer: 3000, toast: true, position: 'top-end' });
+        document.getElementById('password-input').value = '';
+      }
+    }
+
+    function logout() {
+      document.getElementById('cockpit').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('password-input').value = '';
+      products = [];
+      // lastModified ostaje u bazi – ne diramo ga!
+    }
+
+    document.getElementById('password-input').addEventListener('keypress', e => e.key === 'Enter' && checkPassword());
+    setInterval(() => products.length > 0 && saveAllToServer(), 30000);
   </script>
 </body>
 </html>
