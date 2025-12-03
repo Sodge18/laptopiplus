@@ -298,7 +298,9 @@
     // CEO TVOJ POSTOJEĆI KOD OD COCKPIT-a (sve od fetchProducts pa nadalje) ide OVDE:
 
     const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
-    let products = [];
+        let products = [];
+    let lastDataChangeTime = null; // ← OVO JE NOVO – pamti samo prave izmene!
+
     const tbody = document.getElementById('products-list');
     const totalCountEl = document.getElementById('total-count');
     const lastUpdatedEl = document.getElementById('last-updated');
@@ -307,9 +309,20 @@
       Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
     }
 
+    // Ažurira statistiku – "Poslednje ažuriranje" samo ako je bilo prave izmene
     function updateStats() {
       totalCountEl.textContent = products.length;
-      lastUpdatedEl.textContent = new Date().toLocaleString('sr-RS');
+      if (lastDataChangeTime) {
+        lastUpdatedEl.textContent = new Date(lastDataChangeTime).toLocaleString('sr-RS');
+      } else {
+        lastUpdatedEl.textContent = 'Još nema izmena';
+      }
+    }
+
+    // Ova funkcija se poziva SVAKI PUT kad se uspešno sačuva ili obriše proizvod
+    function markDataChanged() {
+      lastDataChangeTime = Date.now();
+      updateStats();
     }
 
     function escapeHtml(text) {
@@ -327,14 +340,13 @@
 
     function render() {
       if (products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:4rem;color:#6b7280;">
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
           <div>Još nema proizvoda</div>
           <div style="font-size:0.9rem;margin-top:0.5rem;">Klikni na "+ Novi proizvod" da dodaš prvi</div>
         </td></tr>`;
         updateStats();
         return;
       }
-
       tbody.innerHTML = products.map((p, i) => `
         <tr data-index="${i}">
           <td><input type="text" value="${escapeHtml(p.title || '')}" data-field="title"></td>
@@ -372,11 +384,11 @@
           }
         }
       });
-
       if (hasError) return;
 
       products[index] = { ...products[index], ...newData };
       await saveAllToServer();
+      markDataChanged(); // ← OVDE SE AŽURIRA VREME!
       toast('Sačuvano!', `"${newData.title}" je ažuriran`);
     };
 
@@ -393,7 +405,7 @@
           products.splice(index, 1);
           await saveAllToServer();
           render();
-          updateStats();
+          markDataChanged(); // ← I BRISANJE RAČUNA VREME!
           toast('Obrisan!', 'Proizvod je uklonjen', 'success');
         }
       });
@@ -414,7 +426,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(products)
         });
-        if (res.ok) updateStats();
+        if (res.ok) {
+          markDataChanged(); // ← SAMO KAD JE USPJEŠNO SAČUVANO NA SERVERU!
+        }
       } catch (err) {
         toast('Greška!', 'Neuspešno čuvanje na server', 'error');
       }
@@ -438,10 +452,11 @@
         images: []
       });
       render();
-      updateStats();
+      markDataChanged(); // ← I DODAVANJE NOVOG RAČUNA KAO IZMENA!
       toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'success');
     };
 
+    // Auto-save svakih 30s – ažurira vreme samo ako je uspešan save
     setInterval(() => products.length > 0 && saveAllToServer(), 30000);
 
     async function fetchProducts() {
@@ -450,9 +465,9 @@
         if (!res.ok) throw new Error();
         products = await res.json();
         render();
-        updateStats();
+        updateStats(); // ← Logovanje NE menja vreme!
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="color:#ef4444; text-align:center; padding:4rem;">
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color:#ef4444;">
           <strong>Ne mogu da se učitaju proizvodi!</strong><br>Proveri internet ili Worker URL.
         </td></tr>`;
       }
