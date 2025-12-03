@@ -510,69 +510,65 @@ const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
 
 async function loadProductsGrid() {
   const grid = document.getElementById('products-grid');
-
   try {
+    console.log('Počinjem fetch...');
     const res = await fetch(API_URL);
-    if (!res.ok) throw new Error('API greška');
-
+    console.log('Fetch status:', res.status);
+    if (!res.ok) throw new Error(`API greška: ${res.status}`);
+    
     const data = await res.json();
-
-    // ISTI LOGIK KAO U TVOM CAROUSELU – obavezno!
+    console.log('Dobijeni podaci:', data);
+    
     let products = [];
     if (data && Array.isArray(data.products)) {
       products = data.products;
     } else if (Array.isArray(data)) {
       products = data;
     } else {
-      throw new Error('Nepoznat format podataka');
+      throw new Error('Nepoznat format');
     }
-
+    
+    console.log('Broj proizvoda:', products.length);
+    
     if (products.length === 0) {
-      grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500 text-xl">Nema dostupnih proizvoda.</div>`;
+      grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500 text-xl">Nema dostupnih proizvoda. Dodaj ih u admin panelu!</div>`;
       return;
     }
-
+    
     grid.innerHTML = products.map(p => {
       const img = p.images?.[0] || p.image || 'https://via.placeholder.com/600x600.png?text=No+Image';
       const shortDesc = p.shortDesc || (p.specs ? p.specs.map(s => s.value).join(' • ') : 'Premium laptop');
-
       return `
         <div onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})'
              class="group relative flex flex-col text-center bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
-          
           <div class="relative w-full h-48 mb-4">
             <img alt="${p.title || 'Laptop'}"
                  class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300"
                  src="${img}"
                  onerror="this.src='https://via.placeholder.com/600x600.png?text=Slika+nije+dostupna'">
           </div>
-
           <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1">
             ${p.title || 'Bez naziva'}
           </h3>
-
           <p class="text-gray-500 dark:text-gray-400 text-sm mb-2 flex-grow">
             ${shortDesc}
           </p>
-
           <p class="text-xl font-bold text-primary dark:text-gray-300">
             ${p.price ? p.price + '€' : 'Cena na upit'}
           </p>
         </div>
       `;
     }).join('');
-
   } catch (err) {
-    console.error('Greška pri učitavanju grid-a:', err);
+    console.error('Detaljna greška:', err);
     grid.innerHTML = `
       <div class="col-span-full text-center py-20">
-        <p class="text-red-500 text-xl">Greška pri učitavanju proizvoda</p>
-        <p class="text-gray-500 mt-2">${err.message}</p>
+        <p class="text-red-500 text-xl">Greška pri učitavanju: ${err.message}</p>
+        <p class="text-gray-500 mt-2">Proveri konzolu za više detalja.</p>
       </div>`;
   }
 }
 
-// Pokreni odmah
 document.addEventListener('DOMContentLoaded', loadProductsGrid);
 </script>
 
