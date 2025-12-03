@@ -92,7 +92,6 @@
   </style>
 </head>
 <body>
-
   <div id="login-screen" class="login-container">
     <div class="logo">Cockpit</div>
     <p class="subtitle">Unesi administratorsku lozinku za pristup</p>
@@ -100,7 +99,6 @@
     <button class="btn-login" onclick="checkPassword()">Uloguj se</button>
     <p style="margin-top: 1rem; color: #9ca3af; font-size: 0.9rem;">Samo ovlašćeni korisnici imaju pristup</p>
   </div>
-
   <div id="cockpit" class="hidden">
     <div class="header">
       <div class="logo">Dashboard</div>
@@ -148,21 +146,18 @@
       </table>
     </div>
   </div>
-
   <script>
     const ADMIN_PASSWORD = "1234"; // ← PROMENI OVO ODMAH!
     const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
     let products = [];
+    let previousProducts = ''; // Prethodno stanje kao JSON string
     let lastModified = null; // vreme iz baze
-
     const tbody = document.getElementById('products-list');
     const totalCountEl = document.getElementById('total-count');
     const lastUpdatedEl = document.getElementById('last-updated');
-
     function toast(title, text = '', icon = 'success') {
       Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
     }
-
     function updateStats() {
       totalCountEl.textContent = products.length;
       if (lastModified) {
@@ -171,18 +166,15 @@
         lastUpdatedEl.textContent = 'Još nema izmena';
       }
     }
-
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text || '';
       return div.innerHTML;
     }
-
     function isTitleTaken(title, excludeIndex = -1) {
       const normalized = title.trim().toLowerCase();
       return products.some((p, i) => i !== excludeIndex && p.title?.trim().toLowerCase() === normalized);
     }
-
     function render() {
       if (products.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
@@ -206,7 +198,6 @@
         </tr>
       `).join('');
     }
-
     // ČUVAMO I VREME IZMENE U BAZI
     async function saveAllToServer() {
       if (products.some(p => !p.title?.trim())) {
@@ -217,12 +208,19 @@
         toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
         return;
       }
-
+      // Proveri da li ima stvarnih promena
+      const currentProducts = JSON.stringify(products);
+      if (currentProducts === previousProducts) {
+        // Nema promena - ne čuvaj ništa
+        return;
+      }
+      // Ima promena - ažuriraj lastModified i sačuvaj
+      lastModified = Date.now();
+      previousProducts = currentProducts;
       const dataToSave = {
         products: products,
-        lastModified: Date.now()  // OVDE ČUVAMO VREME U BAZI
+        lastModified: lastModified // Šalji samo ako je ažuriran
       };
-
       try {
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -230,21 +228,18 @@
           body: JSON.stringify(dataToSave)
         });
         if (res.ok) {
-          lastModified = Date.now();
           updateStats();
         }
       } catch (err) {
         toast('Greška!', 'Neuspešno čuvanje na server', 'error');
       }
     }
-
     window.saveRow = async (index) => {
       const row = tbody.rows[index];
       if (!row) return;
       const inputs = row.querySelectorAll('input, textarea');
       const newData = {};
       let hasError = false;
-
       inputs.forEach(el => {
         const field = el.dataset.field;
         const value = el.value.trim();
@@ -261,12 +256,10 @@
         }
       });
       if (hasError) return;
-
       products[index] = { ...products[index], ...newData };
       await saveAllToServer();
       toast('Sačuvano!', `"${newData.title}" je ažuriran`);
     };
-
     window.deleteRow = (index) => {
       Swal.fire({
         title: 'Obrisati proizvod?',
@@ -284,14 +277,12 @@
         }
       });
     };
-
     document.getElementById('add-product').onclick = () => {
       let counter = 1;
       let newTitle;
       do {
         newTitle = `Novi proizvod ${counter++}`;
       } while (isTitleTaken(newTitle));
-
       products.push({
         id: Date.now(),
         title: newTitle,
@@ -305,13 +296,11 @@
       saveAllToServer();
       toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'success');
     };
-
     async function fetchProducts() {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error();
         const data = await res.json();
-
         // Podrška za novi i stari format
         if (data && data.products) {
           products = data.products;
@@ -319,7 +308,8 @@
         } else if (Array.isArray(data)) {
           products = data;
         }
-
+        // Postavi prethodno stanje nakon učitavanja
+        previousProducts = JSON.stringify(products);
         render();
         updateStats();
       } catch (err) {
@@ -328,7 +318,6 @@
         </td></tr>`;
       }
     }
-
     function checkPassword() {
       const input = document.getElementById('password-input').value;
       if (input === ADMIN_PASSWORD) {
@@ -340,7 +329,6 @@
         document.getElementById('password-input').value = '';
       }
     }
-
     function logout() {
       document.getElementById('cockpit').classList.add('hidden');
       document.getElementById('login-screen').classList.remove('hidden');
@@ -348,9 +336,8 @@
       products = [];
       // lastModified ostaje u bazi – ne diramo ga!
     }
-
     document.getElementById('password-input').addEventListener('keypress', e => e.key === 'Enter' && checkPassword());
-    setInterval(() => products.length > 0 && saveAllToServer(), 30000);
+    // Isključen auto-save: uklonjen setInterval
   </script>
 </body>
 </html>
