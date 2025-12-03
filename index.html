@@ -672,81 +672,74 @@
         const imageUrl = p.image && p.image.trim() ? p.image.trim() : 'https://via.placeholder.com/300x300.png?text=No+Image';
 
         return `
-          <div class="product-card" style="
-            background:#fff;
-            border-radius:12px;
-            overflow:hidden;
-            box-shadow:0 4px 15px rgba(0,0,0,0.1);
-            transition:transform 0.3s, box-shadow 0.3s;
-            margin:1rem;
-            max-width:320px;
-            text-align:center;
-          " onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.15)'"
-             onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+          <div class="product-card" style="background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1); transition:all 0.3s; margin:1rem; max-width:320px; text-align:center;"
+               onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.15)'"
+               onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
             
-            <div style="height:200px; overflow:hidden; background:#f8f9fa;">
+            <div style="height:200px; overflow:hidden; background:#f8f9fa; position:relative;">
+              
+              <!-- OVDE JE ČAROLIJA: alt je prazan, a pravi alt stavljamo u aria-label na roditelju -->
               <img 
-                src="${imageUrl}" 
-                alt="${p.title || 'Proizvod'}"
-                class="product-img"
-                style="width:100%; height:100%; object-fit:cover; background:#f1f1f1;">
+                src="${imageUrl}"
+                alt=""  <!-- NAMERNO PRAZAN ALT -->
+                aria-label="${p.title || 'Proizvod'}"
+                loading="lazy"
+                style="width:100%; height:100%; object-fit:cover; background:#f1f1f1;"
+                class="product-img">
+                
+              <!-- Fallback ikonica koja se prikazuje ako slika padne -->
+              <div class="img-fallback" style="position:absolute; inset:0; background:#f3f4f6; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.2s;">
+                <svg fill="none" stroke="#94a3b8" viewBox="0 0 24 24" width="48" height="48">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
             </div>
 
             <div style="padding:1.2rem;">
               <h3 style="margin:0 0 0.5rem 0; font-size:1.3rem; color:#1f2937;">
                 ${p.title || 'Bez naziva'}
               </h3>
-              
               ${p.shortDesc ? `<p style="color:#6b7280; margin:0.5rem 0; font-size:0.95rem;">${p.shortDesc}</p>` : ''}
-
               <div style="margin:1rem 0; font-size:1.5rem; font-weight:700; color:#6366f1;">
                 ${p.price ? p.price + ' RSD' : 'Cena na upit'}
               </div>
-
-              ${p.tag ? `<span style="
-                background:#e0e7ff;
-                color:#6366f1;
-                padding:0.35rem 0.75rem;
-                border-radius:50px;
-                font-size:0.8rem;
-                font-weight:600;
-                text-transform:uppercase;
-              ">${p.tag}</span>` : ''}
+              ${p.tag ? `<span style="background:#e0e7ff; color:#6366f1; padding:0.35rem 0.75rem; border-radius:50px; font-size:0.8rem; font-weight:600; text-transform:uppercase;">${p.tag}</span>` : ''}
             </div>
           </div>
         `;
       }).join('');
 
-      // Responsive grid
+      // Grid
       container.style.display = 'grid';
       container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
       container.style.gap = '1.5rem';
       container.style.padding = '2rem';
       container.style.justifyItems = 'center';
 
-      // ČISTO REŠENJE ZA GLIČ ALT TEKSTA – bez inline onerror-a
+      // POTPUNO UKLANJA TREPERENJE ALT TEKSTA
       document.querySelectorAll('.product-img').forEach(img => {
-        img.addEventListener('error', function() {
-          this.src = 'https://via.placeholder.com/300x300.png?text=Slika+Nedostaje';
-          this.alt = 'Slika nedostaje';
-          this.style.objectFit = 'contain';
-          this.style.background = '#f9f9f9';
+        const fallback = img.nextElementSibling; // .img-fallback div
+
+        img.addEventListener('error', () => {
+          img.src = 'https://via.placeholder.com/300x300.png?text=Slika+Nedostaje';
+          img.style.objectFit = 'contain';
+          fallback.style.opacity = '1';
         });
 
-        // Opcionalno: ako je već slika "broken" pri učitavanju (npr. prazan src)
-        if (img.naturalWidth === 0 && img.complete) {
-          img.dispatchEvent(new Event('error'));
-        }
+        img.addEventListener('load', () => {
+          if (img.naturalWidth === 0) {
+            // slika je broken iako je "učitana" (npr. 404 koji vrati HTML)
+            img.dispatchEvent(new Event('error'));
+          } else {
+            fallback.style.opacity = '0';
+          }
+        });
       });
 
     })
     .catch(err => {
-      console.error('Greška pri učitavanju proizvoda:', err);
-      document.getElementById('products-container').innerHTML = `
-        <p style="text-align:center; color:#ef4444; padding:3rem;">
-          Ne mogu da učitam proizvode. Proveri internet vezu.
-        </p>
-      `;
+      console.error('Greška:', err);
+      document.getElementById('products-container').innerHTML = `<p style="text-align:center; color:#ef4444; padding:3rem;">Ne mogu da učitam proizvode.</p>`;
     });
 </script>
 
