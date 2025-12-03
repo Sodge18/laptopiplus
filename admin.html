@@ -261,202 +261,223 @@
 </div>
 
   <script>
-    // === PROMENI OVO NA SVOJU TAJNU LOZINKU ===
-    const ADMIN_PASSWORD = "1234"; // ← PROMENI OVO ODMAH!
+  // === PROMENI OVO NA SVOJU TAJNU LOZINKU ===
+  const ADMIN_PASSWORD = "1234"; // ← PROMENI OVO ODMAH!
 
-    function checkPassword() {
-      const input = document.getElementById('password-input').value;
-      if (input === ADMIN_PASSWORD) {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('cockpit').classList.remove('hidden');
-        fetchProducts(); // tek sad učitavamo proizvode
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Pogrešna lozinka!',
-          text: 'Pokušaj ponovo.',
-          timer: 3000,
-          toast: true,
-          position: 'top-end'
-        });
-        document.getElementById('password-input').value = '';
+  let products = [];
+  let lastDataChangeTime = null; // OVO JE KLJUČNO – pamti samo prave izmene!
+
+  const tbody = document.getElementById('products-list');
+  const totalCountEl = document.getElementById('total-count');
+  const lastUpdatedEl = document.getElementById('last-updated');
+
+  function toast(title, text = '', icon = 'success') {
+    Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
+  }
+
+  // Ažuriraj statistiku – ali "Poslednje ažuriranje" samo ako je bilo izmene podataka!
+  function updateStats() {
+    totalCountEl.textContent = products.length;
+
+    if (lastDataChangeTime) {
+      lastUpdatedEl.textContent = new Date(lastDataChangeTime).toLocaleString('sr-RS');
+    } else {
+      lastUpdatedEl.textContent = 'Još nema izmena';
+    }
+  }
+
+  // Ova funkcija se poziva SAMO kada se desi stvarna izmena!
+  function markDataChanged() {
+    lastDataChangeTime = Date.now();
+    updateStats();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+  }
+
+  function isTitleTaken(title, excludeIndex = -1) {
+    const normalized = title.trim().toLowerCase();
+    return products.some((p, i) =>
+      i !== excludeIndex && p.title && p.title.trim().toLowerCase() === normalized
+    );
+  }
+
+  function render() {
+    if (products.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <div>Još nema proizvoda</div>
+        <div style="font-size:0.9rem;margin-top:0.5rem;">Klikni na "+ Novi proizvod" da dodaš prvi</div>
+      </td></tr>`;
+      updateStats();
+      return;
+    }
+
+    tbody.innerHTML = products.map((p, i) => `
+      <tr data-index="${i}">
+        <td><input type="text" value="${escapeHtml(p.title || '')}" data-field="title"></td>
+        <td><input type="text" value="${escapeHtml(p.shortDesc || '')}" data-field="shortDesc"></td>
+        <td><input type="text" value="${escapeHtml(p.price || '')}" data-field="price" style="width:100px;"></td>
+        <td><input type="text" value="${escapeHtml(p.tag || '')}" data-field="tag" style="width:120px;"></td>
+        <td><textarea data-field="description">${escapeHtml(p.description || '')}</textarea></td>
+        <td class="actions">
+          <button class="btn btn-primary" onclick="saveRow(${i})">Sačuvaj</button>
+          <button class="btn btn-danger" onclick="deleteRow(${i})">Obriši</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.saveRow = async (index) => {
+    const row = tbody.rows[index];
+    if (!row) return;
+    const inputs = row.querySelectorAll('input, textarea');
+    const newData = {};
+    let hasError = false;
+
+    inputs.forEach(el => {
+      const field = el.dataset.field;
+      const value = el.value.trim();
+      newData[field] = value;
+      if (field === 'title') {
+        if (!value) { el.style.borderColor = '#ef4444'; hasError = true; }
+        else if (isTitleTaken(value, index)) {
+          el.style.borderColor = '#ef4444';
+          toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
+          hasError = true;
+        } else {
+          el.style.borderColor = '#d1d5db';
+        }
       }
-    }
-
-    function logout() {
-      document.getElementById('cockpit').classList.add('hidden');
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('password-input').value = '';
-      products = [];
-    }
-
-    // Pritisni Enter u polju za lozinku
-    document.getElementById('password-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') checkPassword();
     });
 
-    // CEO TVOJ POSTOJEĆI KOD OD COCKPIT-a (sve od fetchProducts pa nadalje) ide OVDE:
+    if (hasError) return;
 
-    const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
-    let products = [];
-    const tbody = document.getElementById('products-list');
-    const totalCountEl = document.getElementById('total-count');
-    const lastUpdatedEl = document.getElementById('last-updated');
+    products[index] = { ...products[index], ...newData };
+    await saveAllToServer();
+    markDataChanged(); // OVDE PAMTIMO DA JE BILA IZMENA!
+    toast('Sačuvano!', `"${newData.title}" je ažuriran`);
+  };
 
-    function toast(title, text = '', icon = 'success') {
-      Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true, toast: true, position: 'top-end', showConfirmButton: false });
-    }
-
-    function updateStats() {
-      totalCountEl.textContent = products.length;
-      lastUpdatedEl.textContent = new Date().toLocaleString('sr-RS');
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text || '';
-      return div.innerHTML;
-    }
-
-    function isTitleTaken(title, excludeIndex = -1) {
-      const normalized = title.trim().toLowerCase();
-      return products.some((p, i) =>
-        i !== excludeIndex && p.title && p.title.trim().toLowerCase() === normalized
-      );
-    }
-
-    function render() {
-      if (products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:4rem;color:#6b7280;">
-          <div>Još nema proizvoda</div>
-          <div style="font-size:0.9rem;margin-top:0.5rem;">Klikni na "+ Novi proizvod" da dodaš prvi</div>
-        </td></tr>`;
-        updateStats();
-        return;
-      }
-
-      tbody.innerHTML = products.map((p, i) => `
-        <tr data-index="${i}">
-          <td><input type="text" value="${escapeHtml(p.title || '')}" data-field="title"></td>
-          <td><input type="text" value="${escapeHtml(p.shortDesc || '')}" data-field="shortDesc"></td>
-          <td><input type="text" value="${escapeHtml(p.price || '')}" data-field="price" style="width:100px;"></td>
-          <td><input type="text" value="${escapeHtml(p.tag || '')}" data-field="tag" style="width:120px;"></td>
-          <td><textarea data-field="description">${escapeHtml(p.description || '')}</textarea></td>
-          <td class="actions">
-            <button class="btn btn-primary" onclick="saveRow(${i})">Sačuvaj</button>
-            <button class="btn btn-danger" onclick="deleteRow(${i})">Obriši</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    window.saveRow = async (index) => {
-      const row = tbody.rows[index];
-      if (!row) return;
-      const inputs = row.querySelectorAll('input, textarea');
-      const newData = {};
-      let hasError = false;
-
-      inputs.forEach(el => {
-        const field = el.dataset.field;
-        const value = el.value.trim();
-        newData[field] = value;
-        if (field === 'title') {
-          if (!value) { el.style.borderColor = '#ef4444'; hasError = true; }
-          else if (isTitleTaken(value, index)) {
-            el.style.borderColor = '#ef4444';
-            toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
-            hasError = true;
-          } else {
-            el.style.borderColor = '#d1d5db';
-          }
-        }
-      });
-
-      if (hasError) return;
-
-      products[index] = { ...products[index], ...newData };
-      await saveAllToServer();
-      toast('Sačuvano!', `"${newData.title}" je ažuriran`);
-    };
-
-    window.deleteRow = (index) => {
-      Swal.fire({
-        title: 'Obrisati proizvod?',
-        text: products[index].title || 'Ovaj proizvod',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Da, obriši',
-        cancelButtonText: 'Otkaži'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          products.splice(index, 1);
-          await saveAllToServer();
-          render();
-          updateStats();
-          toast('Obrisan!', 'Proizvod je uklonjen', 'success');
-        }
-      });
-    };
-
-    async function saveAllToServer() {
-      if (products.some(p => !p.title?.trim())) {
-        toast('Greška!', 'Svi proizvodi moraju imati naziv!', 'error');
-        return;
-      }
-      if (products.length > 0 && new Set(products.map(p => p.title.trim().toLowerCase())).size !== products.length) {
-        toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
-        return;
-      }
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(products)
-        });
-        if (res.ok) updateStats();
-      } catch (err) {
-        toast('Greška!', 'Neuspešno čuvanje na server', 'error');
-      }
-    }
-
-    document.getElementById('add-product').onclick = () => {
-      let counter = 1;
-      let newTitle;
-      do {
-        newTitle = `Novi proizvod ${counter}`;
-        counter++;
-      } while (isTitleTaken(newTitle));
-
-      products.push({
-        id: Date.now(),
-        title: newTitle,
-        shortDesc: '',
-        price: '0.00',
-        tag: 'new',
-        description: '',
-        images: []
-      });
-      render();
-      updateStats();
-      toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'success');
-    };
-
-    setInterval(() => products.length > 0 && saveAllToServer(), 30000);
-
-    async function fetchProducts() {
-      try {
-        const res = await fetch(API_URL);
-        if (!res.ok) throw new Error();
-        products = await res.json();
+  window.deleteRow = (index) => {
+    Swal.fire({
+      title: 'Obrisati proizvod?',
+      text: products[index].title || 'Ovaj proizvod',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Da, obriši',
+      cancelButtonText: 'Otkaži'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        products.splice(index, 1);
+        await saveAllToServer();
         render();
-        updateStats();
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="color:#ef4444; text-align:center; padding:4rem;">
-          <strong>Ne mogu da se učitaju proizvodi!</strong><br>Proveri internet ili Worker URL.
-        </td></tr>`;
+        markDataChanged(); // I brisanje je prava izmena!
+        toast('Obrisan!', 'Proizvod je uklonjen', 'success');
       }
+    });
+  };
+
+  async function saveAllToServer() {
+    if (products.some(p => !p.title?.trim())) {
+      toast('Greška!', 'Svi proizvodi moraju imati naziv!', 'error');
+      return;
     }
-  </script>
+    if (products.length > 0 && new Set(products.map(p => p.title.trim().toLowerCase())).size !== products.length) {
+      toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
+      return;
+    }
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(products)
+      });
+      if (res.ok) {
+        markDataChanged(); // SVAKI USPJEŠAN SAVE = prava izmena!
+      }
+    } catch (err) {
+      toast('Greška!', 'Neuspešno čuvanje na server', 'error');
+    }
+  }
+
+  document.getElementById('add-product').onclick = () => {
+    let counter = 1;
+    let newTitle;
+    do {
+      newTitle = `Novi proizvod ${counter}`;
+      counter++;
+    } while (isTitleTaken(newTitle));
+
+    products.push({
+      id: Date.now(),
+      title: newTitle,
+      shortDesc: '',
+      price: '0.00',
+      tag: 'new',
+      description: '',
+      images: []
+    });
+    render();
+    markDataChanged(); // Dodavanje je takođe prava izmena!
+    toast('Dodato!', 'Novi proizvod spreman za uređivanje', 'success');
+  };
+
+  // Auto-save svakih 30 sekundi – ali ažurira vreme samo ako je uspeo save
+  setInterval(async () => {
+    if (products.length > 0) {
+      await saveAllToServer();
+    }
+  }, 30000);
+
+  async function fetchProducts() {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error();
+      products = await res.json();
+      render();
+      updateStats(); // Ne menjamo lastDataChangeTime ovde – jer nije bila izmena!
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color:#ef4444;">
+        <strong>Ne mogu da se učitaju proizvodi!</strong><br>Proveri internet ili Worker URL.
+      </td></tr>`;
+    }
+  }
+
+  // Login / logout funkcije
+  function checkPassword() {
+    const input = document.getElementById('password-input').value;
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('cockpit').classList.remove('hidden');
+      fetchProducts(); // učitavanje – NE menja "poslednje ažuriranje"
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Pogrešna lozinka!',
+        text: 'Pokušaj ponovo.',
+        timer: 3000,
+        toast: true,
+        position: 'top-end'
+      });
+      document.getElementById('password-input').value = '';
+    }
+  }
+
+  function logout() {
+    document.getElementById('cockpit').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('password-input').value = '';
+    products = [];
+    lastDataChangeTime = null; // resetujemo i vreme kad izađemo
+  }
+
+  document.getElementById('password-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkPassword();
+  });
+</script>
 </body>
 </html>
