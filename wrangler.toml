@@ -1,7 +1,0 @@
-name = "products-api"
-main = "worker.js"
-compatibility_date = "2025-12-03"
-
-[[kv_namespaces]] # Correctly defines the first (and only) item in the array of tables
-binding = "PRODUCTS"
-id = "0c937e9e577544cdbdb4f4deb9738b2d"
