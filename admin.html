@@ -52,11 +52,6 @@
       position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
     }
     .header .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    .btn-logout {
-      margin-left: 1rem; background: var(--danger); color: white; border: none;
-      padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
-    }
-    .btn-logout:hover { background: var(--danger-hover); }
     .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; background: var(--bg); }
     .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
     .toolbar h2 { margin: 0; font-weight: 600; font-size: 1.8rem; }
@@ -93,6 +88,7 @@
 </head>
 <body>
 
+  <!-- LOGIN EKRAN -->
   <div id="login-screen" class="login-container">
     <div class="logo">Cockpit</div>
     <p class="subtitle">Unesi administratorsku lozinku za pristup</p>
@@ -101,12 +97,12 @@
     <p style="margin-top: 1rem; color: #9ca3af; font-size: 0.9rem;">Samo ovlašćeni korisnici imaju pristup</p>
   </div>
 
+  <!-- COCKPIT – BEZ LOGOUTA -->
   <div id="cockpit" class="hidden">
     <div class="header">
       <div class="logo">Dashboard</div>
       <div style="font-size:0.9rem; color:#6b7280;">
         Products API: <strong style="color:var(--primary)">LIVE</strong>
-        <button onclick="logout()" class="btn-logout">Izloguj se</button>
       </div>
     </div>
     <div class="container">
@@ -153,7 +149,7 @@
     const ADMIN_PASSWORD = "1234"; // ← PROMENI OVO ODMAH!
     const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
     let products = [];
-    let lastModified = null; // vreme iz baze
+    let lastModified = null;
 
     const tbody = document.getElementById('products-list');
     const totalCountEl = document.getElementById('total-count');
@@ -165,11 +161,7 @@
 
     function updateStats() {
       totalCountEl.textContent = products.length;
-      if (lastModified) {
-        lastUpdatedEl.textContent = new Date(lastModified).toLocaleString('sr-RS');
-      } else {
-        lastUpdatedEl.textContent = 'Još nema izmena';
-      }
+      lastUpdatedEl.textContent = lastModified ? new Date(lastModified).toLocaleString('sr-RS') : 'Još nema izmena';
     }
 
     function escapeHtml(text) {
@@ -207,7 +199,6 @@
       `).join('');
     }
 
-    // ČUVAMO I VREME IZMENE U BAZI
     async function saveAllToServer() {
       if (products.some(p => !p.title?.trim())) {
         toast('Greška!', 'Svi proizvodi moraju imati naziv!', 'error');
@@ -217,12 +208,7 @@
         toast('Greška!', 'Postoje duplirani nazivi proizvoda!', 'error');
         return;
       }
-
-      const dataToSave = {
-        products: products,
-        lastModified: Date.now()  // OVDE ČUVAMO VREME U BAZI
-      };
-
+      const dataToSave = { products, lastModified: Date.now() };
       try {
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -244,7 +230,6 @@
       const inputs = row.querySelectorAll('input, textarea');
       const newData = {};
       let hasError = false;
-
       inputs.forEach(el => {
         const field = el.dataset.field;
         const value = el.value.trim();
@@ -255,13 +240,10 @@
             el.style.borderColor = '#ef4444';
             toast('Duplikat!', 'Proizvod sa ovim nazivom već postoji!', 'error');
             hasError = true;
-          } else {
-            el.style.borderColor = '#d1d5db';
-          }
+          } else el.style.borderColor = '#d1d5db';
         }
       });
       if (hasError) return;
-
       products[index] = { ...products[index], ...newData };
       await saveAllToServer();
       toast('Sačuvano!', `"${newData.title}" je ažuriran`);
@@ -269,12 +251,8 @@
 
     window.deleteRow = (index) => {
       Swal.fire({
-        title: 'Obrisati proizvod?',
-        text: products[index].title || 'Ovaj proizvod',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Da, obriši',
-        cancelButtonText: 'Otkaži'
+        title: 'Obrisati proizvod?', text: products[index].title || 'Ovaj proizvod',
+        icon: 'warning', showCancelButton: true, confirmButtonText: 'Da, obriši', cancelButtonText: 'Otkaži'
       }).then(async (result) => {
         if (result.isConfirmed) {
           products.splice(index, 1);
@@ -288,18 +266,10 @@
     document.getElementById('add-product').onclick = () => {
       let counter = 1;
       let newTitle;
-      do {
-        newTitle = `Novi proizvod ${counter++}`;
-      } while (isTitleTaken(newTitle));
-
+      do { newTitle = `Novi proizvod ${counter++}`; } while (isTitleTaken(newTitle));
       products.push({
-        id: Date.now(),
-        title: newTitle,
-        shortDesc: '',
-        price: '0.00',
-        tag: 'new',
-        description: '',
-        images: []
+        id: Date.now(), title: newTitle, shortDesc: '', price: '0.00',
+        tag: 'new', description: '', images: []
       });
       render();
       saveAllToServer();
@@ -311,15 +281,12 @@
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error();
         const data = await res.json();
-
-        // Podrška za novi i stari format
         if (data && data.products) {
           products = data.products;
           lastModified = data.lastModified || null;
         } else if (Array.isArray(data)) {
           products = data;
         }
-
         render();
         updateStats();
       } catch (err) {
@@ -339,14 +306,6 @@
         Swal.fire({ icon: 'error', title: 'Pogrešna lozinka!', timer: 3000, toast: true, position: 'top-end' });
         document.getElementById('password-input').value = '';
       }
-    }
-
-    function logout() {
-      document.getElementById('cockpit').classList.add('hidden');
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('password-input').value = '';
-      products = [];
-      // lastModified ostaje u bazi – ne diramo ga!
     }
 
     document.getElementById('password-input').addEventListener('keypress', e => e.key === 'Enter' && checkPassword());
