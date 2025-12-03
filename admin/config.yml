@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: tvoj-korisnik/laptopiplus
+  repo: Sodge18/laptopiplus   # стави свој GitHub репо
   branch: main
 
 media_folder: "images"
