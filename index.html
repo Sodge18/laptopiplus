@@ -641,4 +641,24 @@
     </script>
 <script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+<div id="products-container"></div>
+
+<script>
+fetch('/data/products.json')
+  .then(res => res.json())
+  .then(products => {
+    const container = document.getElementById('products-container');
+    container.innerHTML = products.map(p => `
+      <div class="product-card">
+        <img src="${p.images[0]}" alt="${p.title}">
+        <h3>${p.title}</h3>
+        <p>${p.shortDesc}</p>
+        <span>${p.price}</span>
+        <span>${p.tag}</span>
+      </div>
+    `).join('');
+  });
+</script>
+
+    
 </body></html>
