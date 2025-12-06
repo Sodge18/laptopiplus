@@ -631,23 +631,26 @@ form.addEventListener("submit", function(e){
    SELECT LAPTOP (form)
 ============================= */
 function selectLaptop(name) {
+    // Postavi tekst na dugmetu i hidden input
     document.getElementById("selected-laptop-text").textContent = name;
     document.getElementById("laptop-select-hidden").value = name;
 
-    document.getElementById("laptop-select").classList.remove("invalid-field");
-    document.querySelector("#laptop-select + p").classList.add("hidden");
+    // Ukloni invalid class i sakrij hint
+    const laptopButton = document.getElementById("laptop-select");
+    laptopButton.classList.remove("invalid-field");
+    laptopButton.nextElementSibling.classList.add("hidden");
 
+    // Zatvori modal (ako koristiš Alpine.js)
+    const modal = document.querySelector('[x-data]');
+    if (modal) {
+        modal.__x.$data.modalOpen = false;
+    }
+
+    // Opcionalno scroll na formu
     document.getElementById("contact-form-section")
         .scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function selectModalLaptop(name) {
-    document.getElementById("selected-laptop-text").textContent = name;
-    document.getElementById("laptop-select-hidden").value = name;
-
-    document.getElementById("laptop-select").classList.remove("invalid-field");
-    document.querySelector("#laptop-select + p").classList.add("hidden");
-}
 </script>
 
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
