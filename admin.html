@@ -16,7 +16,34 @@
     .input-field { margin-bottom: 1rem; }
     .save-confirm { color: #10b981; font-weight: bold; display:none; }
     .product-image-preview { max-height:150px; object-fit:contain; margin-bottom:1rem; }
+
+    /* Tag dugmići */
+    .tag-btn {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .tag-btn:hover {
+      background-color: #6366f1; /* hover plava */
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .tag-btn.active {
+      background-color: #4f46e5; /* izabrani tag */
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    
+    /* Save dugme */
+    #saveBtn {
+      transition: all 0.2s ease;
+    }
+    #saveBtn:hover {
+      background-color: #4f46e5;
+      transform: scale(1.05);
+    }
   </style>
+  
 </head>
 <body class="flex min-h-screen">
 
