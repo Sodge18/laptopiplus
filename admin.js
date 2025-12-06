@@ -100,17 +100,6 @@ function renderProductDetails(index) {
     });
 
   // event listener za dugmiće tagova
-  const tagButtons = document.querySelectorAll('.tag-btn');
-    tagButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // postavi izabrani tag u proizvod
-        document.getElementById('tagContainer').querySelectorAll('button').forEach(b => {
-          b.classList.remove('bg-indigo-500','text-white');
-          b.classList.add('bg-white','text-gray-700');
-        });
-        btn.classList.add('bg-indigo-500','text-white');
-      });
-    });
   const tagContainer = document.getElementById('tagContainer');
     tagContainer.querySelectorAll('button').forEach(btn => {
       btn.onclick = () => {
@@ -122,7 +111,6 @@ function renderProductDetails(index) {
       };
     });
 
-  
   // Upload slike preview
   const imgInput = document.getElementById('imageUpload');
   const imgPreview = document.getElementById('imagePreview');
