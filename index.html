@@ -176,9 +176,8 @@
 </div>
 <!-- KRAJ DETALJ MODALA -->
 
-
-<!-- CONTACT FORM + LAPTOP SELECT MODAL -->
-<section id="contact-form-section" class="container mx-auto px-4 sm:px-6 lg:px-8 py-16" x-data="{ modalOpen: false }">
+<!-- CONTACT FORM SA PADAJUĆIM MENIJEM ZA LAPTOPE -->
+<section id="contact-form-section" class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
   <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
     <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
       
@@ -203,8 +202,8 @@
               <p class="error-hint hidden">Popunite polje</p>
             </div>
           </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <div>
               <label class="block text-sm font-medium text-gray-200 mb-2">Kontakt broj</label>
               <input id="kontakt-broj" type="tel" placeholder="061 234 567" class="w-full p-3 rounded-lg bg-gray-700 text-white" required/>
@@ -217,14 +216,13 @@
             </div>
           </div>
 
-          <div>
+          <!-- PADAJUĆI MENI ZA LAPTOPE -->
+          <div class="mt-4">
             <label class="block text-sm font-medium text-gray-200 mb-2">Koji laptop želite</label>
-            <input type="hidden" id="laptop-select-hidden"/>
-            <button type="button" id="laptop-select" class="w-full p-3 rounded-lg bg-gray-700 text-white text-left flex justify-between items-center"
-                    @click="modalOpen = true">
-              <span id="selected-laptop-text">Odaberite laptop</span>
-              <span class="material-icons">expand_more</span>
-            </button>
+            <select id="laptop-select" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
+              <option value="">Odaberite laptop</option>
+              <!-- JS će ubaciti opcije ovde -->
+            </select>
             <p class="error-hint hidden">Morate izabrati laptop</p>
           </div>
 
@@ -236,24 +234,6 @@
         </form>
       </div>
 
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div x-cloak x-show="modalOpen" @click.away="modalOpen = false"
-       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-    <div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-      <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Odaberite Laptop</h3>
-        <button @click="modalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-          <span class="material-icons">close</span>
-        </button>
-      </div>
-      <div class="p-6 overflow-y-auto">
-        <div id="modal-laptop-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- JS će ovde ubaciti laptopove -->
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -292,10 +272,10 @@
 
 <script>
 const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
-let allProducts = [];  // globalno za grid + modal
+let allProducts = [];  // globalno za grid + carousel
 
 /* =============================
-   LOADING PRODUCTS (CAROUSEL + GRID + SELECT MODAL)
+   LOADING PRODUCTS (CAROUSEL + GRID)
 ============================= */
 async function loadProducts() {
     try {
@@ -303,16 +283,14 @@ async function loadProducts() {
         if (!res.ok) throw new Error("Greška API: " + res.status);
 
         const data = await res.json();
-
-        let products = Array.isArray(data.products) ? data.products :
-                       Array.isArray(data) ? data : [];
+        const products = Array.isArray(data.products) ? data.products :
+                         Array.isArray(data) ? data : [];
 
         allProducts = products;
 
         renderCarousel(products);
         renderGrid(products);
-        renderSelectModal(products);
-
+        populateLaptopDropdown(products); // popuni dropdown u formi
     } catch (e) {
         console.error(e);
     }
@@ -333,7 +311,7 @@ function renderCarousel(products) {
         return;
     }
 
-    carousel.innerHTML = products.map((p, i) => {
+    carousel.innerHTML = products.map(p => {
         const img = p.image || p.images?.[0] || "https://via.placeholder.com/600?text=Laptop";
         const tag = p.tag ? `<span class="absolute top-4 left-4 bg-blue-100 text-blue-800 
                              text-xs font-bold px-3 py-1 rounded-full">${p.tag.toUpperCase()}</span>` : "";
@@ -354,10 +332,6 @@ function renderCarousel(products) {
 
                 <div class="text-center">
                     <p class="text-2xl font-bold">${p.price ? p.price + "€" : "Cena na upit"}</p>
-                    <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 w-full transition"
-                            onclick="selectLaptop('${(p.title || "").replace(/'/g, "\\'")}')">
-                        Izaberite Laptop
-                    </button>
 
                     <button onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})'
                             class="mt-2 bg-gray-200 dark:bg-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 
@@ -371,7 +345,7 @@ function renderCarousel(products) {
 
     dots.innerHTML = products.map((_, i) =>
         `<button onclick="scrollToSlide(${i})"
-                class="w-3 h-3 rounded-full transition-all ${i===0 ? "bg-primary w-8" : "bg-gray-300 dark:bg-gray-600"}">`
+                class="w-3 h-3 rounded-full transition-all ${i===0 ? "bg-primary w-8" : "bg-gray-300 dark:bg-gray-600"}"></button>`
     ).join("");
 
     document.getElementById("prev-btn").onclick = () => scrollCarousel(-1);
@@ -379,7 +353,6 @@ function renderCarousel(products) {
     carousel.addEventListener("scroll", updateActiveDot);
     updateActiveDot();
 }
-
 
 /* =============================
    CAROUSEL NAVIGATION LOGIC
@@ -412,7 +385,6 @@ function updateActiveDot() {
         d.classList.toggle("w-3", i !== active);
     });
 }
-
 
 /* =============================
    RENDER GRID PRODUCTS
@@ -451,29 +423,8 @@ function renderGrid(products) {
     }).join("");
 }
 
-
 /* =============================
-   RENDER SELECT LAPTOP MODAL GRID
-============================= */
-function renderSelectModal(products) {
-    const modalGrid = document.getElementById("modal-laptop-grid");
-
-    modalGrid.innerHTML = products.map(p => `
-        <div onclick="selectModalLaptop('${p.title.replace(/'/g, "\\'")}')"
-             class="bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer
-                    hover:ring-2 hover:ring-primary transition">
-
-            <img src="${p.images?.[0] || p.image || ""}" 
-                 class="w-full h-40 object-contain mb-3" alt="${p.title}">
-
-            <h4 class="font-semibold text-gray-900 dark:text-white text-center">${p.title}</h4>
-        </div>
-    `).join("");
-}
-
-
-/* =============================
-   MODAL HANDLING (open/close)
+   MODAL HANDLING (DETALJI)
 ============================= */
 let selectedProductGlobal = null;
 
@@ -524,20 +475,27 @@ function closeModal() {
     modal.classList.remove("flex");
 }
 
-function selectAndCloseModal() {
-    if (selectedProductGlobal?.title) {
-        selectLaptop(selectedProductGlobal.title);
-    }
-    closeModal();
+/* =============================
+   POPUNJAVANJE PADAJUĆEG MENIJA ZA LAPTOPE
+============================= */
+function populateLaptopDropdown(products) {
+    const laptopSelect = document.getElementById("laptop-select");
+    laptopSelect.innerHTML = '<option value="">Odaberite laptop</option>';
+
+    products.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.title;
+        option.textContent = p.title; // ili `${p.title} - ${p.price}€`
+        laptopSelect.appendChild(option);
+    });
 }
 
 /* =============================
-   CONTACT FORMA VALIDACIJA + SLANJE
+   VALIDACIJA I SUBMIT FORME
 ============================= */
 const form = document.getElementById("contact-form");
-const requiredFields = ["ime", "prezime", "kontakt-broj", "email", "poruka"]; // dodali smo poruku
-const hiddenLaptopInput = document.getElementById("laptop-select-hidden");
-const laptopButton = document.getElementById("laptop-select");
+const requiredFields = ["ime", "prezime", "kontakt-broj", "email", "poruka"];
+const laptopSelectEl = document.getElementById("laptop-select");
 
 function validate(fieldId) {
     const el = document.getElementById(fieldId);
@@ -553,13 +511,13 @@ function validate(fieldId) {
 }
 
 function validateLaptop() {
-    const hint = laptopButton.nextElementSibling;
-    if (!hiddenLaptopInput.value.trim()) {
-        laptopButton.classList.add("invalid-field");
+    const hint = laptopSelectEl.nextElementSibling;
+    if (!laptopSelectEl.value.trim()) {
+        laptopSelectEl.classList.add("invalid-field");
         hint.classList.remove("hidden");
         return false;
     }
-    laptopButton.classList.remove("invalid-field");
+    laptopSelectEl.classList.remove("invalid-field");
     hint.classList.add("hidden");
     return true;
 }
@@ -568,17 +526,9 @@ function validateLaptop() {
 requiredFields.forEach(f => {
     document.getElementById(f).addEventListener("input", () => validate(f));
 });
+laptopSelectEl.addEventListener("change", validateLaptop);
 
-// Odabir laptopa
-function selectLaptop(name) {
-    document.getElementById("selected-laptop-text").textContent = name;
-    hiddenLaptopInput.value = name;
-    laptopButton.classList.remove("invalid-field");
-    laptopButton.nextElementSibling.classList.add("hidden");
-}
-
-// Submit listener sa formatiranim mailto
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function(e) {
     e.preventDefault();
 
     let valid = true;
@@ -590,13 +540,11 @@ form.addEventListener("submit", function(e){
     const prezime = document.getElementById("prezime").value;
     const email = document.getElementById("email").value;
     const broj = document.getElementById("kontakt-broj").value;
-    const laptop = hiddenLaptopInput.value;
+    const laptop = laptopSelectEl.value;
     const poruka = document.getElementById("poruka").value;
 
     const recipient = "tvoj.email@gmail.com";
     const subject = encodeURIComponent(`Upit za laptop od ${ime} ${prezime}`);
-
-    // Formalni format email-a
     const body = encodeURIComponent(
         `Poštovani,\n\n` +
         `Dobili ste novi upit sa sajta Laptopi Plus.\n\n` +
@@ -612,31 +560,6 @@ form.addEventListener("submit", function(e){
 
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 });
-
-/* =============================
-   SELECT LAPTOP (form)
-============================= */
-function selectLaptop(name) {
-    // Postavi tekst na dugmetu i hidden input
-    document.getElementById("selected-laptop-text").textContent = name;
-    document.getElementById("laptop-select-hidden").value = name;
-
-    // Ukloni invalid class i sakrij hint
-    const laptopButton = document.getElementById("laptop-select");
-    laptopButton.classList.remove("invalid-field");
-    laptopButton.nextElementSibling.classList.add("hidden");
-
-    // Zatvori modal (ako koristiš Alpine.js)
-    const modal = document.querySelector('[x-data]');
-    if (modal) {
-        modal.__x.$data.modalOpen = false;
-    }
-
-    // Opcionalno scroll na formu
-    document.getElementById("contact-form-section")
-        .scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
 </script>
 
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
