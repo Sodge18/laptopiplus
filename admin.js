@@ -126,7 +126,7 @@ async function saveProduct(index){
     return { label: label?.trim() || '', value: value?.trim() || '' };
   });
 
-  products[index] = { ...p, title, shortDesc, description, specs, price, tag, images:[imageSrc] };
+  products[index] = { ...p, title, shortDesc, description, specs, price: price || 'Cena na upit', tag, images:[imageSrc] };
 
   try{
     await fetch(API_URL, {
