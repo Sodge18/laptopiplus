@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>    
-    <style> [x-cloak] { display: none !important; } </style>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+    <title>Laptopi Plus Shop Page</title>
+
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -17,24 +20,20 @@
                         "background-light": "#ffffff",
                         "background-dark": "#1f2937",
                     },
-                    fontFamily: {
-                        display: ["Poppins", "sans-serif"],
-                    },
+                    fontFamily: { display: ["Poppins", "sans-serif"] },
                     borderRadius: {
                         DEFAULT: "0.75rem",
-                        xl: '1.25rem',
-                        '2xl': '1.5rem',
+                        xl: "1.25rem",
+                        "2xl": "1.5rem",
                     },
                 },
             },
         };
     </script>
-    
+
     <style>
-        .material-icons {
-            font-size: 24px;
-            vertical-align: middle;
-        }
+        [x-cloak] { display: none !important; }
+
         .carousel-container {
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -42,835 +41,601 @@
         .carousel-container::-webkit-scrollbar {
             display: none;
         }
-        .invalid-field {
-            border: 1px solid #ef4444 !important;
-            animation: flash 0.5s ease-in-out;
-        }
-        @keyframes flash {
-            0%,
-            100% {
-                box-shadow: 0 0 2px 1px rgba(239, 68, 68, 0.7);
-            }
-            50% {
-                box-shadow: none;
-            }
-        }
-        .error-hint {
-            color: #fca5a5;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        body:has([x-show='detailModalOpen'][style*='display: block;']) {
-            overflow: hidden;
-        }
+
+        body:has([x-show='detailModalOpen'][style*='display: block;']),
         body:has([x-show='searchModalOpen'][style*='display: block;']) {
             overflow: hidden;
         }
     </style>
-    
-    <title>Laptopi Plus Shop Page</title>
 </head>
+
 <body class="bg-background-light dark:bg-background-dark font-display text-gray-700 dark:text-gray-300">
-    
-    <!--NAVIGATION BAR-->
-    <header class="py-6 px-4 sm:px-6 lg:px-8">
-        <div class="container mx-auto flex justify-between items-center relative">
-            <a class="text-2xl font-bold text-gray-900 dark:text-white" href="#">Laptopi Plus</a>
-            <nav class="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
-                <a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white font-semibold" href="#">Laptopi</a>
-                <a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white" href="#">Kontakt</a>
-            </nav>
-        </div>
-    </header>
-    <!--END OF NAVIGATION BAR-->
 
-    <!--HERO SECTION-->
-    <section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
-        <img alt="Modern desk setup with a laptop" class="absolute inset-0 w-full h-full object-cover z-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5sVuCtmqZpZ0D8iLshqCe6NaEx0MCjcckHpCFulGhRxoTE1dNfTaFr1vSB7I5IQM2fwQjHE3VtjSyu6x_wgg17LC6MUYNEbcobkIuzjscpJWcohj8e9fqch19RWWUsRTs-XqnE8lBDaGxCBjf65aZd1cg79cNRSCfL3rdjhtuj3Z6zJt85ogQMiv1gNAyNnnVOO9t--q_C_M-Ft1U50YWUe-w_XV3w9jdAo_C76vKZqY4lskd91i6ZYtncUQP06fKFaE_SlMkUF_Y"/>
-        <div class="absolute inset-0 bg-black opacity-50 z-10"></div>
-        <div class="relative z-20 text-center">
-            <h1 class="text-8xl font-bold">Laptopi Plus</h1>
-            <p class="mt-4 text-xl">Laptopi za sve namene!</p>
-            <div class="mt-8 mx-auto max-w-lg">
-                <form @submit.prevent="performSearch()" class="relative">
-                <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                <input class="w-full py-3 pl-12 pr-28 rounded-full bg-background-light dark:bg-gray-800 text-gray-900 dark:text-white border-none focus:ring-2 focus:ring-primary focus:ring-opacity-50" placeholder="Pretraži Laptopi Plus" type="text" x-model="searchQuery"/>
-                <button class="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors" type="submit">Pretraga</button>
-                </form>
-            </div>
-        </div>
-    </section>
-    <!--END OF HERO SECTION-->
+<!-- NAVBAR -->
+<header class="py-6 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto flex justify-between items-center relative">
+        <a class="text-2xl font-bold text-gray-900 dark:text-white" href="#">Laptopi Plus</a>
 
-        
-    <!--POČETAK CAROUSEL-->
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">
-                Odaberite laptop koji vama najviše odgovara
-            </h2>
-        </div>
-    
-        <div class="relative max-w-4xl mx-auto">
-            <div class="carousel-container flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4" id="carousel">
-                <div class="w-full flex justify-center items-center h-96">
-                    <p class="text-gray-500">Učitavanje laptopova...</p>
-                </div>
-            </div>
-    
-            <!-- Strelice -->
-            <button id="prev-btn" class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12 bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10">
-                <span class="material-icons text-gray-800 dark:text-white">arrow_back_ios_new</span>
-            </button>
-            <button id="next-btn" class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12 bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10">
-                <span class="material-icons text-gray-800 dark:text-white">arrow_forward_ios</span>
-            </button>
-        </div>
-    
-        <!-- Pagination dots -->
-        <div class="flex justify-center items-center mt-12 space-x-2" id="pagination-dots"></div>
-    </main>
-
-    <!--MODAL ZA DETALJE PROIZVODA (POPUP DETALJI)-->
-    <div id="product-modal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-black bg-opacity-70 p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            <!-- Header -->
-            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-                <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-                    <span class="material-icons text-3xl">close</span>
-                </button>
-            </div>
-    
-            <!-- Sadržaj -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Levo: Opis i specifikacije -->
-                    <div>
-                        <div class="mb-6">
-                            <h4 id="modal-name" class="text-3xl font-bold text-gray-900 dark:text-white"></h4>
-                            <p id="modal-price" class="text-3xl font-bold text-primary mt-2"></p>
-                        </div>
-    
-                        <div class="mb-8">
-                            <h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Opis</h5>
-                            <p id="modal-description" class="text-gray-600 dark:text-gray-400 leading-relaxed"></p>
-                        </div>
-    
-                        <div>
-                            <h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Specifikacije</h5>
-                            <div id="modal-specs" class="space-y-2"></div>
-                        </div>
-                    </div>
-    
-                    <!-- Desno: Galerija slika -->
-                    <div>
-                        <h5 class="font-semibold text-lg mb-4 text-gray-800 dark:text-gray-200">Galerija</h5>
-                        <div id="modal-gallery" class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-200 dark:bg-gray-700 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center">
-                                <span class="text-gray-500">Nema slika</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Footer -->
-            <div class="p-6 border-t border-gray-200 dark:border-gray-700 text-right bg-gray-50 dark:bg-gray-900">
-                <button onclick="selectAndCloseModal()" class="bg-primary text-white font-bold px-8 py-3 rounded-lg hover:bg-opacity-90 transition-all shadow-lg">
-                    Izaberi ovaj laptop
-                </button>
-            </div>
-        </div>
+        <nav class="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
+            <a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white font-semibold" href="#">Laptopi</a>
+            <a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white font-semibold" href="#">Kontakt</a>
+        </nav>
     </div>
-    <!--END OF MODAL ZA DETALJE PROIZVODA (POPUP DETALJI)-->
+</header>
 
-    <script>
-        let selectedProductGlobal = null; // Čuva trenutno izabrani proizvod
-        
-        function openModal(product) {
-            selectedProductGlobal = product;
-            document.getElementById('modal-title').textContent = product.title || 'Bez naziva';
-            document.getElementById('modal-name').textContent = product.title || 'Bez naziva';
-            document.getElementById('modal-price').textContent = (product.price ? product.price + '€' : 'Cena na upit');
-            document.getElementById('modal-description').textContent = product.description || product.shortDesc || 'Nema opisa.';
-        
-            // Specifikacije (ako postoji polje specs kao niz objekata)
-            const specsContainer = document.getElementById('modal-specs');
-            specsContainer.innerHTML = '';
-            if (Array.isArray(product.specs) && product.specs.length > 0) {
-                product.specs.forEach(spec => {
-                    const div = document.createElement('div');
-                    div.className = 'flex justify-between p-3 rounded-lg bg-gray-100 dark:bg-gray-700/50';
-                    div.innerHTML = `
-                        <span class="font-medium text-gray-600 dark:text-gray-300">${spec.label || 'Nepoznato'}</span>
-                        <span class="font-semibold text-gray-900 dark:text-white">${spec.value || ''}</span>
-                    `;
-                    specsContainer.appendChild(div);
-                });
-            } else {
-                specsContainer.innerHTML = '<p class="text-gray-500 italic">Nema dostupnih specifikacija.</p>';
-            }
-        
-            // Galerija slika
-            const gallery = document.getElementById('modal-gallery');
-            gallery.innerHTML = '';
-            const images = product.images && Array.isArray(product.images) ? product.images : 
-                           (product.image ? [product.image] : []);
-        
-            if (images.length > 0) {
-                images.forEach(src => {
-                    const div = document.createElement('div');
-                    div.className = 'aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600';
-                    div.innerHTML = `<img src="${src}" alt="${product.title}" class="w-full h-full object-contain hover:scale-105 transition-transform duration-300">`;
-                    gallery.appendChild(div);
-                });
-            } else {
-                gallery.innerHTML = `
-                    <div class="col-span-2 bg-gray-200 dark:bg-gray-700 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center">
-                        <span class="text-gray-500 text-lg">Nema dostupnih slika</span>
-                    </div>
-                `;
-            }
-        
-            // Pokaži modal
-            document.getElementById('product-modal').classList.remove('hidden');
-            document.getElementById('product-modal').classList.add('flex');
-        }
-        
-        function closeModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-            document.getElementById('product-modal').classList.remove('flex');
-            selectedProductGlobal = null;
-        }
-        
-        function selectAndCloseModal() {
-            if (selectedProductGlobal && selectedProductGlobal.title) {
-                selectLaptop(selectedProductGlobal.title);
-            }
-            closeModal();
-        }
-        
-        // Zatvaranje klizanjem van modala ili ESC
-        document.getElementById('product-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('product-modal')) {
-                closeModal();
-            }
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-    </script>
+<!-- HERO -->
+<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
+    <img alt="Hero" class="absolute inset-0 w-full h-full object-cover z-0"
+         src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5sVuCtmqZpZ0D8iLshqCe6NaEx0MCjcckHpCFulGhRxoTE1dNfTaFr1vSB7I5IQM2fwQjHE3VtjSyu6x_wgg17LC6MUYNEbcobkIuzjscpJWcohj8e9fqch19RWWUsRTs-XqnE8lBDaGxCBjf65aZd1cg79cNRSCfL3rdjhtuj3Z6zJt85ogQMiv1gNAyNnnVOO9t--q_C_M-Ft1U50YWUe-w_XV3w9jdAo_C76vKZqY4lskd91i6ZYtncUQP06fKFaE_SlMkUF_Y"/>
+    <div class="absolute inset-0 bg-black opacity-50 z-10"></div>
 
-    <!--GLAVNI CAROUSEL SKRIPT – sa dinamičkim učitavanjem i openModal()-->
-    <script>
-        const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
-        const carousel = document.getElementById('carousel');
-        const paginationDots = document.getElementById('pagination-dots');
-        
-        async function loadLaptops() {
-            try {
-                const res = await fetch(API_URL);
-                if (!res.ok) throw new Error('Greška');
-        
-                const data = await res.json();
-        
-                // ==================== PODRŠKA ZA OBA FORMATA ====================
-                let products = [];
-        
-                if (data && Array.isArray(data.products)) {
-                    // Novi format → { products: [...], lastModified: ... }
-                    products = data.products;
-                } else if (Array.isArray(data)) {
-                    // Stari format → samo niz
-                    products = data;
-                }
-                // ================================================================
-        
-                const laptops = products.filter(p => p.title && p.price);
-        
-                if (laptops.length === 0) {
-                    carousel.innerHTML = `<p class="text-center text-gray-500 py-20">Nema dostupnih laptopova.</p>`;
-                    paginationDots.innerHTML = '';
-                    return;
-                }
-        
-                // Ostatak koda ostaje POTPUNO ISTI (od mapiranja nadalje)
-                carousel.innerHTML = laptops.map((p, i) => {
-                    const img = p.image || p.images?.[0] || 'https://via.placeholder.com/600x600.png?text=Laptop';
-                    const tag = p.tag ? `<span class="absolute top-4 left-4 bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">${p.tag.toUpperCase()}</span>` : '';
-                    return `
-                        <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
-                            <div class="group relative flex flex-col w-full max-w-sm">
-                                <div onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})' class="cursor-pointer">
-                                    <div class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6">
-                                        <img src="${img}" alt="${p.title}" class="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-300">
-                                        ${tag}
-                                    </div>
-                                </div>
-                                <h3 class="font-semibold text-3xl text-center mb-2">${p.title}</h3>
-                                <p class="text-gray-500 dark:text-gray-400 text-xl text-center mb-4">${p.shortDesc || 'Premium laptop'}</p>
-                                <div class="text-center">
-                                    <p class="text-3xl font-bold">${p.price === "Cena na upit" ? p.price : p.price + '€'}</p>
-                                    <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 w-full transition" onclick="selectLaptop('${(p.title||"").replace(/'/g, "\\'")}')">
-                                        Izaberite Laptop
-                                    </button>
-                                    <button onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})' class="mt-2 bg-gray-200 dark:bg-gray-700 text-primary dark:text-white px-6 py-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 w-full transition">
-                                        Detalji
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-        
-                // Dots i navigacija
-                paginationDots.innerHTML = laptops.map((_, i) =>
-                    `<button onclick="scrollToSlide(${i})" class="w-3 h-3 rounded-full transition-all ${i===0 ? 'bg-primary w-8' : 'bg-gray-300 dark:bg-gray-600'}"></button>`
-                ).join('');
-        
-                document.getElementById('prev-btn').onclick = () => scrollCarousel(-1);
-                document.getElementById('next-btn').onclick = () => scrollCarousel(1);
-                carousel.addEventListener('scroll', updateActiveDot);
-                updateActiveDot(); // inicijalno
-        
-            } catch (err) {
-                console.error(err);
-                carousel.innerHTML = `<p class="text-red-500 text-center py-20">Greška pri učitavanju.</p>`;
-            }
-        }
-        
-        function scrollCarousel(dir) {
-            const width = carousel.clientWidth;
-            carousel.scrollBy({ left: dir * width, behavior: 'smooth' });
-        }
-        
-        function scrollToSlide(i) {
-            const width = carousel.clientWidth;
-            carousel.scrollTo({ left: i * width, behavior: 'smooth' });
-        }
-        
-        function updateActiveDot() {
-            const dots = paginationDots.querySelectorAll('button');
-            const scroll = carousel.scrollLeft + carousel.clientWidth / 2;
-            const width = carousel.clientWidth;
-            const active = Math.round(scroll / width);
-            dots.forEach((d, i) => {
-                d.classList.toggle('bg-primary', i === active);
-                d.classList.toggle('w-8', i === active);
-                d.classList.toggle('bg-gray-300', i !== active);
-                d.classList.toggle('dark:bg-gray-600', i !== active);
-                d.classList.toggle('w-3', i !== active);
-            });
-        }
-        
-        // Pokreni
-        loadLaptops();
-    </script>
-    <!--KRAJ CAROUSEL-->
-
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16" 
-        id="contact-form-section" 
-        x-data="{ modalOpen: false }">
-    
-        <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
-            <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
-    
-                <div class="lg:w-1/3">
-                    <h2 class="text-4xl font-bold mb-4">Spremni da kupite jedan od naših laptopa?</h2>
-                    <p class="text-gray-300">Popunite formu i mi ćemo Vas kontaktirati u najkraćem mogućem roku.</p>
-                </div>
-    
-                <div class="lg:w-2/3">
-                    <form class="space-y-6" id="contact-form" novalidate>
-    
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-200 mb-2" for="ime">Ime</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="ime" placeholder="Unesite Vaše ime" required type="text"/>
-                                <p class="error-hint hidden">Popunite ostala polja</p>
-                            </div>
-    
-                            <div>
-                                <label class="block text-sm font-medium text-gray-200 mb-2" for="prezime">Prezime</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="prezime" placeholder="Unesite Vaše prezime" required type="text"/>
-                                <p class="error-hint hidden">Popunite ostala polja</p>
-                            </div>
-                        </div>
-    
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-200 mb-2" for="kontakt-broj">Vaš Kontakt broj</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="kontakt-broj" placeholder="Npr. 061 123 4567" required type="tel"/>
-                                <p class="error-hint hidden">Popunite ostala polja</p>
-                            </div>
-    
-                            <div>
-                                <label class="block text-sm font-medium text-gray-200 mb-2" for="email">Email</label>
-                                <input class="w-full p-3 rounded-lg bg-gray-700 text-white" id="email" placeholder="vas.email@example.com" required type="email"/>
-                                <p class="error-hint hidden">Popunite ostala polja</p>
-                            </div>
-                        </div>
-    
-                        <div>
-                            <label class="block text-sm font-medium text-gray-200 mb-2" for="laptop-select">Koji laptop želite</label>
-    
-                            <input id="laptop-select-hidden" name="laptop" required type="hidden"/>
-    
-                            <button 
-                                @click.prevent="modalOpen = true" 
-                                type="button"
-                                id="laptop-select"
-                                class="w-full p-3 rounded-lg bg-gray-700 text-white text-left flex justify-between items-center">
-                                <span id="selected-laptop-text">Odaberite laptop</span>
-                                <span class="material-icons">expand_more</span>
-                            </button>
-    
-                            <p class="error-hint hidden">Popunite ostala polja</p>
-                        </div>
-    
-                        <div class="text-right">
-                            <button 
-                                class="bg-white text-primary font-semibold px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors shadow-md" 
-                                type="submit">
-                                Pošalji
-                            </button>
-                        </div>
-    
-                    </form>
-                </div>
-    
-            </div>
-        </div>
-    
-        <!-- MODAL -->
-        <div 
-            x-cloak 
-            x-show="modalOpen"
-            @click.away="modalOpen = false"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-    
-            <div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-    
-                <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Odaberite Laptop</h3>
-                    <button @click="modalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                        <span class="material-icons">close</span>
-                    </button>
-                </div>
-    
-                <!-- DINAMIČKI GRID -->
-                <div class="p-6 overflow-y-auto">
-                    <div id="modal-laptop-grid" 
-                         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                         <!-- JS će ovde ubaciti laptopove -->
-                    </div>
-                </div>
-    
-            </div>
-        </div>
-    </section>
-
-
-
-    
-<section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="text-center mb-12">
-    <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">Svi naši proizvodi</h2>
-    <p class="mt-2 text-gray-600 dark:text-gray-400">Pregledajte kompletnu ponudu laptopa.</p>
-  </div>
-
-  <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-    <div class="col-span-full text-center py-20">
-      <p class="text-gray-500">Učitavanje proizvoda...</p>
+    <div class="relative z-20 text-center">
+        <h1 class="text-6xl md:text-8xl font-bold">Laptopi Plus</h1>
+        <p class="mt-4 text-xl">Laptopi za sve namene!</p>
     </div>
-  </div>
 </section>
 
-<script>
-const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
+<!-- CAROUSEL -->
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">
+            Odaberite laptop koji vama najviše odgovara
+        </h2>
+    </div>
 
-async function loadProductsGrid() {
-  const grid = document.getElementById('products-grid');
-  try {
-    console.log('Počinjem fetch...');
-    const res = await fetch(API_URL);
-    console.log('Fetch status:', res.status);
-    if (!res.ok) throw new Error(`API greška: ${res.status}`);
-    
-    const data = await res.json();
-    console.log('Dobijeni podaci:', data);
-    
-    let products = [];
-    if (data && Array.isArray(data.products)) {
-      products = data.products;
-    } else if (Array.isArray(data)) {
-      products = data;
-    } else {
-      throw new Error('Nepoznat format');
-    }
-    
-    console.log('Broj proizvoda:', products.length);
-    
-    if (products.length === 0) {
-      grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500 text-xl">Nema dostupnih proizvoda. Dodaj ih u admin panelu!</div>`;
-      return;
-    }
-    
-    grid.innerHTML = products.map(p => {
-      const img = p.images?.[0] || p.image || 'https://via.placeholder.com/600x600.png?text=No+Image';
-      const shortDesc = p.shortDesc || (p.specs ? p.specs.map(s => s.value).join(' • ') : 'Premium laptop');
-      return `
-        <div onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})'
-             class="group relative flex flex-col text-center bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
-          <div class="relative w-full h-48 mb-4">
-            <img alt="${p.title || 'Laptop'}"
-                 class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300"
-                 src="${img}"
-                 onerror="this.src='https://via.placeholder.com/600x600.png?text=Slika+nije+dostupna'">
-          </div>
-          <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1">
-            ${p.title || 'Bez naziva'}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400 text-sm mb-2 flex-grow">
-            ${shortDesc}
-          </p>
-          <p class="text-xl font-bold text-primary dark:text-gray-300">
-            ${p.price ? p.price + '€' : 'Cena na upit'}
-          </p>
+    <div class="relative max-w-4xl mx-auto">
+
+        <div id="carousel"
+             class="carousel-container flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4">
+            <div class="w-full flex justify-center items-center h-96">
+                <p class="text-gray-500">Učitavanje laptopova...</p>
+            </div>
         </div>
-      `;
-    }).join('');
-  } catch (err) {
-    console.error('Detaljna greška:', err);
-    grid.innerHTML = `
-      <div class="col-span-full text-center py-20">
-        <p class="text-red-500 text-xl">Greška pri učitavanju: ${err.message}</p>
-        <p class="text-gray-500 mt-2">Proveri konzolu za više detalja.</p>
-      </div>`;
-  }
+
+        <!-- Strelice -->
+        <button id="prev-btn"
+                class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12
+                       bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md
+                       hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10">
+            <span class="material-icons text-gray-800 dark:text-white">arrow_back_ios_new</span>
+        </button>
+
+        <button id="next-btn"
+                class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12
+                       bg-gray-100 dark:bg-gray-700/50 p-3 rounded-full shadow-md
+                       hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10">
+            <span class="material-icons text-gray-800 dark:text-white">arrow_forward_ios</span>
+        </button>
+    </div>
+
+    <div id="pagination-dots" class="flex justify-center items-center mt-12 space-x-2"></div>
+</main>
+
+<!-- MODAL ZA DETALJE PROIZVODA -->
+<div id="product-modal"
+     class="fixed inset-0 z-[70] hidden items-center justify-center bg-black bg-opacity-70 p-4">
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 id="modal-title"
+                class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+
+            <button onclick="closeModal()"
+                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                <span class="material-icons text-3xl">close</span>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- Info -->
+                <div>
+                    <div class="mb-6">
+                        <h4 id="modal-name"
+                            class="text-3xl font-bold text-gray-900 dark:text-white"></h4>
+                        <p id="modal-price"
+                           class="text-3xl font-bold text-primary mt-2"></p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Opis</h5>
+                        <p id="modal-description"
+                           class="text-gray-600 dark:text-gray-400 leading-relaxed"></p>
+                    </div>
+
+                    <div>
+                        <h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Specifikacije</h5>
+                        <div id="modal-specs" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Galerija -->
+                <div>
+                    <h5 class="font-semibold text-lg mb-4 text-gray-800 dark:text-gray-200">Galerija</h5>
+                    <div id="modal-gallery" class="grid grid-cols-2 gap-4">
+                        <!-- Auto-popunjavanje -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-6 border-t border-gray-200 dark:border-gray-700 text-right bg-gray-50 dark:bg-gray-900">
+            <button onclick="selectAndCloseModal()"
+                    class="bg-primary text-white font-bold px-8 py-3 rounded-lg hover:bg-opacity-90 transition-all shadow-lg">
+                Izaberi ovaj laptop
+            </button>
+        </div>
+    </div>
+
+</div>
+<!-- KRAJ DETALJ MODALA -->
+
+
+<!-- CONTACT FORMA + SELECT LAPTOP MODAL -->
+<section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16"
+         id="contact-form-section"
+         x-data="{ modalOpen: false }">
+
+    <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
+
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
+
+            <!-- Left -->
+            <div class="lg:w-1/3">
+                <h2 class="text-4xl font-bold mb-4">Spremni da kupite laptop?</h2>
+                <p class="text-gray-300">Popunite formu i bićemo u kontaktu.</p>
+            </div>
+
+            <!-- Form -->
+            <div class="lg:w-2/3">
+
+                <form id="contact-form" class="space-y-6" novalidate>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-200 mb-2">Ime</label>
+                            <input id="ime"
+                                   type="text"
+                                   placeholder="Unesite Vaše ime"
+                                   class="w-full p-3 rounded-lg bg-gray-700 text-white"/>
+                            <p class="error-hint hidden">Popunite polje</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-200 mb-2">Prezime</label>
+                            <input id="prezime"
+                                   type="text"
+                                   placeholder="Unesite Vaše prezime"
+                                   class="w-full p-3 rounded-lg bg-gray-700 text-white"/>
+                            <p class="error-hint hidden">Popunite polje</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-200 mb-2">Kontakt broj</label>
+                            <input id="kontakt-broj"
+                                   type="tel"
+                                   placeholder="061 234 567"
+                                   class="w-full p-3 rounded-lg bg-gray-700 text-white"/>
+                            <p class="error-hint hidden">Popunite polje</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-200 mb-2">Email</label>
+                            <input id="email"
+                                   type="email"
+                                   placeholder="vas.email@example.com"
+                                   class="w-full p-3 rounded-lg bg-gray-700 text-white"/>
+                            <p class="error-hint hidden">Popunite polje</p>
+                        </div>
+                    </div>
+
+                    <!-- SELECT LAPTOP BUTTON -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-200 mb-2">Koji laptop želite</label>
+
+                        <input type="hidden" id="laptop-select-hidden"/>
+
+                        <button id="laptop-select"
+                                @click.prevent="modalOpen = true"
+                                class="w-full p-3 rounded-lg bg-gray-700 text-white text-left flex justify-between items-center">
+                            <span id="selected-laptop-text">Odaberite laptop</span>
+                            <span class="material-icons">expand_more</span>
+                        </button>
+
+                        <p class="error-hint hidden">Morate izabrati laptop</p>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="text-right">
+                        <button type="submit"
+                                class="bg-white text-primary font-semibold px-8 py-3 rounded-lg hover:bg-gray-200 transition shadow-md">
+                            Pošalji
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LAPTOP SELECT MODAL -->
+    <div x-cloak x-show="modalOpen"
+         @click.away="modalOpen = false"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+
+        <div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-semibold">Odaberite Laptop</h3>
+                <button @click="modalOpen = false"
+                        class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto">
+                <div id="modal-laptop-grid"
+                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Dinamički prikaz proizvoda -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- GRID — SVI PROIZVODI -->
+<section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">Svi naši proizvodi</h2>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Pregledajte kompletnu ponudu laptopa.</p>
+    </div>
+
+    <div id="products-grid"
+         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="col-span-full text-center py-20">
+            <p class="text-gray-500">Učitavanje proizvoda...</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="bg-background-light dark:bg-background-dark">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+            <p>Laptopi Plus — Laptopi za sve namene</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ============================== -->
+<!--       JAVASCRIPT CORE         -->
+<!-- ============================== -->
+
+<script>
+const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
+let allProducts = [];  // globalno za grid + modal
+
+/* =============================
+   LOADING PRODUCTS (CAROUSEL + GRID + SELECT MODAL)
+============================= */
+async function loadProducts() {
+    try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("Greška API: " + res.status);
+
+        const data = await res.json();
+
+        let products = Array.isArray(data.products) ? data.products :
+                       Array.isArray(data) ? data : [];
+
+        allProducts = products;
+
+        renderCarousel(products);
+        renderGrid(products);
+        renderSelectModal(products);
+
+    } catch (e) {
+        console.error(e);
+    }
 }
 
-document.addEventListener('DOMContentLoaded', loadProductsGrid);
-</script>
+document.addEventListener("DOMContentLoaded", loadProducts);
 
-<footer class="bg-background-light dark:bg-background-dark">
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-<div class="text-center text-sm text-gray-500 dark:text-gray-400">
-<p>Laptopi Plus - Laptopi za sve namene</p>
-</div>
-</div>
-</footer>
-<div @click.away="searchModalOpen = false" class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak="" x-show="searchModalOpen">
-<div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-<div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Rezultati pretrage za "<span x-text="searchQuery"></span>"</h3>
-<button @click="searchModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-<span class="material-icons">close</span>
-</button>
-</div>
-<div class="p-6 overflow-y-auto">
-<template x-if="searchResults.length &gt; 0">
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-<template :key="product.name" x-for="product in searchResults">
-<div @click="openProductDetails(product)" class="group relative flex flex-col bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-primary dark:hover:ring-gray-500 transition-all">
-<img :alt="product.name" :src="product.image" class="w-full h-40 object-contain mb-4"/>
-<h4 class="font-semibold text-gray-900 dark:text-white" x-text="product.name"></h4>
-<p class="text-sm text-gray-500 dark:text-gray-400 flex-grow" x-text="product.shortDesc"></p>
-<p class="font-bold text-lg text-gray-900 dark:text-white mt-2" x-text="product.price"></p>
-</div>
-</template>
-</div>
-</template>
-<template x-if="searchResults.length === 0">
-<div class="text-center py-12">
-<p class="text-gray-500 dark:text-gray-400 text-lg">Nema rezultata za vašu pretragu.</p>
-</div>
-</template>
-</div>
-</div>
-</div>
-<div @click.away="detailModalOpen = false" class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak="" x-show="detailModalOpen">
-<div class="bg-background-light dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-<div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-<h3 class="text-xl font-semibold text-gray-900 dark:text-white" x-text="selectedProduct.name"></h3>
-<button @click="detailModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-<span class="material-icons">close</span>
-</button>
-</div>
-<div class="p-6 overflow-y-auto">
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-<div>
-<div class="mb-4">
-<h4 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="selectedProduct.name"></h4>
-<p class="text-2xl font-semibold text-primary dark:text-gray-300 mt-1" x-text="selectedProduct.price"></p>
-</div>
-<div class="mb-6">
-<h5 class="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-200">Opis</h5>
-<p class="text-gray-600 dark:text-gray-400" x-text="selectedProduct.description"></p>
-</div>
-<div>
-<h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Specifikacije</h5>
-<div class="space-y-2">
-<template :key="spec.label" x-for="spec in selectedProduct.specs">
-<div class="flex justify-between text-sm p-2 rounded-md bg-gray-100 dark:bg-gray-700/50">
-<span class="font-medium text-gray-600 dark:text-gray-300" x-text="spec.label"></span>
-<span class="text-gray-800 dark:text-white" x-text="spec.value"></span>
-</div>
-</template>
-</div>
-</div>
-</div>
-<div>
-<h5 class="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-200">Galerija</h5>
-<div class="grid grid-cols-2 gap-4">
-<template :key="image" x-for="image in selectedProduct.images">
-<div class="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-<img :alt="selectedProduct.name" :src="image" class="w-full h-full object-contain"/>
-</div>
-</template>
-</div>
-</div>
-</div>
-</div>
-<div class="p-6 mt-auto border-t border-gray-200 dark:border-gray-700 text-right">
-<button @click="selectLaptop(selectedProduct.name); detailModalOpen = false" class="bg-primary text-white font-semibold px-8 py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-md">Izaberi Laptop</button>
-</div>
-</div>
-</div>
-</div>
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.getElementById('carousel');
-            if (!carousel) return;
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const items = document.querySelectorAll('.carousel-item');
-            const dotsContainer = document.getElementById('pagination-dots');
-            const totalItems = items.length;
-            if (totalItems <= 1) return;
-            let currentIndex = 0;
-            let itemWidth = items[0].offsetWidth;
-            let isTransitioning = false;
-            function updateCarousel(instant = false) {
-                const scrollPosition = currentIndex * itemWidth;
-                carousel.scrollTo({
-                    left: scrollPosition,
-                    behavior: instant ? 'instant' : 'smooth'
-                });
-                updateDots();
-            }
-            function updateDots() {
-                const dots = document.querySelectorAll('.pagination-dot');
-                dots.forEach((dot, index) => {
-                    if (index === currentIndex) {
-                        dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
-                        dot.classList.add('bg-primary');
-                    } else {
-                        dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
-                        dot.classList.remove('bg-primary');
-                    }
-                });
-            }
-            function createDots() {
-                dotsContainer.innerHTML = '';
-                for (let i = 0; i < totalItems; i++) {
-                    const button = document.createElement('button');
-                    button.classList.add('pagination-dot', 'w-3', 'h-3', 'rounded-full', 'transition-colors');
-                    button.classList.add(i === 0 ? 'bg-primary' : 'bg-gray-300', 'dark:bg-gray-600', 'hover:bg-gray-400', 'dark:hover:bg-gray-500');
-                    button.addEventListener('click', () => {
-                        currentIndex = i;
-                        updateCarousel();
-                    });
-                    dotsContainer.appendChild(button);
-                }
-            }
-            function handleNext() {
-                if (isTransitioning) return;
-                if (currentIndex === totalItems - 1) {
-                    currentIndex = 0;
-                } else {
-                    currentIndex++;
-                }
-                updateCarousel();
-            }
-            function handlePrev() {
-                if (isTransitioning) return;
-                if (currentIndex === 0) {
-                     currentIndex = totalItems - 1;
-                } else {
-                    currentIndex--;
-                }
-                updateCarousel();
-            }
-            nextBtn.addEventListener('click', handleNext);
-            prevBtn.addEventListener('click', handlePrev);
-            createDots();
-            updateCarousel(true);
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    itemWidth = items[0].offsetWidth;
-                    updateCarousel(true);
-                }, 250);
-            });
-        });
-        const contactForm = document.getElementById('contact-form');
-        const formFields = ['ime', 'prezime', 'kontakt-broj', 'email'];
-        const laptopSelectButton = document.getElementById('laptop-select');
-        const hiddenLaptopInput = document.getElementById('laptop-select-hidden');
-        function validateField(fieldId) {
-            const input = document.getElementById(fieldId);
-            const errorHint = input.nextElementSibling;
-            let isValid = input.value.trim() !== '';
-            if (fieldId === 'laptop-select-hidden') {
-                isValid = hiddenLaptopInput.value.trim() !== '';
-                const button = document.getElementById('laptop-select');
-                const buttonErrorHint = button.nextElementSibling;
-                if (!isValid) {
-                    button.classList.add('invalid-field');
-                    buttonErrorHint.classList.remove('hidden');
-                } else {
-                    button.classList.remove('invalid-field');
-                    buttonErrorHint.classList.add('hidden');
-                }
-                return isValid;
-            }
-            if (!isValid) {
-                input.classList.add('invalid-field');
-                if (errorHint) errorHint.classList.remove('hidden');
-                errorHint.textContent = 'Popunite ostala polja';
-            } else {
-                input.classList.remove('invalid-field');
-                if (errorHint) errorHint.classList.add('hidden');
-            }
-            return isValid;
-        }
-        function validateAllFields() {
-            let isFormValid = true;
-            formFields.forEach(fieldId => {
-                if (!validateField(fieldId)) {
-                    isFormValid = false;
-                }
-            });
-            return isFormValid;
-        }
-        contactForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            let isFormValid = validateAllFields();
-            if (!validateField('laptop-select-hidden')) {
-                isFormValid = false;
-            }
-            if (isFormValid) {
-                console.log('Form submitted successfully!');
-            }
-        });
-        formFields.forEach(fieldId => {
-            const input = document.getElementById(fieldId);
-            input.addEventListener('input', () => validateField(fieldId));
-        });
-        function selectLaptop(laptopName) {
-            const formSection = document.getElementById('contact-form-section');
-            formSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-            const laptopSelectText = document.getElementById('selected-laptop-text');
-            laptopSelectText.textContent = laptopName;
-            hiddenLaptopInput.value = laptopName;
-            laptopSelectText.classList.remove('text-gray-400');
-            laptopSelectText.classList.add('text-white');
-            validateField('laptop-select-hidden');
-        }
-        function selectModalLaptop(laptopName) {
-            const laptopSelectText = document.getElementById('selected-laptop-text');
-            laptopSelectText.textContent = laptopName;
-            hiddenLaptopInput.value = laptopName;
-            laptopSelectText.classList.remove('text-gray-400');
-            laptopSelectText.classList.add('text-white');
-            validateField('laptop-select-hidden');
-        }
-    </script>
-<script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<div id="products-container">
-  <p style="text-align:center; padding:2rem; color:#666;">Učitavanje proizvoda...</p>
-</div>
-<script>
-  const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
-  fetch(API_URL)
-    .then(res => {
-      if (!res.ok) throw new Error('Neuspešno učitavanje');
-      return res.json();
-    })
-    .then(products => {
-      const container = document.getElementById('products-container');
-      if (!products || products.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center; padding:4rem; color:#999;">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="64" height="64">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-3.5m-9 0H4"/>
-            </svg>
-            <p style="margin-top:1rem; font-size:1.2rem;">Još uvek nema proizvoda</p>
-          </div>
-        `;
+/* =============================
+   RENDER CAROUSEL
+============================= */
+function renderCarousel(products) {
+    const carousel = document.getElementById("carousel");
+    const dots = document.getElementById("pagination-dots");
+
+    if (!products.length) {
+        carousel.innerHTML = `<p class="text-center text-gray-500 py-20">Nema laptopova.</p>`;
         return;
-      }
+    }
 
-      container.innerHTML = products.map(p => {
-        const imageUrl = p.image && p.image.trim() ? p.image.trim() : 'https://via.placeholder.com/300x300.png?text=No+Image';
-        const productTitle = p.title || 'Proizvod';
+    carousel.innerHTML = products.map((p, i) => {
+        const img = p.image || p.images?.[0] || "https://via.placeholder.com/600?text=Laptop";
+        const tag = p.tag ? `<span class="absolute top-4 left-4 bg-blue-100 text-blue-800 
+                             text-xs font-bold px-3 py-1 rounded-full">${p.tag.toUpperCase()}</span>` : "";
 
         return `
-          <div class="product-card" 
-               style="background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1); transition:all 0.3s; margin:1rem; max-width:320px; text-align:center;"
-               onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.15)'"
-               onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'"
-               aria-label="${productTitle}">
+        <div class="carousel-item snap-center flex-shrink-0 w-full flex justify-center p-4">
+            <div class="group relative flex flex-col w-full max-w-sm">
+                <div onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})' class="cursor-pointer">
+                    <div class="relative w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-6">
+                        <img src="${img}" class="w-full h-full object-contain p-8 group-hover:scale-105 
+                             transition-transform duration-300" alt="${p.title}">
+                        ${tag}
+                    </div>
+                </div>
 
-            <div style="height:200px; overflow:hidden; background:#f8f9fa; position:relative;">
-              <img
-                  src="${imageUrl}"
-                  loading="lazy"
-                  aria-hidden="true"
-                  style="width:100%; height:100%; object-fit:cover; background:#f1f1f1;"
-                  class="product-img">
+                <h3 class="font-semibold text-2xl text-center mb-2">${p.title}</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-base text-center mb-4">${p.shortDesc || ""}</p>
 
-              <!-- Fallback ako slika ne učita -->
-              <div class="img-fallback" style="position:absolute; inset:0; background:#f3f4f6; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.2s;">
-                <svg fill="none" stroke="#94a3b8" viewBox="0 0 24 24" width="48" height="48">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold">${p.price ? p.price + "€" : "Cena na upit"}</p>
+                    <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 w-full transition"
+                            onclick="selectLaptop('${(p.title || "").replace(/'/g, "\\'")}')">
+                        Izaberite Laptop
+                    </button>
+
+                    <button onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})'
+                            class="mt-2 bg-gray-200 dark:bg-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 
+                                   dark:hover:bg-gray-600 w-full transition">
+                        Detalji
+                    </button>
+                </div>
             </div>
+        </div>`;
+    }).join("");
 
-            <div style="padding:1.2rem;">
-              <h3 style="margin:0 0 0.5rem 0; font-size:1.3rem; color:#1f2937;">
-                ${productTitle}
-              </h3>
-              ${p.shortDesc ? `<p style="color:#6b7280; margin:0.5rem 0; font-size:0.95rem;">${p.shortDesc}</p>` : ''}
-              <div style="margin:1rem 0; font-size:1.5rem; font-weight:700; color:#6366f1;">
-                ${p.price ? p.price + ' RSD' : 'Cena na upit'}
-              </div>
-              ${p.tag ? `<span style="background:#e0e7ff; color:#6366f1; padding:0.35rem 0.75rem; border-radius:50px; font-size:0.8rem; font-weight:600; text-transform:uppercase;">${p.tag}</span>` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
+    dots.innerHTML = products.map((_, i) =>
+        `<button onclick="scrollToSlide(${i})"
+                class="w-3 h-3 rounded-full transition-all ${i===0 ? "bg-primary w-8" : "bg-gray-300 dark:bg-gray-600"}">`
+    ).join("");
 
-      // Grid stilovi
-      container.style.display = 'grid';
-      container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
-      container.style.gap = '1.5rem';
-      container.style.padding = '2rem';
-      container.style.justifyItems = 'center';
-    })
-    .catch(err => {
-      console.error('Greška:', err);
-      document.getElementById('products-container').innerHTML = `<p style="text-align:center; color:#ef4444; padding:3rem;">Ne mogu da učitam proizvode.</p>`;
+    document.getElementById("prev-btn").onclick = () => scrollCarousel(-1);
+    document.getElementById("next-btn").onclick = () => scrollCarousel(1);
+    carousel.addEventListener("scroll", updateActiveDot);
+    updateActiveDot();
+}
+
+
+/* =============================
+   CAROUSEL NAVIGATION LOGIC
+============================= */
+function scrollCarousel(dir) {
+    const carousel = document.getElementById("carousel");
+    const width = carousel.clientWidth;
+    carousel.scrollBy({ left: dir * width, behavior: "smooth" });
+}
+
+function scrollToSlide(i) {
+    const carousel = document.getElementById("carousel");
+    const width = carousel.clientWidth;
+    carousel.scrollTo({ left: i * width, behavior: "smooth" });
+}
+
+function updateActiveDot() {
+    const carousel = document.getElementById("carousel");
+    const dots = document.querySelectorAll("#pagination-dots button");
+
+    const scroll = carousel.scrollLeft + carousel.clientWidth / 2;
+    const width = carousel.clientWidth;
+    const active = Math.round(scroll / width);
+
+    dots.forEach((d, i) => {
+        d.classList.toggle("bg-primary", i === active);
+        d.classList.toggle("w-8", i === active);
+        d.classList.toggle("bg-gray-300", i !== active);
+        d.classList.toggle("dark:bg-gray-600", i !== active);
+        d.classList.toggle("w-3", i !== active);
     });
+}
+
+
+/* =============================
+   RENDER GRID PRODUCTS
+============================= */
+function renderGrid(products) {
+    const grid = document.getElementById("products-grid");
+
+    if (!products.length) {
+        grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500 text-xl">
+            Nema dostupnih proizvoda.
+        </div>`;
+        return;
+    }
+
+    grid.innerHTML = products.map(p => {
+        const img = p.images?.[0] || p.image || "https://via.placeholder.com/600?text=Laptop";
+        const shortDesc = p.shortDesc || "";
+
+        return `
+        <div onclick='openModal(${JSON.stringify(p).replace(/'/g, "\\'")})'
+             class="group relative flex flex-col text-center bg-gray-50 dark:bg-gray-800 rounded-2xl 
+                    overflow-hidden p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
+
+            <div class="relative w-full h-48 mb-4">
+                <img src="${img}" alt="${p.title}"
+                     class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
+            </div>
+
+            <h3 class="font-semibold text-lg text-gray-900 dark:text-white mb-1">${p.title}</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mb-2 flex-grow">${shortDesc}</p>
+
+            <p class="text-xl font-bold text-primary dark:text-gray-300">
+                ${p.price ? p.price + "€" : "Cena na upit"}
+            </p>
+        </div>`;
+    }).join("");
+}
+
+
+/* =============================
+   RENDER SELECT LAPTOP MODAL GRID
+============================= */
+function renderSelectModal(products) {
+    const modalGrid = document.getElementById("modal-laptop-grid");
+
+    modalGrid.innerHTML = products.map(p => `
+        <div onclick="selectModalLaptop('${p.title.replace(/'/g, "\\'")}')"
+             class="bg-gray-100 dark:bg-gray-700/50 rounded-xl p-4 cursor-pointer
+                    hover:ring-2 hover:ring-primary transition">
+
+            <img src="${p.images?.[0] || p.image || ""}" 
+                 class="w-full h-40 object-contain mb-3" alt="${p.title}">
+
+            <h4 class="font-semibold text-gray-900 dark:text-white text-center">${p.title}</h4>
+        </div>
+    `).join("");
+}
+
+
+/* =============================
+   MODAL HANDLING (open/close)
+============================= */
+let selectedProductGlobal = null;
+
+function openModal(product) {
+    selectedProductGlobal = product;
+
+    document.getElementById("modal-title").textContent = product.title;
+    document.getElementById("modal-name").textContent = product.title;
+    document.getElementById("modal-price").textContent = product.price ? product.price + "€" : "Cena na upit";
+    document.getElementById("modal-description").textContent = product.description || product.shortDesc || "";
+
+    const specs = document.getElementById("modal-specs");
+    specs.innerHTML = "";
+
+    if (product.specs?.length) {
+        product.specs.forEach(s => {
+            specs.innerHTML += `
+                <div class="flex justify-between p-3 rounded-lg bg-gray-100 dark:bg-gray-700/50">
+                    <span class="font-medium">${s.label}</span>
+                    <span class="font-semibold">${s.value}</span>
+                </div>`;
+        });
+    } else {
+        specs.innerHTML = `<p class="text-gray-500 italic">Nema specifikacija.</p>`;
+    }
+
+    const gallery = document.getElementById("modal-gallery");
+    gallery.innerHTML = "";
+
+    const images = product.images?.length ? product.images :
+                    product.image ? [product.image] : [];
+
+    images.forEach(src => {
+        gallery.innerHTML += `
+            <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+                <img src="${src}" class="w-full h-full object-contain">
+            </div>`;
+    });
+
+    const modal = document.getElementById("product-modal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function closeModal() {
+    const modal = document.getElementById("product-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+function selectAndCloseModal() {
+    if (selectedProductGlobal?.title) {
+        selectLaptop(selectedProductGlobal.title);
+    }
+    closeModal();
+}
+
+
+/* =============================
+   CONTACT FORMA VALIDACIJA
+============================= */
+const form = document.getElementById("contact-form");
+const requiredFields = ["ime", "prezime", "kontakt-broj", "email"];
+
+function validate(fieldId) {
+    const el = document.getElementById(fieldId);
+    const hint = el.nextElementSibling;
+
+    if (!el.value.trim()) {
+        el.classList.add("invalid-field");
+        hint.classList.remove("hidden");
+        return false;
+    }
+
+    el.classList.remove("invalid-field");
+    hint.classList.add("hidden");
+    return true;
+}
+
+form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    let valid = true;
+
+    requiredFields.forEach(f => {
+        if (!validate(f)) valid = false;
+    });
+
+    if (!document.getElementById("laptop-select-hidden").value.trim()) {
+        valid = false;
+        document.getElementById("laptop-select").classList.add("invalid-field");
+        document.querySelector("#laptop-select + p").classList.remove("hidden");
+    }
+
+    if (valid) {
+        console.log("Form submitted.");
+    }
+});
+
+requiredFields.forEach(f => {
+    document.getElementById(f).addEventListener("input", () => validate(f));
+});
+
+
+/* =============================
+   SELECT LAPTOP (form)
+============================= */
+function selectLaptop(name) {
+    document.getElementById("selected-laptop-text").textContent = name;
+    document.getElementById("laptop-select-hidden").value = name;
+
+    document.getElementById("laptop-select").classList.remove("invalid-field");
+    document.querySelector("#laptop-select + p").classList.add("hidden");
+
+    document.getElementById("contact-form-section")
+        .scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function selectModalLaptop(name) {
+    document.getElementById("selected-laptop-text").textContent = name;
+    document.getElementById("laptop-select-hidden").value = name;
+
+    document.getElementById("laptop-select").classList.remove("invalid-field");
+    document.querySelector("#laptop-select + p").classList.add("hidden");
+}
 </script>
 
-    
-</body></html>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</body>
+</html>
