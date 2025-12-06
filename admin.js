@@ -81,6 +81,12 @@ function renderProductDetails(index) {
     </div>
   `;
 
+  const priceInput = document.getElementById('price');
+    priceInput.addEventListener('input', (e) => {
+      // Dozvoli samo brojeve i decimalnu tačku
+      e.target.value = e.target.value.replace(/[^0-9.]/g, '');
+    });
+  
   // Upload slike preview
   const imgInput = document.getElementById('imageUpload');
   const imgPreview = document.getElementById('imagePreview');
