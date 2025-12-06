@@ -103,13 +103,12 @@ function renderProductDetails(index) {
   const tagContainer = document.getElementById('tagContainer');
     tagContainer.querySelectorAll('button').forEach(btn => {
       btn.onclick = () => {
-        // ukloni selekciju sa svih dugmića
+        // ukloni klasu active sa svih dugmića
         tagContainer.querySelectorAll('button').forEach(b => {
-          b.classList.remove('bg-indigo-500','text-white');
-          b.classList.add('bg-white','text-gray-700');
+          b.classList.remove('active');
         });
-        // dodaj selekciju na kliknuti dugme
-        btn.classList.add('bg-indigo-500','text-white');
+        // dodaj klasu active na kliknuti dugme
+        btn.classList.add('active');
       };
     });
 
@@ -140,7 +139,7 @@ async function saveProduct(index){
   const description = document.getElementById('description').value.trim();
   const specsText = document.getElementById('specs').value.trim();
   const price = document.getElementById('price').value.trim();
-  const tag = document.getElementById('tagContainer').querySelector('.bg-indigo-500')?.textContent || '';
+  const tag = document.getElementById('tagContainer').querySelector('.active')?.textContent || '';
   const imageSrc = document.getElementById('imagePreview').src;
 
   if(!title || !shortDesc || !description || !specsText || !tag || !imageSrc){
