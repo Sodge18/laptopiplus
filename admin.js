@@ -117,8 +117,9 @@ async function saveProduct(index){
   const tag = document.getElementById('tag').value.trim();
   const imageSrc = document.getElementById('imagePreview').src;
 
-  if(!title || !shortDesc || !description || !specsText || !price || !tag || !imageSrc){
-    Swal.fire({icon:'error', text:'Popunite sva polja!'}); return;
+  if(!title || !shortDesc || !description || !specsText || !tag || !imageSrc){
+    Swal.fire({icon:'error', text:'Popunite sva polja!'}); 
+    return;
   }
 
   const specs = specsText.split('\n').map(line=>{
