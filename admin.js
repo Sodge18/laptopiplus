@@ -154,7 +154,7 @@ async function saveProduct(index){
 
   const saveConfirm = document.getElementById('saveConfirm');
 
-  // PRIKAŽI SPINNER dok traje fetch
+  // 1️⃣ PRIKAŽI SPINNER dok traje fetch
   saveConfirm.innerHTML = `<span class="spinner"></span> Čuvanje...`;
   saveConfirm.style.display = 'inline-flex';
 
@@ -165,9 +165,9 @@ async function saveProduct(index){
       body:JSON.stringify({products})
     });
 
-    // Nakon uspešnog čuvanja, prikaži zelenu poruku "Sačuvano!" 1-2 sekunde
+    // 2️⃣ Kada je fetch uspešno završen
     saveConfirm.innerHTML = '✔ Sačuvano!';
-    setTimeout(()=>saveConfirm.style.display='none',2000);
+    setTimeout(()=>saveConfirm.style.display='none', 2000);
 
     renderSidebar();
   }catch(err){
@@ -176,6 +176,7 @@ async function saveProduct(index){
     Swal.fire({icon:'error', text:'Greška pri čuvanju!'});
   }
 }
+
 
 // DELETE proizvod
 async function deleteProduct(index){
