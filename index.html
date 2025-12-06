@@ -311,7 +311,7 @@
                                 <h3 class="font-semibold text-3xl text-center mb-2">${p.title}</h3>
                                 <p class="text-gray-500 dark:text-gray-400 text-xl text-center mb-4">${p.shortDesc || 'Premium laptop'}</p>
                                 <div class="text-center">
-                                    <p class="text-3xl font-bold">${p.price ? p.price + '€' : 'Upit'}</p>
+                                    <p class="text-3xl font-bold">${p.price === "Cena na upit" ? p.price : p.price + '€'}</p>
                                     <button class="mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-opacity-90 w-full transition" onclick="selectLaptop('${(p.title||"").replace(/'/g, "\\'")}')">
                                         Izaberite Laptop
                                     </button>
