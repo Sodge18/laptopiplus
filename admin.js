@@ -92,8 +92,11 @@ function renderProductDetails(index) {
   // event listener za cijenu
   const priceInput = document.getElementById('price');
     priceInput.addEventListener('input', (e) => {
-      // Dozvoli samo cifre i decimalnu tačku
-      e.target.value = e.target.value.replace(/[^0-9.]/g, '');
+      let val = e.target.value;
+      val = val.replace(/[^0-9.]/g, ''); // samo cifre i tačka
+      const parts = val.split('.');
+      if(parts.length > 2) val = parts[0] + '.' + parts[1]; // maksi 1 tačka
+      e.target.value = val;
     });
 
   // event listener za dugmiće tagova
@@ -108,6 +111,17 @@ function renderProductDetails(index) {
         btn.classList.add('bg-indigo-500','text-white');
       });
     });
+  const tagContainer = document.getElementById('tagContainer');
+    tagContainer.querySelectorAll('button').forEach(btn => {
+      btn.onclick = () => {
+        tagContainer.querySelectorAll('button').forEach(b => {
+          b.classList.remove('bg-indigo-500','text-white');
+          b.classList.add('bg-white','text-gray-700');
+        });
+        btn.classList.add('bg-indigo-500','text-white');
+      };
+    });
+
   
   // Upload slike preview
   const imgInput = document.getElementById('imageUpload');
