@@ -61,7 +61,7 @@ Poruka: ${poruka}
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           personalizations: [{
-            to: [{ email: "TVOJ-MEJL@GMAIL.COM" }]   // ← OVDJE PROMENI
+            to: [{ email: "sergej.kaldesic@gmail.com" }]   // ← OVDJE PROMENI
           }],
           from: {
             email: "no-reply@laptopiplus.rs",
