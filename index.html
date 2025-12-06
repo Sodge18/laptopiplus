@@ -566,10 +566,12 @@ function selectAndCloseModal() {
 
 
 /* =============================
-   CONTACT FORMA VALIDACIJA
+   CONTACT FORMA VALIDACIJA + SLANJE
 ============================= */
 const form = document.getElementById("contact-form");
 const requiredFields = ["ime", "prezime", "kontakt-broj", "email"];
+const hiddenLaptopInput = document.getElementById("laptop-select-hidden");
+const laptopButton = document.getElementById("laptop-select");
 
 function validate(fieldId) {
     const el = document.getElementById(fieldId);
@@ -586,7 +588,19 @@ function validate(fieldId) {
     return true;
 }
 
-form.addEventListener("submit", e => {
+function validateLaptop() {
+    const hint = laptopButton.nextElementSibling;
+    if (!hiddenLaptopInput.value.trim()) {
+        laptopButton.classList.add("invalid-field");
+        hint.classList.remove("hidden");
+        return false;
+    }
+    laptopButton.classList.remove("invalid-field");
+    hint.classList.add("hidden");
+    return true;
+}
+
+form.addEventListener("submit", async e => {
     e.preventDefault();
 
     let valid = true;
@@ -595,20 +609,37 @@ form.addEventListener("submit", e => {
         if (!validate(f)) valid = false;
     });
 
-    if (!document.getElementById("laptop-select-hidden").value.trim()) {
-        valid = false;
-        document.getElementById("laptop-select").classList.add("invalid-field");
-        document.querySelector("#laptop-select + p").classList.remove("hidden");
-    }
+    if (!validateLaptop()) valid = false;
 
-    if (valid) {
-        console.log("Form submitted.");
+    if (!valid) return;
+
+    // Ako je sve validno, šaljemo formu
+    const formData = new FormData(form);
+
+    try {
+        const res = await fetch("https://products-api.sergej-kaldesic.workers.dev/send", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!res.ok) throw new Error("Greška pri slanju forme");
+
+        alert("Poruka uspešno poslata!");
+        form.reset();
+        hiddenLaptopInput.value = "";
+        document.getElementById("selected-laptop-text").textContent = "Odaberite laptop";
+
+    } catch (err) {
+        console.error(err);
+        alert("Došlo je do greške. Pokušajte ponovo kasnije.");
     }
 });
 
+// Real-time validacija dok korisnik kuca
 requiredFields.forEach(f => {
     document.getElementById(f).addEventListener("input", () => validate(f));
 });
+
 
 
 /* =============================
