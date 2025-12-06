@@ -104,9 +104,7 @@ function renderProductDetails(index) {
     tagContainer.querySelectorAll('button').forEach(btn => {
       btn.onclick = () => {
         // ukloni klasu active sa svih dugmića
-        tagContainer.querySelectorAll('button').forEach(b => {
-          b.classList.remove('active');
-        });
+        tagContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         // dodaj klasu active na kliknuti dugme
         btn.classList.add('active');
       };
