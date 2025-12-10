@@ -588,6 +588,41 @@ form.addEventListener("submit", async e => {
 function goToProduct(id) {
     window.location.href = `product.html?selected=${id}`;
 }
+
+// AUTOMATSKI ODABERI LAPTOP IZ URL PARAMETRA (iz product.html)
+function autoSelectLaptopFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const selectedId = params.get('selected');
+  if (!selectedId) return;
+
+  const select = document.getElementById('laptop-select');
+  if (!select) return;
+
+  // Pronađi i odaberi taj laptop
+  const option = select.querySelector(`option[value="${selectedId}"]`);
+  if (option) {
+    select.value = selectedId;
+    select.dispatchEvent(new Event('change')); // ako imaš dodatnu logiku na change
+  }
+
+  // Skroluj do forme ako je #contact-form-section u URL-u
+  if (window.location.hash === '#contact-form-section') {
+    document.querySelector('#contact-form-section')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+    // Mali offset zbog fiksnog headera
+    setTimeout(() => window.scrollBy(0, -120), 500);
+  }
+}
+
+// Pokreni kada se učitaju proizvodi
+document.addEventListener("DOMContentLoaded", () => {
+  loadProducts(); // tvoja funkcija koja učitava proizvode i popunjava dropdown
+  // Čekamo malo da se dropdown popuni, pa onda odaberemo
+  setTimeout(autoSelectLaptopFromUrl, 500);
+});
+    
 </script>
 </body>
 </html>
