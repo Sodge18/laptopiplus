@@ -79,29 +79,21 @@
     </div>
 </header>
 
-<!-- HERO – PROFESIONALNI, MOĆNI, SAVRŠEN -->
+<!-- HERO – SAVRŠEN VERTIKALNI GRADIENT + TALASI PREKO CELOG EKRANA -->
 <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
-    <!-- POZADINA – ČIST VERTIKALNI GRADIENT (MIDNIGHT BLUE → DEEP BLACK) -->
-    <div class="absolute inset-0 -z-10">
-      <div class="absolute inset-0 bg-gradient-to-b 
-                   from-gray-900 
-                   via-[#0f172a] 
-                   to-black">
-      </div>
-      
-      <!-- Suptilni sjaj u centru za dubinu -->
-      <div class="absolute inset-0 bg-gradient-to-t from-transparent via-primary/5 to-transparent opacity-60"></div>
-    </div>
+  <!-- GLAVNA POZADINA – vertikalni gradijent -->
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-gray-900 via-[#0f172a] to-black"></div>
 
-  <!-- Overlay sa suptilnim talasima -->
-  <div class="absolute inset-0 -z-10 opacity-30">
-    <svg class="w-full h-full" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 400L80 380C160 360 320 320 480 310C640 300 800 320 960 350C1120 380 1280 420 1360 440L1440 460V800H1360C1280 800 1120 800 960 800C800 800 640 800 480 800C320 800 160 800 80 800H0V400Z" 
+  <!-- SUPTILNI TALASI – sada 100% širine i visine -->
+  <div class="absolute inset-0 -z-10 opacity-40">
+    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 400L80 380C160 360 320 320 480 310C640 300 800 320 960 350C1120 380 1280 420 1360 440L1440 460V800H0V400Z"
             fill="url(#wave1)"/>
       <defs>
-        <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#8b5cf6"/>
-          <stop offset="100%" stop-color="#3b82f6"/>
+        <linearGradient id="wave1" x1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.2"/>
         </linearGradient>
       </defs>
     </svg>
@@ -115,13 +107,12 @@
       LAPTOPI PLUS
     </h1>
     <p class="text-2xl md:text-4xl font-light text-white/90 mb-12 tracking-wide">
-      Laptopi za posao, kreativnost i performanse
+      Premium laptopovi za posao, kreativnost i performanse
     </p>
     
-    <!-- CTA dugmad -->
     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-      <a href="#contact-form-section" 
-         class="group inline-flex items-center gap-4 bg-white text-gray-900 font-bold text-xl px-12 py-6 
+      <a href="#contact-form-section"
+         class="group inline-flex items-center gap-4 bg-white text-gray-900 font-bold text-xl px-12 py-6
                 rounded-2xl shadow-2xl hover:shadow-white/30 transform hover:scale-105 transition-all duration-300">
         Pošalji upit odmah
         <svg class="w-7 h-7 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,9 +120,9 @@
         </svg>
       </a>
       
-      <a href="#products-grid" 
-         class="inline-flex items-center gap-3 text-white/90 font-semibold text-xl px-10 py-6 
-                border-2 border-white/30 rounded-2xl backdrop-blur-xl hover:bg-white/10 
+      <a href="#products-grid"
+         class="inline-flex items-center gap-3 text-white/90 font-semibold text-xl px-10 py-6
+                border-2 border-white/30 rounded-2xl backdrop-blur-xl hover:bg-white/10
                 transform hover:scale-105 transition-all duration-300">
         Pregled ponude
         <span class="material-icons text-3xl">arrow_downward</span>
@@ -139,7 +130,7 @@
     </div>
   </div>
 
-  <!-- Dekorativni elementi -->
+  <!-- Donji prelaz u svetlu pozadinu -->
   <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent"></div>
 </section>
 
