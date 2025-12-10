@@ -44,7 +44,7 @@ function renderSidebar() {
     btn.addEventListener('click', () => {
       currentIndex = i;
       renderSidebar();
-      s(i);
+      renderProductDetails(currentIndex);
     });
     sidebar.appendChild(btn);
   });
