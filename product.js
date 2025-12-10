@@ -2,7 +2,7 @@ const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
 
 async function loadProduct() {
     const url = new URL(window.location.href);
-    const id = url.searchParams.get("id");
+    const id = url.searchParams.get("selected");
     if (!id) {
         document.body.innerHTML = `
             <div class="text-center mt-20">
