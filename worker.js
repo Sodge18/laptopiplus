@@ -7,15 +7,14 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type",
     };
 
-    // Preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders, status: 204 });
     }
 
     const KV = env.KV_BINDING;
-    const KEY = "products"; // jedan ključ gde čuvamo ceo niz
+    const KEY = "products";
 
-    // 1. GET svi proizvodi
+    // 1. GET – vraća { products: [...] }
     if (request.method === "GET" && url.pathname === "/") {
       let raw = await KV.get(KEY);
       if (!raw) raw = "[]";
@@ -31,11 +30,15 @@ export default {
       });
     }
 
-    // 2. POST – dodavanje/izmena jednog proizvoda (admin panel koristi ovo)
+    // 2. POST – SADA POPRAVLJENO: Ako je { products: [...] } → zamenjuje CELO niz! Inače, dodaje/izmenjuje jedan
     if (request.method === "POST") {
-      const body = await request.json();
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return new Response("Invalid JSON", { status: 400 });
+      }
 
-      // Učitaj trenutne proizvode
       let products = [];
       let raw = await KV.get(KEY);
       if (raw) {
@@ -45,29 +48,33 @@ export default {
         } catch (e) { /* ignore */ }
       }
 
-      // Ako ima ?id=xxx → izmena postojećeg
-      const urlId = url.searchParams.get("id");
-      if (urlId) {
-        const index = products.findIndex(p => p.id === urlId);
-        if (index !== -1) {
-          products[index] = { ...products[index], ...body }; // merge
+      // KLJUČNA PROMENA: Ako body ima 'products' polje → ovo je "zameni ceo niz" (za čišćenje)
+      if (body && body.products && Array.isArray(body.products)) {
+        products = body.products;  // ← ZAMENJUJE CELO, ne dodaje!
+      } else {
+        // Inače, normalno dodavanje/izmena jednog proizvoda
+        const urlId = url.searchParams.get("id");
+        if (urlId) {
+          const index = products.findIndex(p => p.id === urlId);
+          if (index !== -1) {
+            products[index] = { ...products[index], ...body };
+          } else {
+            body.id = urlId;
+            products.push(body);
+          }
         } else {
-          body.id = urlId; // osiguraj ID
+          if (!body.id) body.id = crypto.randomUUID();
           products.push(body);
         }
-      } else {
-        // Dodavanje novog (admin panel ga šalje bez id parametra)
-        if (!body.id) body.id = crypto.randomUUID();
-        products.push(body);
       }
 
       await KV.put(KEY, JSON.stringify(products, null, 2));
-      return new Response(JSON.stringify({ success: true }), {
+      return new Response(JSON.stringify({ success: true, count: products.length }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // 3. DELETE – brisanje po id
+    // 3. DELETE – brisanje po ID
     if (request.method === "DELETE") {
       const idToDelete = url.searchParams.get("id");
       if (!idToDelete) return new Response("Missing id", { status: 400 });
@@ -84,7 +91,7 @@ export default {
       const filtered = products.filter(p => p.id !== idToDelete);
       await KV.put(KEY, JSON.stringify(filtered, null, 2));
 
-      return new Response(JSON.stringify({ success: true }), {
+      return new Response(JSON.stringify({ success: true, count: filtered.length }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
