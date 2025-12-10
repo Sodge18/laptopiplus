@@ -59,6 +59,11 @@ function updateActiveSidebarButton() {
 function renderProductDetails(index) {
   const p = products[index];
   content.innerHTML = `
+    <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-4 bg-white dark:bg-slate-900 sticky top-0 z-10">
+      <h2 id="productHeader" class="text-slate-900 dark:text-white text-lg font-bold">
+        Detalji proizvoda
+      </h2>
+    </header>
     <div class="grid grid-cols-3 gap-8">
       <!-- Lijeva strana: Detalji i Specifikacije -->
       <div class="col-span-2 space-y-6">
@@ -125,6 +130,10 @@ function renderProductDetails(index) {
     </div>
   `;
 
+  // Update header sa nazivom laptopa
+  const headerEl = document.getElementById('productHeader');
+  headerEl.textContent = `Detalji proizvoda: ${p.title || ''}`;
+  
   // --- INPUTS ---
   ['title','shortDesc','description','specs','price'].forEach(id=>{
     document.getElementById(id).addEventListener('input', debounce(()=>{
