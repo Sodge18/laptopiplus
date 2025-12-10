@@ -206,7 +206,7 @@ function renderProductDetails(index) {
     products[currentIndex].tag = btn.dataset.tag;
   });
 
-  // --- SAVE & DELETE ---
+  // --- SAVE &  ---
   document.getElementById('saveBtn').addEventListener('click', ()=>saveProduct(currentIndex));
   document.getElementById('deleteBtn').addEventListener('click', ()=>deleteProduct(currentIndex));
 }
@@ -256,55 +256,55 @@ async function saveProduct(index){
   }
 }
 
-// --- DELETE OPTIMIZED ---
+// --- DELETE PROIZVODA ---
 async function deleteProduct(index){
   if(index === null || !products[index]) return;
   const p = products[index];
 
   Swal.fire({
-    title:'Obrisati proizvod?', 
+    title: 'Obrisati proizvod?',
     text: p.title || '',
-    icon:'warning', 
-    showCancelButton:true, 
-    confirmButtonText:'Da', 
-    cancelButtonText:'Otkaži'
-  }).then(async result=>{
-    if(result.isConfirmed){
-      try{
-        // Pošalji zahtev za brisanje na server
-        const res = await fetch(`${API_URL}?id=${p.id}`,{
-          method:'DELETE',
-          headers:{'Content-Type':'application/json'}
-        });
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Da',
+    cancelButtonText: 'Otkaži'
+  }).then(async result => {
+    if(!result.isConfirmed) return;
 
-        if(!res.ok){
-          throw new Error(`Server returned ${res.status}`);
-        }
+    // pokaži spinner u contentu dok briše
+    showSpinner();
 
-        // Ukloni lokalno iz niza
-        products.splice(index,1);
+    try {
+      const res = await fetch(`${API_URL}?id=${p.id}`, {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'}
+      });
 
-        // Resetuj currentIndex
-        if(products.length === 0){
-          currentIndex = null;
-          content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
-            Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
-          </div>`;
-        } else {
-          currentIndex = Math.min(index, products.length-1);
-          renderProductDetails(currentIndex);
-        }
+      if(!res.ok) throw new Error(`Server returned ${res.status}`);
 
-        renderSidebar();
-        Swal.fire({icon:'success', text:'Proizvod obrisan!'});
-      }catch(err){
-        console.error(err);
-        Swal.fire({icon:'error', text:'Greška pri brisanju!'});
+      // nakon uspešnog brisanja ukloni iz niza
+      products.splice(index, 1);
+
+      // resetuj currentIndex
+      if(products.length === 0){
+        currentIndex = null;
+        content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
+          Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
+        </div>`;
+      } else {
+        currentIndex = Math.min(index, products.length - 1);
+        renderProductDetails(currentIndex);
       }
+
+      renderSidebar();
+      Swal.fire({icon:'success', text:'Proizvod obrisan!'});
+    } catch(err) {
+      console.error(err);
+      content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">Greška pri brisanju proizvoda.</div>`;
+      Swal.fire({icon:'error', text:'Greška pri brisanju!'});
     }
   });
 }
-
 
 // --- ADD NOVI ---
 addBtn.addEventListener('click', ()=>{
