@@ -589,18 +589,21 @@ Laptopi Plus`;
 function selectAndCloseModal() {
     if(!selectedProductGlobal) return;
 
-    // Upisujemo izabrani laptop u padajući meni
     const laptopSelect = document.getElementById("laptop-select");
     if(laptopSelect) {
         laptopSelect.value = selectedProductGlobal.title;
-
-        // Trigger event da forma može reagovati
         laptopSelect.dispatchEvent(new Event('change'));
     }
 
-    // Zatvori modal
     closeModal();
+
+    // Scroll do forme
+    const formSection = document.getElementById("contact-form-section");
+    if(formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
+
 
 </script>
 
