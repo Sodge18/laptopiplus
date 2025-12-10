@@ -14,85 +14,70 @@ export default {
     const KV = env.KV_BINDING;
     const KEY = "products";
 
-    // 1. GET – vraća { products: [...] }
-    if (request.method === "GET" && url.pathname === "/") {
-      let raw = await KV.get(KEY);
-      if (!raw) raw = "[]";
-      let productsArray = [];
-      try {
-        productsArray = JSON.parse(raw);
-        if (!Array.isArray(productsArray)) productsArray = [];
-      } catch (e) {
-        productsArray = [];
-      }
-      return new Response(JSON.stringify({ products: productsArray }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // GET – vraća { products: [...] }
+    if (request.method === "GET") {
+      let raw = await KV.get(KEY) || "[]";
+      let arr = [];
+      try { arr = JSON.parse(raw); } catch(e) {}
+      if (!Array.isArray(arr)) arr = [];
+      return new Response(JSON.stringify({ products: arr }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
-    // 2. POST – SADA POPRAVLJENO: Ako je { products: [...] } → zamenjuje CELO niz! Inače, dodaje/izmenjuje jedan
+    // POST – ako pošalješ {clear: true} → briše sve
     if (request.method === "POST") {
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return new Response("Invalid JSON", { status: 400 });
+      const body = await request.json().catch(() => ({}));
+
+      // OVDE JE MAGIJA: ako pošalješ {clear: true} → KV postaje prazan niz
+      if (body.clear === true) {
+        await KV.put(KEY, "[]");
+        return new Response(JSON.stringify({ success: true, cleared: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
       }
 
-      let products = [];
+      // Inače normalno dodavanje/izmena
+      let arr = [];
       let raw = await KV.get(KEY);
       if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          products = Array.isArray(parsed) ? parsed : [];
-        } catch (e) { /* ignore */ }
+        try { arr = JSON.parse(raw); } catch(e) {}
+        if (!Array.isArray(arr)) arr = [];
       }
 
-      // KLJUČNA PROMENA: Ako body ima 'products' polje → ovo je "zameni ceo niz" (za čišćenje)
       if (body && body.products && Array.isArray(body.products)) {
-        products = body.products;  // ← ZAMENJUJE CELO, ne dodaje!
+        arr = body.products; // zameni sve
       } else {
-        // Inače, normalno dodavanje/izmena jednog proizvoda
-        const urlId = url.searchParams.get("id");
-        if (urlId) {
-          const index = products.findIndex(p => p.id === urlId);
-          if (index !== -1) {
-            products[index] = { ...products[index], ...body };
-          } else {
-            body.id = urlId;
-            products.push(body);
-          }
+        const id = url.searchParams.get("id") || (body.id || crypto.randomUUID());
+        const index = arr.findIndex(p => p.id === id);
+        if (index > -1) {
+          arr[index] = { ...arr[index], ...body, id };
         } else {
-          if (!body.id) body.id = crypto.randomUUID();
-          products.push(body);
+          arr.push({ ...body, id });
         }
       }
 
-      await KV.put(KEY, JSON.stringify(products, null, 2));
-      return new Response(JSON.stringify({ success: true, count: products.length }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      await KV.put(KEY, JSON.stringify(arr));
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
-    // 3. DELETE – brisanje po ID
+    // DELETE po ID
     if (request.method === "DELETE") {
-      const idToDelete = url.searchParams.get("id");
-      if (!idToDelete) return new Response("Missing id", { status: 400 });
+      const id = url.searchParams.get("id");
+      if (!id) return new Response("no id", { status: 400 });
 
-      let products = [];
+      let arr = [];
       let raw = await KV.get(KEY);
       if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          products = Array.isArray(parsed) ? parsed : [];
-        } catch (e) { /* ignore */ }
+        try { arr = JSON.parse(raw); } catch(e) {}
+        if (!Array.isArray(arr)) arr = [];
       }
-
-      const filtered = products.filter(p => p.id !== idToDelete);
-      await KV.put(KEY, JSON.stringify(filtered, null, 2));
-
-      return new Response(JSON.stringify({ success: true, count: filtered.length }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      arr = arr.filter(p => p.id !== id);
+      await KV.put(KEY, JSON.stringify(arr));
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
