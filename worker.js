@@ -17,8 +17,20 @@ export default {
 
     // GET – vraća proizvode iz KV
     if (request.method === "GET" && url.pathname === "/") {
-      const products = await env.KV_BINDING.get(key);
-      return new Response(products || "[]", {
+      let raw = await env.KV_BINDING.get(key);
+      if (!raw) raw = "[]";
+    
+      let productsArray;
+      try {
+        productsArray = JSON.parse(raw);
+      } catch (e) {
+        productsArray = [];
+      }
+    
+      // OVDE JE KLJUČNA PROMENA:
+      const responseBody = JSON.stringify({ products: productsArray });
+    
+      return new Response(responseBody, {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
