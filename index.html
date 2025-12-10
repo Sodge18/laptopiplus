@@ -486,6 +486,9 @@ function closeModal() {
     const modal = document.getElementById("product-modal");
     modal.classList.add("hidden");
     modal.classList.remove("flex");
+
+    // --- VRATI BODY SCROLL ---
+    document.body.style.overflow = '';
 }
 
 /* =============================
