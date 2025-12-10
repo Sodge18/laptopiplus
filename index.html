@@ -46,6 +46,9 @@
         body:has([x-show='searchModalOpen'][style*='display: block;']) {
             overflow: hidden;
         }
+        .carousel-item {
+            scroll-snap-align: start;
+        }
     </style>
 </head>
 
@@ -377,16 +380,17 @@ function updateActiveDot() {
     const carousel = document.getElementById("carousel");
     const dots = document.querySelectorAll("#pagination-dots button");
 
-    const scroll = carousel.scrollLeft + carousel.clientWidth / 2;
     const width = carousel.clientWidth;
-    const active = Math.round(scroll / width);
+    const active = Math.round(carousel.scrollLeft / width);
 
     dots.forEach((d, i) => {
-        d.classList.toggle("bg-primary", i === active);
-        d.classList.toggle("w-8", i === active);
-        d.classList.toggle("bg-gray-300", i !== active);
-        d.classList.toggle("dark:bg-gray-600", i !== active);
-        d.classList.toggle("w-3", i !== active);
+        const isActive = i === active;
+        d.classList.toggle("bg-primary", isActive);
+        d.classList.toggle("w-8", isActive);
+
+        d.classList.toggle("bg-gray-300", !isActive);
+        d.classList.toggle("dark:bg-gray-600", !isActive);
+        d.classList.toggle("w-3", !isActive);
     });
 }
 
