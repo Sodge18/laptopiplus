@@ -352,7 +352,7 @@ function renderGrid(products) {
     }
 
     grid.innerHTML = products.map(p => {
-        const img = p.images?.[0] || p.image || "https://via.placeholder.com/800x600?text=Laptop";
+        const img = p.images?.[0] || p.image || "https://via.placeholder.com/800x600/cccccc/666666?text=Laptop";
         const hasTag = p.tag && p.tag.trim() !== "";
 
         return `
@@ -361,13 +361,14 @@ function renderGrid(products) {
                         transition-all duration-500 overflow-hidden border border-gray-200 dark:border-gray-700
                         hover:border-primary/30 hover:-translate-y-3">
           
-          <!-- Slika + Tag -->
-          <div class="relative h-64 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+          <!-- Gornji deo: slika koja popunjava 100% -->
+          <div class="relative h-64 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
             <img src="${img}" alt="${p.title}" 
-                 class="w-full h-full object-contain p-10 transition-transform duration-700 group-hover:scale-110">
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
             
+            <!-- Tag u gornjem desnom uglu -->
             ${hasTag ? `
-            <div class="absolute top-4 right-4">
+            <div class="absolute top-4 right-4 z-10">
               <span class="inline-block px-4 py-2 text-xs font-bold tracking-wider uppercase rounded-full
                            bg-primary text-white shadow-lg">
                 ${p.tag}
@@ -375,7 +376,7 @@ function renderGrid(products) {
             </div>` : ''}
           </div>
 
-          <!-- Sadržaj -->
+          <!-- Donji deo: tekst -->
           <div class="p-8">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 leading-tight">
               ${p.title}
@@ -385,25 +386,26 @@ function renderGrid(products) {
               ${p.shortDesc || "Visokokvalitetni laptop sa najnovijim specifikacijama."}
             </p>
 
-            <!-- Cena -->
+            <!-- Cena + strelica -->
             <div class="flex items-end justify-between mt-auto">
               <div>
                 <div class="text-3xl font-extrabold text-gray-900 dark:text-white">
                   ${p.price ? p.price + "€" : "Cena na upit"}
                 </div>
-                ${p.price ? `<div class="text-xs text-gray-500 dark:text-gray-400">PDV uključen</div>` : ''}
               </div>
 
               <div class="text-primary font-semibold text-lg opacity-0 group-hover:opacity-100 
-                          translate-x-4 group-hover:translate-x-0 transition-all duration-500">
-                Detalji →
+                          translate-x-4 group-hover:translate-x-0 transition-all duration-500 flex items-center gap-2">
+                Detalji 
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
               </div>
             </div>
           </div>
         </article>`;
     }).join("");
 }
-
 /* =============================
    POPUNJAVANJE PADAJUĆEG MENIJA ZA LAPTOPE
 ============================= */
