@@ -571,7 +571,7 @@ Laptopi Plus`;
 
     // PRIMARNO — NAJPOUZDANIJE
     window.location.href = mailtoLink;
-
+    
     // FALLBACK (ako browser blokira) — 100% radi
     setTimeout(() => {
         const a = document.createElement("a");
@@ -581,8 +581,6 @@ Laptopi Plus`;
         a.click();
         document.body.removeChild(a);
     }, 200);
-
-    alert("Hvala na upitu! Otvara se tvoj email program...");
 });
 
 </script>
