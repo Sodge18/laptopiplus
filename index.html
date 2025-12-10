@@ -551,7 +551,8 @@ form.addEventListener("submit", function(e) {
 
     const subject = `Upit za laptop: ${ime} ${prezime}`;
 
-    const body = `Poštovani,
+    const body =
+`Poštovani,
 
 Dobili ste novi upit sa sajta Laptopi Plus.
 
@@ -569,19 +570,10 @@ Laptopi Plus`;
     const mailtoLink =
         `mailto:sergej.kaldesic@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    // PRIMARNO — NAJPOUZDANIJE
+    // JEDINO OVO OSTAVLJAŠ
     window.location.href = mailtoLink;
-    
-    // FALLBACK (ako browser blokira) — 100% radi
-    setTimeout(() => {
-        const a = document.createElement("a");
-        a.href = mailtoLink;
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }, 200);
 });
+
 
 </script>
 
