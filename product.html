@@ -5,22 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalji proizvoda - Laptopi Plus</title>
 
-<link href="https://cdn.tailwindcss.com?plugins=forms" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<style>
+  body { font-family: 'Poppins', sans-serif; }
+  .thumbnail { cursor: pointer; border: 2px solid transparent; transition: border 0.2s; }
+  .thumbnail.active { border-color: #1d4ed8; }
+</style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-<!-- WRAPPER -->
 <div class="max-w-6xl mx-auto py-10 px-4">
 
-    <!-- BACK -->
-    <a href="index.html"
-       class="inline-block mb-6 text-primary font-semibold hover:underline">
+    <a href="index.html" class="inline-block mb-6 text-primary font-semibold hover:underline">
        ← Nazad
     </a>
 
-    <!-- PRODUCT HEADER -->
     <h1 id="p-title" class="text-4xl font-bold mb-3"></h1>
     <p id="p-price" class="text-2xl font-semibold text-primary mb-8"></p>
 
