@@ -38,9 +38,20 @@ export default {
     // POST – čuva proizvode u KV
     if (request.method === "POST" && url.pathname === "/") {
       const body = await request.json();
-      await env.KV_BINDING.put(key, JSON.stringify(body, null, 2));
-
-      return new Response(JSON.stringify({ success: true }), {
+    
+      // UVEK čuvamo SAMO niz proizvoda ili products niz iz body-a
+      let productsToSave = [];
+    
+      if (Array.isArray(body)) {
+        productsToSave = body;
+      } else if (body && Array.isArray(body.products)) {
+        productsToSave = body.products;
+      }
+    
+      // Čuvamo SAMO niz proizvoda, ne ceo objekat!
+      await env.KV_BINDING.put(key, JSON.stringify(productsToSave, null, 2));
+    
+      return new Response(JSON.stringify({ success: true, count: productsToSave.length }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
