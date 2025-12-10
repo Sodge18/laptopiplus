@@ -48,13 +48,6 @@ function renderSidebar() {
 
     sidebar.appendChild(btn);
   });
-
-  // Ako nema proizvoda, prikazi početni tekst
-  if(products.length === 0){
-    content.innerHTML = `<p class="text-gray-500 text-center mt-20">
-      Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
-    </p>`;
-  }
 }
 
 // --- UPDATE ACTIVE BUTTON ---
@@ -219,17 +212,27 @@ async function saveProduct(index){
 // --- DELETE ---
 async function deleteProduct(index){
   Swal.fire({
-    title:'Obrisati proizvod?', text: products[index].title||'',
-    icon:'warning', showCancelButton:true, confirmButtonText:'Da', cancelButtonText:'Otkaži'
-  }).then(async result=>{
+    title:'Obrisati proizvod?', 
+    text: products[index].title || '',
+    icon:'warning', 
+    showCancelButton:true, 
+    confirmButtonText:'Da', 
+    cancelButtonText:'Otkaži'
+  }).then(async result => {
     if(result.isConfirmed){
       products.splice(index,1);
       try{
-        await fetch(API_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({products})});
+        await fetch(API_URL, {
+          method:'POST', 
+          headers:{'Content-Type':'application/json'}, 
+          body:JSON.stringify({products})
+        });
         currentIndex = null;
-        content.innerHTML='<p class="text-gray-500 text-center mt-20">Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>,<br>  ili odaberite postojeći sa leve strane za uređivanje ili brisanje.</p>';
-        renderSidebar();
-      }catch(err){ console.error(err); Swal.fire({icon:'error', text:'Greška pri brisanju!'}); }
+        renderSidebar();  // samo ažurira sidebar, početni tekst je u HTML-u
+      } catch(err) {
+        console.error(err);
+        Swal.fire({icon:'error', text:'Greška pri brisanju!'});
+      }
     }
   });
 }
