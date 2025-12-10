@@ -60,54 +60,67 @@ function renderProductDetails(index) {
   const p = products[index];
   content.innerHTML = `
     <div class="grid grid-cols-3 gap-8">
+      <!-- Lijeva strana: Detalji i Specifikacije -->
       <div class="col-span-2 space-y-6">
         <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Detalji proizvoda</h3>
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Product Details</h3>
           <div class="space-y-4">
             <div>
               <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="title">Naziv proizvoda</label>
-              <input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" type="text" id="title" value="${p.title||''}"/>
+              <input id="title" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.title||''}"/>
             </div>
             <div>
               <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="shortDesc">Kratak opis</label>
-              <input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" type="text" id="shortDesc" value="${p.shortDesc||''}"/>
+              <input id="shortDesc" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.shortDesc||''}"/>
             </div>
             <div>
               <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="description">Detaljan opis</label>
-              <textarea class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" id="description" rows="5">${p.description||''}</textarea>
+              <textarea id="description" rows="5" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white">${p.description||''}</textarea>
             </div>
-            <div>
-              <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="specs">Specifikacije</label>
-              <textarea id="specs" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white h-20">${(p.specs||[]).map(s=>`${s.label}:${s.value}`).join('\n')}</textarea>
-              <p class="text-sm text-gray-400 mt-1">Format: label:value po liniji</p>
-            </div>
-            <div>
-              <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="price">Cena</label>
-              <input type="text" id="price" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.price==='Cena na upit' ? '' : p.price}"/>
-              <p class="text-sm text-gray-400 mt-1">Ako ostane prazno, prikazaće "Cena na upit"</p>
-            </div>
-            <div>
-              <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Tag</label>
-              <div id="tagContainer" class="flex gap-2 flex-wrap">
-                ${TAGS.map(tag => `<button type="button" data-tag="${tag}" class="tag-btn ${p.tag===tag?'active':''}">${tag}</button>`).join('')}
+          </div>
+        </div>
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Specifikacije</h3>
+          <textarea id="specs" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white h-20">${p.specs.map(s=>`${s.label}:${s.value}`).join('\n')}</textarea>
+        </div>
+      </div>
+
+      <!-- Desna strana: Slike, Cijena i Tagovi -->
+      <div class="col-span-1 space-y-6">
+        <!-- Slike -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Slike</h3>
+          <div class="grid grid-cols-2 gap-4">
+            ${(p.images||[]).map(src=>`<img src="${src}" class="aspect-square w-full rounded-lg object-cover">`).join('')}
+            <div class="flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary transition-colors text-slate-500 dark:text-slate-400">
+              <div class="text-center">
+                <span class="material-symbols-outlined text-4xl">upload</span>
+                <p class="mt-1 text-sm">Upload Image</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-span-1 space-y-6">
+
+        <!-- Cijena -->
         <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Slike</h3>
-          <div class="grid grid-cols-2 gap-4 mb-2" id="imagePreviewContainer">
-            ${(p.images||[]).map(src=>`<img src="${src}" class="aspect-square w-full rounded-lg object-cover">`).join('')}
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Cijena</h3>
+          <input id="price" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.price==='Cena na upit'?'':p.price}" placeholder="0.00"/>
+        </div>
+
+        <!-- Tagovi -->
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Tagovi</h3>
+          <div id="tagContainer" class="flex flex-wrap gap-2">
+            ${TAGS.map(tag => `<button type="button" data-tag="${tag}" class="tag-btn px-3 py-1 rounded-lg ${tag===p.tag?'active':''}">${tag}</button>`).join('')}
           </div>
-          <input type="file" id="imageUpload" accept="image/*" multiple class="mt-2 w-full text-sm text-slate-500 dark:text-slate-400"/>
         </div>
-        <div class="flex justify-between">
-          <button id="saveBtn" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90">Sačuvaj</button>
-          <button id="deleteBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Obriši</button>
-          <span class="save-confirm" id="saveConfirm">Sačuvano!</span>
+
+        <!-- Save i Delete -->
+        <div class="flex gap-2">
+          <button id="saveBtn" class="bg-indigo-500 text-white px-4 py-2 rounded-lg flex-1">Sačuvaj</button>
+          <button id="deleteBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg flex-1">Obriši</button>
         </div>
+        <span class="save-confirm" id="saveConfirm">Sačuvano!</span>
       </div>
     </div>
   `;
