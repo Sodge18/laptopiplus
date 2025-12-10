@@ -114,60 +114,79 @@
     <div id="pagination-dots" class="flex justify-center items-center mt-12 space-x-2"></div>
 </main>
 
-<!-- CONTACT FORM -->
-<section id="contact-form-section" class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="bg-primary text-white rounded-2xl p-8 md:p-12">
-    <div class="flex flex-col lg:flex-row gap-8 lg:gap-16">
-      <div class="lg:w-1/3">
-        <h2 class="text-4xl font-bold mb-4">Spremni da kupite laptop?</h2>
-        <p class="text-gray-300">Popunite formu i bićemo u kontaktu.</p>
+<!-- CONTACT FORM – FULL WIDTH BLOCK -->
+<section id="contact-form-section" class="relative py-24 overflow-hidden">
+  <!-- Pozadina sa gradientom i talasima -->
+  <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-black"></div>
+  <div class="absolute inset-0 opacity-20">
+    <svg class="w-full h-full" viewBox="0 0 1440 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0L1440 320L0 560V0Z" fill="white"/>
+      <path d="M0 100L1440 420L0 660V100Z" fill="white" opacity="0.1"/>
+    </svg>
+  </div>
+
+  <div class="relative container mx-auto px-6 lg:px-8 z-10">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl md:text-7xl font-black text-white mb-6">
+          Spremni za savršeni laptop?
+        </h2>
+        <p class="text-2xl text-white/90 font-medium">
+          Ostavite upit – odgovaramo u roku od 24h
+        </p>
       </div>
 
-      <div class="lg:w-2/3">
-        <form id="contact-form" novalidate>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-10 md:p-16 border border-white/20">
+        <form id="contact-form" novalidate class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-8">
             <div>
-              <label class="block text-sm font-medium text-gray-200 mb-2">Ime</label>
-              <input id="ime" type="text" placeholder="Unesite Vaše ime" class="w-full p-3 rounded-lg bg-gray-700 text-white" required/>
-              <p class="error-hint text-red-400 text-sm mt-1 hidden">Popunite polje</p>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Ime</label>
+              <input id="ime" type="text" placeholder="Vaše ime" required
+                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
+              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-200 mb-2">Prezime</label>
-              <input id="prezime" type="text" placeholder="Unesite Vaše prezime" class="w-full p-3 rounded-lg bg-gray-700 text-white" required/>
-              <p class="error-hint text-red-400 text-sm mt-1 hidden">Popunite polje</p>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Prezime</label>
+              <input id="prezime" type="text" placeholder="Vaše prezime" required
+                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
+              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+            </div>
+            <div>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Telefon</label>
+              <input id="kontakt-broj" type="tel" placeholder="061 234 567" required
+                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
+              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+            </div>
+            <div>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Email</label>
+              <input id="email" type="email" placeholder="vas.email@gmail.com" required
+                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
+              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+          <div class="space-y-8">
             <div>
-              <label class="block text-sm font-medium text-gray-200 mb-2">Kontakt broj</label>
-              <input id="kontakt-broj" type="tel" placeholder="061 234 567" class="w-full p-3 rounded-lg bg-gray-700 text-white" required/>
-              <p class="error-hint text-red-400 text-sm mt-1 hidden">Popunite polje</p>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Koji laptop vas zanima?</label>
+              <select id="laptop-select" required
+                      class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white focus:outline-none focus:border-white focus:bg-white/30 transition text-lg">
+                <option value="" class="text-gray-500">Izaberite model...</option>
+              </select>
+              <p class="error-hint text-red-300 text-sm mt-2 hidden">Izaberite laptop</p>
             </div>
+
             <div>
-              <label class="block text-sm font-medium text-gray-200 mb-2">Email</label>
-              <input id="email" type="email" placeholder="vas.email@example.com" class="w-full p-3 rounded-lg bg-gray-700 text-white" required/>
-              <p class="error-hint text-red-400 text-sm mt-1 hidden">Popunite polje</p>
+              <label class="block text-white/90 text-lg font-semibold mb-3">Poruka (nije obavezno)</label>
+              <textarea id="poruka" rows="6" placeholder="Recite nam šta vam treba – budžet, namena, specifikacije..."
+                        class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition resize-none text-lg"></textarea>
             </div>
-          </div>
 
-          <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-200 mb-2">Koji laptop želite</label>
-            <select id="laptop-select" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
-              <option value="">Odaberite laptop</option>
-            </select>
-            <p class="error-hint text-red-400 text-sm mt-1 hidden">Morate izabrati laptop</p>
-          </div>
-
-          <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-200 mb-2">Poruka (nije obavezno)</label>
-            <textarea id="poruka" rows="4" placeholder="Dodatne želje, pitanja..." class="w-full p-3 rounded-lg bg-gray-700 text-white"></textarea>
-          </div>
-
-          <div class="text-right mt-8">
-            <button type="submit" class="bg-white text-primary font-semibold px-10 py-4 rounded-lg hover:bg-gray-200 transition shadow-lg text-lg">
-              Pošalji upit
-            </button>
+            <div class="pt-6">
+              <button type="submit"
+                      class="w-full bg-white text-primary font-black text-2xl py-7 rounded-2xl hover:bg-gray-100 transform hover:scale-105 transition duration-300 shadow-2xl">
+                POŠALJI UPIT ODMAH
+              </button>
+            </div>
           </div>
         </form>
       </div>
