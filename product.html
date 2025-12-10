@@ -5,16 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">Laptopi Plus</title>
 
+  <!-- Tailwind + Font + Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <!-- FORSIRA LIGHT MODE – 100% SIGURNO -->
   <script>
     document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light'); // sprečava da se ikad aktivira dark
   </script>
-  
+
   <script>
     tailwind.config = {
+      darkMode: "class", // dozvoljava dark mode uopšte, ali ga mi nikad ne aktiviramo
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -30,12 +34,12 @@
     .thumbnail {
       transition: all 0.3s ease;
       border: 2px solid transparent;
-      opacity: 0.7;
+      opacity: 0.8;
     }
     .thumbnail:hover, .thumbnail.active {
       border-color: #333333;
       opacity: 1;
-      transform: scale(1.05;
+      transform: scale(1.05);
     }
     .main-image {
       transition: transform 0.5s ease;
@@ -45,10 +49,12 @@
     }
   </style>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+
+<!-- LIGHT MODE JE FORSIRAN NA HTML TAGU -->
+<body class="bg-white text-gray-800 min-h-screen">
 
 <!-- HEADER -->
-<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
   <div class="container mx-auto px-6 py-6 flex items-center justify-between">
     <a href="index.html" class="flex items-center gap-3 text-primary font-bold hover:opacity-80 transition">
       <span class="material-icons text-3xl">arrow_back</span>
@@ -63,40 +69,40 @@
 
     <!-- LEVO: GALERIJA -->
     <div class="space-y-6">
-      <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg main-image">
+      <div class="bg-gray-100 rounded-2xl overflow-hidden shadow-lg main-image">
         <img id="mainImage" src="" alt="Laptop" class="w-full h-full object-contain p-8 lg:p-12">
       </div>
 
       <div id="thumbnails" class="grid grid-cols-4 gap-4">
-        <!-- JS popunjava -->
+        <!-- JS generiše -->
       </div>
     </div>
 
     <!-- DESNO: SADRŽAJ -->
     <div class="space-y-12">
       <div>
-        <h1 id="title" class="text-5xl lg:text-6xl font-black text-gray-900 dark:text-white mb-4"></h1>
-        <p id="shortDesc" class="text-xl text-gray-600 dark:text-gray-400 mb-8"></p>
+        <h1 id="title" class="text-5xl lg:text-6xl font-black text-gray-900 mb-4"></h1>
+        <p id="shortDesc" class="text-xl text-gray-600 mb-8"></p>
         
         <div class="text-5xl font-black text-primary mb-12" id="price"></div>
 
         <button id="chooseBtn" 
-                class="w-full bg-primary text-white font-bold text-xl py-5 rounded-xl hover:bg-gray-800 transition shadow-lg">
+                class="w-full bg-primary text-white font-bold text-xl py-6 rounded-xl hover:bg-gray-800 transition shadow-lg transform hover:scale-105">
           IZABERI OVAJ LAPTOP I POŠALJI UPIT
         </button>
       </div>
 
       <!-- DETALJAN OPIS -->
       <div>
-        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 dark:border-gray-700 pb-4">
+        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">
           Detaljan opis
         </h2>
-        <div id="description" class="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed"></div>
+        <div id="description" class="prose prose-lg text-gray-700 leading-relaxed"></div>
       </div>
 
       <!-- SPECIFIKACIJE -->
       <div>
-        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 dark:border-gray-700 pb-4">
+        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">
           Tehničke specifikacije
         </h2>
         <div id="specs" class="space-y-4"></div>
@@ -125,7 +131,6 @@ async function loadProduct() {
 
     if (!product) throw new Error("Not found");
 
-    // SEO + naslov
     document.getElementById("pageTitle").textContent = `${product.title} - Laptopi Plus`;
     document.getElementById("title").textContent = product.title;
     document.getElementById("shortDesc").textContent = product.shortDesc || "";
@@ -134,8 +139,7 @@ async function loadProduct() {
 
     // Galerija
     const images = product.images?.length ? product.images : ["https://via.placeholder.com/1000?text=Laptop"];
-    const mainImg = document.getElementById("mainImage");
-    mainImg.src = images[0];
+    document.getElementById("mainImage").src = images[0];
 
     const thumbs = document.getElementById("thumbnails");
     thumbs.innerHTML = images.map((src, i) => `
@@ -146,23 +150,22 @@ async function loadProduct() {
                     this.classList.add('active')">
     `).join("");
 
-    // Specifikacije – čiste linije kao na slici
+    // Specifikacije
     const specsDiv = document.getElementById("specs");
     const keys = ['CPU','RAM','GPU','Memorija','Ekran','Baterija','OS','Težina','Dimenzije','Portovi','Bežične konekcije','Kamera','Audio'];
     
     keys.forEach(key => {
       if (product.specs?.[key]) {
         const div = document.createElement("div");
-        div.className = "flex justify-between items-center py-5 border-b border-gray-200 dark:border-gray-700 last:border-0";
+        div.className = "flex justify-between items-center py-5 border-b border-gray-200 last:border-0";
         div.innerHTML = `
-          <span class="text-lg font-medium text-gray-600 dark:text-gray-400">${key}</span>
-          <span class="text-lg font-bold text-gray-900 dark:text-white">${product.specs[key]}</span>
+          <span class="text-lg font-medium text-gray-600">${key}</span>
+          <span class="text-lg font-bold text-gray-900">${product.specs[key]}</span>
         `;
         specsDiv.appendChild(div);
       }
     });
 
-    // Dugme
     document.getElementById("chooseBtn").onclick = () => {
       window.location.href = `index.html?selected=${product.id}#contact-form-section`;
     };
