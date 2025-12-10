@@ -23,7 +23,6 @@ async function fetchProducts() {
     const data = await res.json();
     products = data.products || data;
     renderSidebar();
-    }
   } catch(err) {
     console.error(err);
     alert('Ne mogu da učitam proizvode.');
@@ -32,6 +31,7 @@ async function fetchProducts() {
 
 // --- SIDEBAR ---
 function renderSidebar() {
+  // ukloni samo prethodna dugmad proizvoda, ne + Novi proizvod
   sidebar.querySelectorAll('button.product-tab').forEach(b => b.remove());
 
   products.forEach((p, i) => {
@@ -42,22 +42,27 @@ function renderSidebar() {
 
     btn.addEventListener('click', () => {
       currentIndex = i;
-
-      // SAMO update aktivno dugme, ne renderuj ponovo ceo sidebar
-      sidebar.querySelectorAll('button.product-tab').forEach(b2 => b2.classList.remove('active'));
-      btn.classList.add('active');
-
+      updateActiveSidebarButton();
       renderProductDetails(currentIndex);
     });
 
     sidebar.appendChild(btn);
   });
 
-  // Ako nema proizvoda uopšte, pokaži početni tekst
+  // Ako nema proizvoda, prikazi početni tekst
   if(products.length === 0){
     content.innerHTML = `<p class="text-gray-500 text-center mt-20">
       Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
     </p>`;
+  }
+}
+
+// --- UPDATE ACTIVE BUTTON ---
+function updateActiveSidebarButton() {
+  sidebar.querySelectorAll('button.product-tab').forEach(btn => btn.classList.remove('active'));
+  if(currentIndex !== null){
+    const btns = sidebar.querySelectorAll('button.product-tab');
+    if(btns[currentIndex]) btns[currentIndex].classList.add('active');
   }
 }
 
@@ -70,13 +75,11 @@ function updateProductDetailsUI(index) {
   document.getElementById('specs').value = p.specs.map(s=>`${s.label}:${s.value}`).join('\n');
   document.getElementById('price').value = p.price==='Cena na upit' ? '' : p.price;
 
-  // Tag dugmići
   const tagContainer = document.getElementById('tagContainer');
   tagContainer.querySelectorAll('button').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tag === p.tag);
   });
 
-  // Slike
   const imgContainer = document.getElementById('imagePreviewContainer');
   imgContainer.innerHTML = '';
   (p.images||[]).forEach(src => {
@@ -110,7 +113,7 @@ function renderProductDetails(index) {
     </div>
   `;
   updateProductDetailsUI(index);
-  // AUTOMATSKI UPDATE POLJA SA DEBOUNCE
+
   const inputs = ['title','shortDesc','description','specs','price'];
   inputs.forEach(id=>{
     const el = document.getElementById(id);
@@ -134,10 +137,7 @@ function renderProductDetails(index) {
     }, 300));
   });
 
-
   // --- EVENT LISTENERS ---
-
-  // Cena input
   document.getElementById('price').addEventListener('input', e=>{
     let val = e.target.value.replace(/[^0-9.]/g,'');
     const parts = val.split('.');
@@ -175,14 +175,10 @@ function renderProductDetails(index) {
       };
       reader.readAsDataURL(file);
     });
-    // resetuj input da može ponovo birati iste fajlove ako želiš
     e.target.value = '';
   });
 
-  // Save
   document.getElementById('saveBtn').addEventListener('click', ()=>saveProduct(currentIndex));
-
-  // Delete
   document.getElementById('deleteBtn').addEventListener('click', ()=>deleteProduct(currentIndex));
 }
 
