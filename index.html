@@ -79,55 +79,41 @@
 </section>
 
 <!-- CAROUSEL – LUKSUZNA VERZIJA -->
-<main class="relative py-24 overflow-hidden">
-  <!-- Pozadina sa talasima -->
-  <div class="absolute inset-0 -z-10">
-    <svg class="w-full h-full" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 300L1440 150V800H0V300Z" fill="url(#grad1)"/>
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#0ea5e9"/>
-          <stop offset="100%" stop-color="#1e40af"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  </div>
-
+<main class="py-24 bg-gray-50 dark:bg-gray-900">
   <div class="container mx-auto px-6 lg:px-8">
+    <!-- Naslov -->
     <div class="text-center mb-20">
-      <h2 class="text-6xl md:text-8xl font-black text-white mb-6 drop-shadow-2xl">
-        Izaberite svog savršenog laptopa
+      <h2 class="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white tracking-tight">
+        Naša ponuda laptopova
       </h2>
-      <p class="text-2xl text-white/90 font-medium max-w-4xl mx-auto">
-        Od poslovnih mašina do gejming zveri – imamo sve
+      <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Pažljivo odabrani modeli za poslovne korisnike, kreativce i zahtevne profesionalce.
       </p>
     </div>
 
-    <!-- KARUSEL -->
-    <div class="relative max-w-7xl mx-auto">
-      <div id="carousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth pb-12 gap-8 px-4
-                                     scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
-        <div class="w-full flex justify-center items-center h-96">
-          <p class="text-white/70 text-2xl">Učitavanje premium laptopova...</p>
+    <!-- Karusel -->
+    <div class="relative">
+      <div id="carousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-8 pb-12
+                                   scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+        <div class="w-full flex-shrink-0 flex justify-center items-center h-96">
+          <p class="text-gray-500 dark:text-gray-400 text-lg">Učitavanje proizvoda...</p>
         </div>
       </div>
 
-      <!-- Strelice – luksuzne -->
-      <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 z-20
-                                   bg-white/20 backdrop-blur-xl hover:bg-white/40 text-white 
-                                   p-6 rounded-full shadow-2xl transition-all duration-300 
-                                   hover:scale-110 hover:shadow-primary/50">
-        <span class="material-icons text-4xl">chevron_left</span>
+      <!-- Strelice – diskretne i elegantne -->
+      <button id="prev-btn" class="absolute left-0 top-1/2 -translate-y-1/2 z-10
+                                   bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl 
+                                   p-4 rounded-full transition-all duration-300">
+        <span class="material-icons text-gray-700 dark:text-gray-300 text-2xl">chevron_left</span>
       </button>
-      <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 z-20
-                                   bg-white/20 backdrop-blur-xl hover:bg-white/40 text-white 
-                                   p-6 rounded-full shadow-2xl transition-all duration-300 
-                                   hover:scale-110 hover:shadow-primary/50">
-        <span class="material-icons text-4xl">chevron_right</span>
+      <button id="next-btn" class="absolute right-0 top-1/2 -translate-y-1/2 z-10
+                                   bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl 
+                                   p-4 rounded-full transition-all duration-300">
+        <span class="material-icons text-gray-700 dark:text-gray-300 text-2xl">chevron_right</span>
       </button>
 
-      <!-- Dots – premium stil -->
-      <div id="pagination-dots" class="flex justify-center gap-4 mt-12"></div>
+      <!-- Dots – minimalistički -->
+      <div id="pagination-dots" class="flex justify-center gap-3 mt-10"></div>
     </div>
   </div>
 </main>
@@ -270,51 +256,48 @@ document.addEventListener("DOMContentLoaded", loadProducts);
 function renderCarousel(products) {
     const carousel = document.getElementById("carousel");
     const dots = document.getElementById("pagination-dots");
-    
+
     if (!products.length) {
-        carousel.innerHTML = `<p class="text-white/80 text-3xl font-light text-center py-40">Trenutno nema dostupnih laptopova</p>`;
+        carousel.innerHTML = `<div class="w-full text-center py-32 text-gray-500 dark:text-gray-400 text-xl">Trenutno nema dostupnih proizvoda.</div>`;
         return;
     }
 
-    carousel.innerHTML = products.map((p, i) => {
-        const img = p.images?.[0] || p.image || "https://via.placeholder.com/800";
+    carousel.innerHTML = products.map(p => {
+        const img = p.images?.[0] || p.image || "https://via.placeholder.com/800x600?text=Laptop";
         return `
-        <div class="carousel-item snap-center flex-shrink-0 w-full max-w-5xl px-4">
-            <div onclick='goToProduct("${p.id}")' class="cursor-pointer group">
-                <div class="relative bg-white/10 backdrop-blur-2xl rounded-3xl overflow-hidden shadow-2xl
-                            border border-white/20 transform transition-all duration-500 
-                            hover:scale-105 hover:shadow-3xl hover:shadow-primary/30">
-                    
-                    <!-- Tag (Novo, Gamer, itd.) -->
-                    ${p.tag ? `<div class="absolute top-6 left-6 z-10">
-                        <span class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white 
-                                     font-bold px-6 py-3 rounded-full text-sm shadow-lg">
+        <div class="carousel-item snap-center flex-shrink-0 w-full max-w-md">
+            <div onclick="goToProduct('${p.id}')" class="group cursor-pointer bg-white dark:bg-gray-800 
+                        rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                
+                <!-- Slika -->
+                <div class="relative h-80 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+                    <img src="${img}" alt="${p.title}" 
+                         class="w-full h-full object-contain p-12 transition-transform duration-700 group-hover:scale-105">
+                    ${p.tag ? `<div class="absolute top-4 right-4">
+                        <span class="bg-gray-900 text-white text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-wider">
                             ${p.tag}
                         </span>
                     </div>` : ''}
+                </div>
 
-                    <!-- Slika -->
-                    <div class="relative h-96 lg:h-full overflow-hidden">
-                        <img src="${img}" alt="${p.title}" 
-                             class="w-full h-full object-contain p-12 transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
+                <!-- Sadržaj -->
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                        ${p.title}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3 leading-relaxed">
+                        ${p.shortDesc || "Visokokvalitetni laptop sa najnovijim specifikacijama."}
+                    </p>
 
-                    <!-- Sadržaj -->
-                    <div class="p-10 text-white">
-                        <h3 class="text-4xl font-black mb-4 tracking-tight">${p.title}</h3>
-                        <p class="text-xl text-white/80 mb-6 leading-relaxed line-clamp-2">${p.shortDesc || "Izuzetan laptop za sve namene"}</p>
-                        
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-5xl font-black">${p.price ? p.price + "€" : "Cena na upit"}</span>
-                                ${p.price ? '<span class="block text-white/60 text-lg">+ PDV uključen</span>' : ''}
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-gray-900 dark:text-white">
+                                ${p.price ? p.price + "€" : "Cena na upit"}
                             </div>
-                            <div class="bg-white text-primary font-bold px-10 py-5 rounded-2xl text-xl
-                                        shadow-2xl transform transition-all duration-300 
-                                        group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
-                                Detalji →
-                            </div>
+                            ${p.price ? '<div class="text-xs text-gray-500">PDV uključen</div>' : ''}
+                        </div>
+                        <div class="text-primary font-semibold text-lg group-hover:text-primary/80 transition">
+                            Detalji →
                         </div>
                     </div>
                 </div>
@@ -322,11 +305,11 @@ function renderCarousel(products) {
         </div>`;
     }).join("");
 
-    // Dots – premium stil
+    // Dots – elegantno
     dots.innerHTML = products.map((_, i) => `
         <button onclick="scrollToSlide(${i})"
-                class="w-4 h-4 rounded-full transition-all duration-300 
-                       ${i===0 ? 'bg-white w-16 shadow-lg' : 'bg-white/40 hover:bg-white/80'}">
+                class="w-2 h-2 rounded-full transition-all duration-300
+                       ${i===0 ? 'bg-gray-900 dark:bg-white w-8' : 'bg-gray-400 hover:bg-gray-600'}">
         </button>
     `).join("");
 
