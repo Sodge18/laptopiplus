@@ -293,10 +293,11 @@ async function fetchProducts() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
+    console.log('API data:', data); // <--- ovo će ti pokazati strukturu
     products = data.products || data;
 
-    // --- osiguraj ID-jeve ---
-    ensureIds();
+    // privremeno zakomentariši ensureIds() dok testiraš
+    // ensureIds();
 
     renderSidebar();
   } catch(err) {
@@ -304,6 +305,7 @@ async function fetchProducts() {
     alert('Ne mogu da učitam proizvode.');
   }
 }
+
 
 function ensureIds() {
   let changed = false;
