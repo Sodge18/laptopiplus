@@ -79,16 +79,64 @@
     </div>
 </header>
 
-<!-- HERO -->
-<section class="relative h-96 flex items-center justify-center text-white overflow-hidden">
-    <img alt="Hero" class="absolute inset-0 w-full h-full object-cover z-0"
-         src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5sVuCtmqZpZ0D8iLshqCe6NaEx0MCjcckHpCFulGhRxoTE1dNfTaFr1vSB7I5IQM2fwQjHE3VtjSyu6x_wgg17LC6MUYNEbcobkIuzjscpJWcohj8e9fqch19RWWUsRTs-XqnE8lBDaGxCBjf65aZd1cg79cNRSCfL3rdjhtuj3Z6zJt85ogQMiv1gNAyNnnVOO9t--q_C_M-Ft1U50YWUe-w_XV3w9jdAo_C76vKZqY4lskd91i6ZYtncUQP06fKFaE_SlMkUF_Y"/>
-    <div class="absolute inset-0 bg-black opacity-50 z-10"></div>
+<!-- HERO – PROFESIONALNI, MOĆNI, SAVRŠEN -->
+<section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
+  <!-- Pozadina – prelepi apstraktni gradient + blur efekat -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=2400')] 
+                 bg-cover bg-center bg-no-repeat opacity-20"></div>
+    <div class="absolute inset-0 backdrop-blur-3xl"></div>
+  </div>
 
-    <div class="relative z-20 text-center">
-        <h1 class="text-6xl md:text-8xl font-bold">Laptopi Plus</h1>
-        <p class="mt-4 text-xl">Laptopi za sve namene!</p>
+  <!-- Overlay sa suptilnim talasima -->
+  <div class="absolute inset-0 -z-10 opacity-30">
+    <svg class="w-full h-full" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 400L80 380C160 360 320 320 480 310C640 300 800 320 960 350C1120 380 1280 420 1360 440L1440 460V800H1360C1280 800 1120 800 960 800C800 800 640 800 480 800C320 800 160 800 80 800H0V400Z" 
+            fill="url(#wave1)"/>
+      <defs>
+        <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8b5cf6"/>
+          <stop offset="100%" stop-color="#3b82f6"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- Sadržaj -->
+  <div class="relative z-10 text-center px-6 max-w-6xl mx-auto">
+    <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6 leading-none
+               bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent
+               drop-shadow-2xl">
+      LAPTOPI PLUS
+    </h1>
+    <p class="text-2xl md:text-4xl font-light text-white/90 mb-12 tracking-wide">
+      Premium laptopovi za posao, kreativnost i performanse
+    </p>
+    
+    <!-- CTA dugmad -->
+    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+      <a href="#contact-form-section" 
+         class="group inline-flex items-center gap-4 bg-white text-gray-900 font-bold text-xl px-12 py-6 
+                rounded-2xl shadow-2xl hover:shadow-white/30 transform hover:scale-105 transition-all duration-300">
+        Pošalji upit odmah
+        <svg class="w-7 h-7 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </a>
+      
+      <a href="#products-grid" 
+         class="inline-flex items-center gap-3 text-white/90 font-semibold text-xl px-10 py-6 
+                border-2 border-white/30 rounded-2xl backdrop-blur-xl hover:bg-white/10 
+                transform hover:scale-105 transition-all duration-300">
+        Pregled ponude
+        <span class="material-icons text-3xl">arrow_downward</span>
+      </a>
     </div>
+  </div>
+
+  <!-- Dekorativni elementi -->
+  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent"></div>
 </section>
 
 <!-- CAROUSEL -->
