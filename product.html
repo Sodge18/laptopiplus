@@ -5,52 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">Laptopi Plus</title>
 
-  <!-- Tailwind + Font + Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- FORSIRA LIGHT MODE – 100% SIGURNO -->
+  <!-- FORSIRA LIGHT MODE -->
   <script>
     document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light'); // sprečava da se ikad aktivira dark
   </script>
 
   <script>
     tailwind.config = {
-      darkMode: "class", // dozvoljava dark mode uopšte, ali ga mi nikad ne aktiviramo
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            primary: "#333333",
-          }
+          colors: { primary: "#333333" }
         }
       }
     }
   </script>
 
   <style>
-    .thumbnail {
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-      opacity: 0.8;
-    }
-    .thumbnail:hover, .thumbnail.active {
-      border-color: #333333;
-      opacity: 1;
-      transform: scale(1.05);
-    }
-    .main-image {
-      transition: transform 0.5s ease;
-    }
-    .main-image:hover {
-      transform: scale(1.02);
-    }
+    .thumbnail { transition: all 0.3s ease; border: 2px solid transparent; opacity: 0.8; }
+    .thumbnail:hover, .thumbnail.active { border-color: #333333; opacity: 1; transform: scale(1.05); }
+    .main-image { transition: opacity 0.4s ease; }
+    .lightbox { transition: opacity 0.4s ease, visibility 0.4s ease; }
   </style>
 </head>
-
-<!-- LIGHT MODE JE FORSIRAN NA HTML TAGU -->
 <body class="bg-white text-gray-800 min-h-screen">
 
 <!-- HEADER -->
@@ -67,15 +48,25 @@
 <main class="container mx-auto px-6 py-12 max-w-7xl">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
-    <!-- LEVO: GALERIJA -->
-    <div class="space-y-6">
-      <div class="bg-gray-100 rounded-2xl overflow-hidden shadow-lg main-image">
-        <img id="mainImage" src="" alt="Laptop" class="w-full h-full object-contain p-8 lg:p-12">
+    <!-- LEVO: GALERIJA SA STRELICAMA -->
+    <div class="space-y-6 relative">
+      <div class="relative bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
+        <img id="mainImage" src="" alt="Laptop" class="w-full h-full object-contain p-8 lg:p-12 cursor-zoom-in main-image">
+
+        <!-- Strelice na glavnoj slici -->
+        <button id="prevImage" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 p-3 rounded-full shadow-lg transition z-10">
+          <span class="material-icons text-2xl">chevron_left</span>
+        </button>
+        <button id="nextImage" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 p-3 rounded-full shadow-lg transition z-10">
+          <span class="material-icons text-2xl">chevron_right</span>
+        </button>
+
+        <!-- Klik na sliku otvara lightbox -->
+        <div id="mainImage" onclick="openLightbox(currentImageIndex)" class="absolute inset-0 cursor-zoom-in"></div>
       </div>
 
-      <div id="thumbnails" class="grid grid-cols-4 gap-4">
-        <!-- JS generiše -->
-      </div>
+      <!-- Thumbnailovi -->
+      <div id="thumbnails" class="grid grid-cols-4 gap-4"></div>
     </div>
 
     <!-- DESNO: SADRŽAJ -->
@@ -83,36 +74,49 @@
       <div>
         <h1 id="title" class="text-5xl lg:text-6xl font-black text-gray-900 mb-4"></h1>
         <p id="shortDesc" class="text-xl text-gray-600 mb-8"></p>
-        
         <div class="text-5xl font-black text-primary mb-12" id="price"></div>
-
-        <button id="chooseBtn" 
+        <button id="chooseBtn"
                 class="w-full bg-primary text-white font-bold text-xl py-6 rounded-xl hover:bg-gray-800 transition shadow-lg transform hover:scale-105">
           IZABERI OVAJ LAPTOP I POŠALJI UPIT
         </button>
       </div>
 
-      <!-- DETALJAN OPIS -->
       <div>
-        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">
-          Detaljan opis
-        </h2>
+        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">Detaljan opis</h2>
         <div id="description" class="prose prose-lg text-gray-700 leading-relaxed"></div>
       </div>
 
-      <!-- SPECIFIKACIJE -->
       <div>
-        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">
-          Tehničke specifikacije
-        </h2>
+        <h2 class="text-3xl font-bold mb-8 border-b-2 border-gray-300 pb-4">Tehničke specifikacije</h2>
         <div id="specs" class="space-y-4"></div>
       </div>
     </div>
   </div>
 </main>
 
+<!-- LIGHTBOX (full-screen preview) -->
+<div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden flex items-center justify-center lightbox">
+  <button onclick="closeLightbox()" class="absolute top-8 right-8 text-white hover:text-gray-300 transition text-5xl">
+    ×
+  </button>
+  <button id="lightboxPrev" class="absolute left-8 text-white hover:text-gray-300 transition text-6xl">
+    ‹
+  </button>
+  <button id="lightboxNext" class="absolute right-8 text-white hover:text-gray-300 transition text-6xl">
+    ›
+  </button>
+  <img id="lightboxImage" src="" alt="Full screen" class="max-w-full max-h-full object-contain">
+  
+  <!-- Thumbnailovi u lightboxu -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+    <div id="lightboxThumbs" class="flex gap-3"></div>
+  </div>
+</div>
+
 <script>
 const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
+let images = [];
+let currentImageIndex = 0;
 
 async function loadProduct() {
   const params = new URLSearchParams(window.location.search);
@@ -138,22 +142,25 @@ async function loadProduct() {
     document.getElementById("description").innerHTML = product.description || "Nema detaljnog opisa.";
 
     // Galerija
-    const images = product.images?.length ? product.images : ["https://via.placeholder.com/1000?text=Laptop"];
-    document.getElementById("mainImage").src = images[0];
+    images = product.images?.length ? product.images : ["https://via.placeholder.com/1000?text=Laptop"];
+    currentImageIndex = 0;
+    updateMainImage();
 
+    // Thumbnailovi
     const thumbs = document.getElementById("thumbnails");
     thumbs.innerHTML = images.map((src, i) => `
-      <img src="${src}" alt="Slika ${i+1}" 
+      <img src="${src}" alt="Slika ${i+1}"
            class="rounded-xl cursor-pointer thumbnail shadow-md ${i===0?'active':''}"
-           onclick="document.getElementById('mainImage').src='${src}'; 
-                    document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active')); 
-                    this.classList.add('active')">
+           onclick="setImage(${i})">
     `).join("");
+
+    // Strelice
+    document.getElementById("prevImage").onclick = () => setImage(currentImageIndex - 1);
+    document.getElementById("nextImage").onclick = () => setImage(currentImageIndex + 1);
 
     // Specifikacije
     const specsDiv = document.getElementById("specs");
     const keys = ['CPU','RAM','GPU','Memorija','Ekran','Baterija','OS','Težina','Dimenzije','Portovi','Bežične konekcije','Kamera','Audio'];
-    
     keys.forEach(key => {
       if (product.specs?.[key]) {
         const div = document.createElement("div");
@@ -175,6 +182,50 @@ async function loadProduct() {
     document.body.innerHTML = `<div class="text-center py-32 text-4xl font-bold text-red-600">Greška pri učitavanju</div>`;
   }
 }
+
+function updateMainImage() {
+  document.getElementById("mainImage").src = images[currentImageIndex];
+}
+
+function setImage(index) {
+  currentImageIndex = (index + images.length) % images.length;
+  updateMainImage();
+  document.querySelectorAll('.thumbnail').forEach((t, i) => {
+    t.classList.toggle('active', i === currentImageIndex);
+  });
+}
+
+// Lightbox funkcije
+function openLightbox(index) {
+  currentImageIndex = index;
+  document.getElementById("lightboxImage").src = images[currentImageIndex];
+  document.getElementById("lightbox").classList.remove("hidden");
+  
+  // Thumbnailovi u lightboxu
+  const lightboxThumbs = document.getElementById("lightboxThumbs");
+  lightboxThumbs.innerHTML = images.map((src, i) => `
+    <img src="${src}" class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${i===currentImageIndex?'border-white':'border-transparent'}"
+         onclick="setLightboxImage(${i})">
+  `).join("");
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").classList.add("hidden");
+}
+
+function setLightboxImage(index) {
+  currentImageIndex = index;
+  document.getElementById("lightboxImage").src = images[currentImageIndex];
+  document.querySelectorAll('#lightboxThumbs img').forEach((t, i) => {
+    t.classList.toggle('border-white', i === index);
+  });
+}
+
+document.getElementById("lightboxPrev").onclick = () => setLightboxImage((currentImageIndex - 1 + images.length) % images.length);
+document.getElementById("lightboxNext").onclick = () => setLightboxImage((currentImageIndex + 1) % images.length);
+
+// Otvaranje lightboxa klikom na glavnu sliku
+document.getElementById("mainImage").onclick = () => openLightbox(currentImageIndex);
 
 document.addEventListener("DOMContentLoaded", loadProduct);
 </script>
