@@ -8,28 +8,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: { "primary": "#197fe6", "background-light": "#f6f7f8", "background-dark": "#111921" },
+      fontFamily: { "display": ["Inter", "sans-serif"] },
+      borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+    },
+  },
+}
+</script>
 <style>
 body { font-family:'Inter',sans-serif; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 .material-symbols-outlined.active { font-variation-settings: 'FILL' 1; }
 .save-confirm { display:none; font-weight:bold; margin-left:8px; }
 .product-image-preview { width:100%; border-radius:.75rem; object-fit:cover; }
-.tag-btn.active { background-color:#197fe6; color:white; border-color:#197fe6; }
-button.product-tab { 
-  width: 100%; text-align:left; 
-  padding:0.5rem 1rem; margin-bottom:0.5rem;
-  border-radius:0.75rem; border:1px solid #e2e8f0;
-  background-color:white; color:#1e293b; 
-  transition: background 0.2s;
-}
+.tag-btn { padding:.25rem .75rem; border-radius:.75rem; border:1px solid #cbd5e1; cursor:pointer; transition:.2s; }
+.tag-btn.active { background-color:#197fe6;color:white;border-color:#197fe6; }
+button.product-tab { width:100%; text-align:left; padding:.5rem 1rem; margin-bottom:.5rem; border-radius:.75rem; border:1px solid #e2e8f0; background-color:white; color:#1e293b; transition: background 0.2s; }
 button.product-tab.active { background-color:#197fe6; color:white; border-color:#197fe6; }
 button.product-tab:hover { background-color:#e0f2ff; }
-input, textarea { 
-  border-radius:0.75rem; border:1px solid #cbd5e1; 
-  background-color:#f8fafc; padding:0.5rem;
-  width:100%;
-  color:#1e293b;
-}
+input, textarea { border-radius:.75rem; border:1px solid #cbd5e1; background-color:#f8fafc; padding:.5rem; width:100%; color:#1e293b; }
 input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197fe6; }
 </style>
 </head>
@@ -40,7 +42,6 @@ input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197f
   <!-- SIDEBAR -->
   <aside class="w-80 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
     <div class="p-4 flex flex-col h-full">
-      <!-- Logo -->
       <div class="flex items-center gap-3 mb-4 p-2">
         <div class="bg-primary/20 text-primary p-2 rounded-lg">
           <span class="material-symbols-outlined">laptop_chromebook</span>
@@ -51,7 +52,6 @@ input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197f
         </div>
       </div>
 
-      <!-- Add button -->
       <div class="px-2 mb-4">
         <button id="add-product-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
           <span class="material-symbols-outlined">add_circle</span>
@@ -59,14 +59,13 @@ input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197f
         </button>
       </div>
 
-      <!-- Products list -->
       <div class="flex-1 overflow-y-auto px-2" id="product-sidebar">
-        <!-- Dinamički proizvodi sa istim dizajnom -->
+        <!-- Dinamički proizvodi -->
       </div>
     </div>
   </aside>
 
-  <!-- CONTENT -->
+  <!-- MAIN CONTENT -->
   <main class="flex-1 flex flex-col overflow-y-auto">
     <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-4 bg-white dark:bg-slate-900 sticky top-0 z-10">
       <h2 class="text-slate-900 dark:text-white text-lg font-bold">Detalji proizvoda</h2>
