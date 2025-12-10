@@ -49,6 +49,19 @@
         .invalid-field {
             border: 2px solid #f87171;
         }
+        
+    </style>
+    <style>
+      article { 
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+      }
+      article:hover { 
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 30px rgba(51, 51, 51, 0.1);
+      }
+      .invalid-field { 
+        border-color: #ef4444 !important; 
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+      }
     </style>
 </head>
 
@@ -136,60 +149,60 @@
         </p>
       </div>
 
-      <div class="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-10 md:p-16 border border-white/20">
-        <form id="contact-form" novalidate class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="space-y-8">
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Ime</label>
-              <input id="ime" type="text" placeholder="Vaše ime" required
-                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
-              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+      <div class="bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl p-10 md:p-16 border border-gray-700/50">
+          <form id="contact-form" novalidate class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-8">
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Ime</label>
+                <input id="ime" type="text" placeholder="Vaše ime" required
+                       class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/50 focus:bg-gray-800 transition text-lg"/>
+                <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+              </div>
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Prezime</label>
+                <input id="prezime" type="text" placeholder="Vaše prezime" required
+                       class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/50 focus:bg-gray-800 transition text-lg"/>
+                <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+              </div>
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Telefon</label>
+                <input id="kontakt-broj" type="tel" placeholder="061 234 567" required
+                       class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/50 focus:bg-gray-800 transition text-lg"/>
+                <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+              </div>
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Email</label>
+                <input id="email" type="email" placeholder="vas.email@gmail.com" required
+                       class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/50 focus:bg-gray-800 transition text-lg"/>
+                <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+              </div>
             </div>
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Prezime</label>
-              <input id="prezime" type="text" placeholder="Vaše prezime" required
-                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
-              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
+        
+            <div class="space-y-8">
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Koji laptop vas zanima?</label>
+                <select id="laptop-select" required
+                        class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white focus:outline-none focus:border-white/50 focus:bg-gray-800 transition text-lg">
+                  <option value="" class="text-gray-500">Izaberite model...</option>
+                </select>
+                <p class="error-hint text-red-300 text-sm mt-2 hidden">Izaberite laptop</p>
+              </div>
+        
+              <div>
+                <label class="block text-white/90 text-lg font-semibold mb-3">Poruka (nije obavezno)</label>
+                <textarea id="poruka" rows="6" placeholder="Recite nam šta vam treba – budžet, namena, specifikacije..."
+                          class="w-full px-6 py-5 bg-gray-800/70 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-white/50 focus:bg-gray-800 transition resize-none text-lg"></textarea>
+              </div>
+        
+              <div class="pt-6">
+                <button type="submit"
+                    class="w-full bg-white text-gray-900 font-black text-2xl py-8 rounded-2xl hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-transparent hover:border-gray-300">
+                    POŠALJI UPIT
+                </button>
+              </div>
             </div>
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Telefon</label>
-              <input id="kontakt-broj" type="tel" placeholder="061 234 567" required
-                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
-              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
-            </div>
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Email</label>
-              <input id="email" type="email" placeholder="vas.email@gmail.com" required
-                     class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition text-lg"/>
-              <p class="error-hint text-red-300 text-sm mt-2 hidden">Popunite polje</p>
-            </div>
-          </div>
-
-          <div class="space-y-8">
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Koji laptop vas zanima?</label>
-              <select id="laptop-select" required
-                      class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white focus:outline-none focus:border-white focus:bg-white/30 transition text-lg">
-                <option value="" class="text-gray-500">Izaberite model...</option>
-              </select>
-              <p class="error-hint text-red-300 text-sm mt-2 hidden">Izaberite laptop</p>
-            </div>
-
-            <div>
-              <label class="block text-white/90 text-lg font-semibold mb-3">Poruka (nije obavezno)</label>
-              <textarea id="poruka" rows="6" placeholder="Recite nam šta vam treba – budžet, namena, specifikacije..."
-                        class="w-full px-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/30 transition resize-none text-lg"></textarea>
-            </div>
-
-            <div class="pt-6">
-              <button type="submit"
-                      class="w-full bg-white text-primary font-black text-2xl py-7 rounded-2xl hover:bg-gray-100 transform hover:scale-105 transition duration-300 shadow-2xl">
-                POŠALJI UPIT ODMAH
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
     </div>
   </div>
 </section>
@@ -218,12 +231,17 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="bg-background-light dark:bg-background-dark">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>Laptopi Plus — Laptopi za sve namene</p>
-        </div>
+<footer class="bg-gray-800 text-gray-300 border-t border-gray-700">
+  <div class="container mx-auto px-6 lg:px-8 py-12">
+    <div class="text-center space-y-4">
+      <p class="text-sm">
+        Laptopi Plus — Laptopi za sve namene
+      </p>
+      <p class="text-xs text-gray-500">
+        Developed by <span class="font-medium text-gray-400 hover:text-white transition">@sodge.studio</span>
+      </p>
     </div>
+  </div>
 </footer>
 
 <script>
