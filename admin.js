@@ -87,20 +87,22 @@ function renderProductDetails(index) {
     <div class="col-span-1 space-y-6">
       <!-- Slike -->
       <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-        <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Slike</h3>
-        <div class="grid grid-cols-2 gap-4" id="imageContainer">
+        <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">Slike</h3>
+        <div class="mb-2 text-sm text-slate-600 dark:text-slate-400" id="imageCount">Trenutni broj slika: ${p.images.length}</div>
+        
+        <!-- Carousel preview -->
+        <div id="imageCarousel" class="flex gap-2 overflow-x-auto pb-2">
           ${(p.images||[]).map((src,i)=>`
-            <div class="relative group">
-              <img src="${src}" class="aspect-square w-full rounded-lg object-cover">
-              <button class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs" data-index="${i}" title="Obriši sliku">×</button>
+            <div class="relative flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+              <img src="${src}" class="w-full h-full object-cover">
+              <button class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" data-index="${i}" title="Obriši sliku">×</button>
             </div>
           `).join('')}
-          <div class="flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary transition-colors text-slate-500 dark:text-slate-400" id="imageUpload">
-            <div class="text-center">
-              <span class="material-symbols-outlined text-4xl">upload</span>
-              <p class="mt-1 text-sm">Upload Image</p>
-            </div>
-          </div>
+        </div>
+      
+        <!-- Upload button ispod carousel -->
+        <div>
+          <button id="imageUpload" class="w-full py-2 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary text-slate-500 dark:text-slate-400">+ Nova fotografija</button>
         </div>
       </div>
 
@@ -130,17 +132,23 @@ function renderProductDetails(index) {
 
   const imageContainer = document.getElementById('imageContainer');
 
-  // --- DELETE IMAGE ---
-  imageContainer.addEventListener('click', e=>{
+  function updateImageCount() {
+    const countEl = document.getElementById('imageCount');
+    if(countEl) countEl.textContent = `Trenutni broj slika: ${products[currentIndex].images.length}`;
+  }
+  
+  // DELETE IMAGE
+  document.getElementById('imageCarousel').addEventListener('click', e=>{
     const btn = e.target.closest('button[data-index]');
     if(!btn) return;
     const idx = parseInt(btn.dataset.index);
     if(isNaN(idx)) return;
     products[currentIndex].images.splice(idx,1);
-    renderProductDetails(currentIndex);
+    renderProductDetails(currentIndex); // rerender carousel
+    updateImageCount();
   });
-
-  // --- IMAGE UPLOAD ---
+  
+  // IMAGE UPLOAD
   document.getElementById('imageUpload').addEventListener('click', ()=>{
     const fileInput = document.createElement('input');
     fileInput.type='file';
@@ -159,6 +167,7 @@ function renderProductDetails(index) {
           if(!products[currentIndex].images) products[currentIndex].images=[];
           products[currentIndex].images.push(ev.target.result);
           renderProductDetails(currentIndex);
+          updateImageCount();
         };
         reader.readAsDataURL(file);
       });
