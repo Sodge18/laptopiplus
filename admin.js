@@ -6,7 +6,6 @@ function debounce(fn, delay=300){
   };
 }
 
-
 const API_URL = 'https://products-api.sergej-kaldesic.workers.dev/';
 let products = [];
 let currentIndex = null;
@@ -36,14 +35,19 @@ async function fetchProducts() {
 
 // --- SIDEBAR ---
 function renderSidebar() {
+  // izbriši samo dugmad za proizvode
   sidebar.querySelectorAll('button.product-tab').forEach(b => b.remove());
-  products.forEach((p,i) => {
+
+  products.forEach((p, i) => {
     const btn = document.createElement('button');
     btn.textContent = p.title || 'Bez naziva';
-    btn.className = 'product-tab' + (i===currentIndex ? ' active' : '');
+    btn.className = 'product-tab' + (i === currentIndex ? ' active' : '');
     btn.addEventListener('click', () => {
       currentIndex = i;
-      renderSidebar();
+      // update klasa aktivnog dugmeta
+      sidebar.querySelectorAll('button.product-tab').forEach(b2 => b2.classList.remove('active'));
+      btn.classList.add('active');
+      // update detalja
       renderProductDetails(currentIndex);
     });
     sidebar.appendChild(btn);
