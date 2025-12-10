@@ -16,19 +16,6 @@ const addBtn = document.getElementById('add-product-btn');
 
 const TAGS = ['Novo', 'Poslovni', 'Gamer', 'Premium'];
 
-// --- FETCH proizvoda ---
-async function fetchProducts() {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    products = data.products || data;
-    renderSidebar();
-  } catch(err) {
-    console.error(err);
-    alert('Ne mogu da učitam proizvode.');
-  }
-}
-
 // --- SIDEBAR ---
 function renderSidebar() {
   sidebar.innerHTML = '';
@@ -289,12 +276,59 @@ async function deleteProduct(index){
 
 // --- ADD NOVI ---
 addBtn.addEventListener('click', ()=>{
-  const newProd = {title:'', shortDesc:'', description:'', specs:{}, price:'', tag:'Novo', images:[]};
+
+  // ✅ GENERIŠEMO UNIKATAN ID – trajno, stabilno, bez konflikta
+  const newProd = {
+    id: crypto.randomUUID(),                 // <── KLJUČNA LINIJA
+    title: '',
+    shortDesc: '',
+    description: '',
+    specs: {},
+    price: '',
+    tag: 'Novo',
+    images: []
+  };
+
   products.push(newProd);
-  currentIndex=products.length-1;
+  currentIndex = products.length - 1;
   renderSidebar();
   renderProductDetails(currentIndex);
 });
 
 // --- INIT ---
 fetchProducts();
+
+async function fetchProducts() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    products = data.products || data;
+
+    ensureIds();   // <── OVO DODAJEŠ
+
+    renderSidebar();
+  } catch(err) {
+    console.error(err);
+    alert('Ne mogu da učitam proizvode.');
+  }
+}
+
+function ensureIds() {
+  let changed = false;
+  products.forEach(p => {
+    if (!p.id) {
+      p.id = crypto.randomUUID();
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    // auto-save da se ID-jevi upišu u bazu
+    fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ products })
+    }).catch(err => console.error("Greška pri auto-upisu ID-jeva:", err));
+  }
+}
+
