@@ -239,7 +239,7 @@ function setupImageUpload(){
   });
 }
 
-// --- SAVE ---
+// --- SAVE OPTIMIZED ---
 async function saveProduct(index){
   const p = products[index];
   const title = document.getElementById('title').value.trim();
@@ -251,9 +251,11 @@ async function saveProduct(index){
   const images = products[index].images || [];
 
   if(!title||!shortDesc||!description||!tag||images.length===0){
-    Swal.fire({icon:'error', text:'Popunite sva polja!'}); return;
+    Swal.fire({icon:'error', text:'Popunite sva polja!'}); 
+    return;
   }
 
+  // Update lokalno
   products[index] = {...p, title, shortDesc, description, specs, price, tag, images};
 
   const saveConfirm = document.getElementById('saveConfirm');
@@ -261,41 +263,22 @@ async function saveProduct(index){
   saveConfirm.style.display='inline-flex';
 
   try{
-    await fetch(API_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({products})});
+    // Šaljemo samo ovaj proizvod
+    await fetch(`${API_URL}?id=${p.id}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(products[index])
+    });
     saveConfirm.innerHTML='✔ Sačuvano!';
     setTimeout(()=>saveConfirm.style.display='none',2000);
     renderSidebar();
   }catch(err){
-    console.error(err); saveConfirm.style.display='none';
+    console.error(err); 
+    saveConfirm.style.display='none';
     Swal.fire({icon:'error', text:'Greška pri čuvanju!'});
   }
 }
 
-// --- DELETE ---
-async function deleteProduct(index){
-  Swal.fire({
-    title:'Obrisati proizvod?', 
-    text: products[index].title || '',
-    icon:'warning', 
-    showCancelButton:true, 
-    confirmButtonText:'Da', 
-    cancelButtonText:'Otkaži'
-  }).then(async result=>{
-    if(result.isConfirmed){
-      products.splice(index,1);
-      try{
-        await fetch(API_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({products})});
-        currentIndex=null;
-        content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.</div>`;
-        content.dataset.rendered = '';
-        renderSidebar();
-      }catch(err){
-        console.error(err);
-        Swal.fire({icon:'error', text:'Greška pri brisanju!'});
-      }
-    }
-  });
-}
 
 // --- ADD NOVI ---
 addBtn.addEventListener('click', ()=>{
