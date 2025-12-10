@@ -258,7 +258,9 @@ async function saveProduct(index){
 
 // --- DELETE OPTIMIZED ---
 async function deleteProduct(index){
+  if(index === null || !products[index]) return;
   const p = products[index];
+
   Swal.fire({
     title:'Obrisati proizvod?', 
     text: p.title || '',
@@ -268,14 +270,33 @@ async function deleteProduct(index){
     cancelButtonText:'Otkaži'
   }).then(async result=>{
     if(result.isConfirmed){
-      products.splice(index,1);
       try{
-        await fetch(`${API_URL}?id=${p.id}`,{
-          method:'DELETE'
+        // Pošalji zahtev za brisanje na server
+        const res = await fetch(`${API_URL}?id=${p.id}`,{
+          method:'DELETE',
+          headers:{'Content-Type':'application/json'}
         });
-        currentIndex=null;
-        content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.</div>`;
+
+        if(!res.ok){
+          throw new Error(`Server returned ${res.status}`);
+        }
+
+        // Ukloni lokalno iz niza
+        products.splice(index,1);
+
+        // Resetuj currentIndex
+        if(products.length === 0){
+          currentIndex = null;
+          content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
+            Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
+          </div>`;
+        } else {
+          currentIndex = Math.min(index, products.length-1);
+          renderProductDetails(currentIndex);
+        }
+
         renderSidebar();
+        Swal.fire({icon:'success', text:'Proizvod obrisan!'});
       }catch(err){
         console.error(err);
         Swal.fire({icon:'error', text:'Greška pri brisanju!'});
@@ -283,6 +304,7 @@ async function deleteProduct(index){
     }
   });
 }
+
 
 // --- ADD NOVI ---
 addBtn.addEventListener('click', ()=>{
