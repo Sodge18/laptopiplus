@@ -1,201 +1,59 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html class="light" lang="sr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel - Laptopi Plus</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f4f4f5;
-      margin: 0;
-    }
-
-    /* --- Layout --- */
-    .sidebar {
-      width: 280px;
-      background: #ffffff;
-      border-right: 1px solid #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-    }
-
-    .sidebar button {
-      width: 100%;
-      text-align: left;
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .sidebar button.active {
-      background-color: #6366f1;
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .sidebar button#add-product-btn {
-      background-color: #4f46e5;
-      color: #fff;
-      margin: 1rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .sidebar button#add-product-btn:hover {
-      background-color: #6366f1;
-      transform: scale(1.02);
-    }
-
-    .content {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .input-field {
-      margin-bottom: 1.2rem;
-    }
-
-    label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.5rem 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.375rem;
-      font-size: 0.95rem;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-    }
-
-    .product-image-preview {
-      max-height: 120px;
-      object-fit: contain;
-      border-radius: 0.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 0.5rem;
-    }
-
-    /* Tag buttons */
-    .tag-btn {
-      transition: all 0.2s ease;
-      cursor: pointer;
-      padding: 0.25rem 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.375rem;
-      font-size: 0.85rem;
-    }
-
-    .tag-btn:hover {
-      background-color: #6366f1;
-      color: #fff;
-      transform: scale(1.05);
-    }
-
-    .tag-btn.active {
-      background-color: #4f46e5;
-      color: #fff;
-      font-weight: 600;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    /* Buttons */
-    #saveBtn, #deleteBtn {
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    #saveBtn {
-      background-color: #4f46e5;
-      color: #fff;
-    }
-
-    #saveBtn:hover {
-      background-color: #6366f1;
-      transform: scale(1.03);
-    }
-
-    #deleteBtn {
-      background-color: #ef4444;
-      color: #fff;
-      margin-left: 0.5rem;
-    }
-
-    #deleteBtn:hover {
-      background-color: #f87171;
-      transform: scale(1.03);
-    }
-
-    .save-confirm {
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      color: #10b981;
-      font-weight: bold;
-      font-size: 0.9rem;
-      margin-left: 1rem;
-    }
-
-    .save-confirm .spinner {
-      border: 2px solid #10b981;
-      border-top: 2px solid transparent;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Scrollbar styling */
-    .sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .sidebar::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.1);
-      border-radius: 3px;
-    }
-
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Panel - Laptopi Plus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+body { font-family:'Inter',sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.material-symbols-outlined.active { font-variation-settings: 'FILL' 1; }
+</style>
 </head>
-<body class="flex min-h-screen">
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="product-sidebar">
-    <button id="add-product-btn">+ Novi proizvod</button>
-  </div>
+<div class="flex h-screen">
 
-  <!-- Content -->
-  <div class="content" id="product-details">
-    <div class="text-center mt-20 text-gray-500 text-lg">
-      Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
+  <!-- SIDEBAR -->
+  <aside class="w-80 flex-shrink-0 bg-white dark:bg-background-dark border-r border-slate-200 dark:border-slate-800 flex flex-col">
+    <div class="p-4 flex flex-col h-full">
+      <div class="px-2 mb-4">
+        <button id="add-product-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span class="text-sm font-medium">+ Novi proizvod</span>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto px-2" id="product-sidebar">
+        <!-- Dinamički proizvodi -->
+      </div>
     </div>
-  </div>
+  </aside>
 
-  <script src="admin.js"></script>
+  <!-- CONTENT -->
+  <main class="flex-1 flex flex-col overflow-y-auto">
+    <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-4 bg-white dark:bg-background-dark sticky top-0 z-10">
+      <h2 class="text-slate-900 dark:text-white text-lg font-bold">Detalji proizvoda</h2>
+      <div class="flex items-center gap-4">
+        <button class="flex items-center justify-center rounded-full h-10 w-10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </button>
+        <button id="discardBtn" class="text-sm font-medium leading-normal bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700">Otkaži</button>
+        <button id="saveBtnHeader" class="text-sm font-medium leading-normal bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90">Sačuvaj</button>
+      </div>
+    </header>
+    <div class="p-8 flex-1" id="product-details">
+      <div class="text-center mt-20 text-gray-500 text-lg">
+        Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="admin.js"></script>
 </body>
 </html>
