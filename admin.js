@@ -211,6 +211,15 @@ function renderProductDetails(index) {
   document.getElementById('deleteBtn').addEventListener('click', ()=>deleteProduct(currentIndex));
 }
 
+// --- SHOW SPINNER ---
+function showSpinner() {
+  content.innerHTML = `
+    <div class="flex justify-center items-center h-full">
+      <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+    </div>
+  `;
+}
+
 // --- SAVE OPTIMIZED ---
 async function saveProduct(index){
   const p = products[index];
@@ -297,13 +306,20 @@ addBtn.addEventListener('click', ()=>{
 fetchProducts();
 
 async function fetchProducts() {
+  showSpinner();
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
     products = data.products || data;
     renderSidebar();
+    if(products.length) {
+      currentIndex = 0;
+      renderProductDetails(0);
+    } else {
+      content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.</div>`;
+    }
   } catch(err) {
     console.error(err);
-    alert('Ne mogu da učitam proizvode.');
+    content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">Greška pri učitavanju proizvoda.</div>`;
   }
 }
