@@ -85,7 +85,7 @@ function renderProductDetails(index) {
         </div>
       </div>
 
-      <!-- Desna strana: Slike, Cijena i Tagovi -->
+      <!-- Desna strana: Slike, Cena i Tagovi -->
       <div class="col-span-1 space-y-6">
         <!-- Slike -->
         <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
@@ -103,7 +103,7 @@ function renderProductDetails(index) {
 
         <!-- Cijena -->
         <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Cijena</h3>
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Cena €</h3>
           <input id="price" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.price==='Cena na upit'?'':p.price}" placeholder="0.00"/>
         </div>
 
