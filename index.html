@@ -586,6 +586,21 @@ Laptopi Plus`;
     window.location.href = mailtoLink;
 });
 
+function selectAndCloseModal() {
+    if(!selectedProductGlobal) return;
+
+    // Upisujemo izabrani laptop u padajući meni
+    const laptopSelect = document.getElementById("laptop-select");
+    if(laptopSelect) {
+        laptopSelect.value = selectedProductGlobal.title;
+
+        // Trigger event da forma može reagovati
+        laptopSelect.dispatchEvent(new Event('change'));
+    }
+
+    // Zatvori modal
+    closeModal();
+}
 
 </script>
 
