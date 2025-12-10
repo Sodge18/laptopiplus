@@ -1,58 +1,163 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detalji proizvoda - Laptopi Plus</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="pageTitle">Laptopi Plus</title>
+  
+  <!-- Tailwind + Heroicons + Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/heroicons@2.1.1/dist/heroicons.min.js"></script>
 
-<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-<style>
-  body { font-family: 'Poppins', sans-serif; }
-  .thumbnail { cursor: pointer; border: 2px solid transparent; transition: border 0.2s; }
-  .thumbnail.active { border-color: #1d4ed8; }
-</style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { primary: '#0ea5e9' },
+          animation: { 'fade-in': 'fadeIn 0.6s ease-out forwards' },
+          keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }}
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background: linear-gradient(to bottom right, #f8fafc, #e0f2fe); min-height: 100vh; }
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.3); }
+    .img-zoom { transition: transform 0.4s ease; }
+    .img-zoom:hover { transform: scale(1.05); }
+    .spec-row:nth-child(even) { background: rgba(14, 165, 233, 0.05); }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-gray-800">
 
-<div class="max-w-6xl mx-auto py-10 px-4">
-
-    <a href="index.html" class="inline-block mb-6 text-primary font-semibold hover:underline">
-       ← Nazad
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 glass shadow-lg">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 group">
+      <div class="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition">
+        <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </div>
+      <span class="font-bold text-lg">Nazad na prodavnicu</span>
     </a>
+    <div class="text-2xl font-bold text-primary">Laptopi Plus</div>
+  </div>
+</header>
 
-    <h1 id="p-title" class="text-4xl font-bold mb-3"></h1>
-    <p id="p-price" class="text-2xl font-semibold text-primary mb-8"></p>
+<main class="pt-24 pb-16 max-w-7xl mx-auto px-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-fade-in">
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-        <!-- LEFT: GALLERY -->
-        <div>
-            <div id="gallery-main"
-                 class="w-full h-80 bg-white shadow rounded-xl flex items-center justify-center overflow-hidden">
-            </div>
-
-            <div id="gallery-thumbs"
-                 class="flex gap-3 mt-4 overflow-x-auto">
-            </div>
+    <!-- GALLERY -->
+    <div class="order-2 lg:order-1 space-y-6">
+      <div id="mainImage" class="relative overflow-hidden rounded-2xl shadow-2xl glass">
+        <img id="mainImg" src="" alt="" class="w-full h-96 lg:h-full object-contain img-zoom"/>
+        <div class="absolute top-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium">
+          <span id="tagBadge">Novo</span>
         </div>
+      </div>
 
-        <!-- RIGHT: DETAILS -->
-        <div>
-            <h2 class="text-2xl font-semibold mb-4">Opis</h2>
-            <p id="p-desc" class="text-gray-700 leading-relaxed mb-10"></p>
-
-            <h2 class="text-2xl font-semibold mb-4">Specifikacije</h2>
-            <div id="p-specs" class="space-y-2"></div>
-
-            <button id="chooseBtn"
-                class="mt-10 w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary/90 transition">
-                Izaberi ovaj laptop
-            </button>
-        </div>
-
+      <div id="thumbnails" class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary/30">
+        <!-- Thumbnails se generišu iz JS-a -->
+      </div>
     </div>
-</div>
 
-<script src="product.js"></script>
+    <!-- DETAILS -->
+    <div class="order-1 lg:order-2 space-y-8">
+      <div>
+        <h1 id="title" class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"></h1>
+        <div class="flex items-center gap-4 mt-4">
+          <span id="price" class="text-4xl font-extrabold text-primary"></span>
+          <span class="text-lg text-gray-500 line-through" id="oldPrice"></span>
+        </div>
+      </div>
+
+      <div class="glass rounded-2xl p-8 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6-4h6m-6 8h6"></path>
+          </svg>
+          Specifikacije
+        </h2>
+        <div id="specs" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg spec-row rounded-lg p-3"></div>
+      </div>
+
+      <div id="description" class="prose prose-lg text-gray-700 leading-relaxed"></div>
+
+      <!-- CTA -->
+      <button id="chooseBtn" class="w-full bg-primary hover:bg-primary/90 text-white font-bold text-xl py-6 rounded-2xl shadow-2xl transform hover:scale-105 transition duration-300 flex items-center justify-center gap-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18l-2 13H5L3 3zm4 18a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z"/>
+        </svg>
+        Izaberi ovaj laptop i pošalji upit
+      </button>
+    </div>
+  </div>
+</main>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const selectedId = urlParams.get('selected');
+const API = "https://products-api.sergej-kaldesic.workers.dev/";
+
+async function loadProduct() {
+  try {
+    const res = await fetch(API);
+    const data = await res.json();
+    const products = data.products || data;
+    const product = products.find(p => p.id === selectedId);
+
+    if (!product) {
+      document.body.innerHTML = `<div class="text-center py-32 text-3xl">Laptop nije pronađen</div>`;
+      return;
+    }
+
+    // Title & SEO
+    document.getElementById('pageTitle').textContent = product.title + " - Laptopi Plus";
+    document.getElementById('title').textContent = product.title;
+    document.getElementById('price').textContent = product.price ? `${product.price}€` : "Cena na upit";
+    document.getElementById('tagBadge').textContent = product.tag || "Novo";
+
+    // Images
+    const mainImg = document.getElementById('mainImg');
+    const thumbs = document.getElementById('thumbnails');
+    mainImg.src = product.images?.[0] || "https://via.placeholder.com/800";
+    
+    thumbs.innerHTML = (product.images || []).map((img, i) => `
+      <img src="${img}" alt="thumb ${i+1}" class="w-24 h-24 object-cover rounded-xl cursor-pointer snap-center thumbnail ${i===0?'ring-4 ring-primary':''}"
+           onclick="document.getElementById('mainImg').src=this.src; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('ring-4','ring-primary')); this.classList.add('ring-4','ring-primary')">
+    `).join('');
+
+    // Specs
+    const specsDiv = document.getElementById('specs');
+    const specs = product.specs || {};
+    const keys = ['CPU','RAM','GPU','Memorija','Ekran','Baterija','OS','Težina','Portovi','Kamera','Audio'];
+    specsDiv.innerHTML = keys.map(k => {
+      if (!specs[k]) return '';
+      return `<div class="flex justify-between"><span class="font-medium">${k}:</span> <span class="text-primary font-semibold">${specs[k]}</span></div>`;
+    }).join('');
+
+    // Description
+    document.getElementById('description').textContent = product.description || product.shortDesc || "Nema detaljnog opisa.";
+
+    // Choose button
+    document.getElementById('chooseBtn').onclick = () => {
+      const laptopSelect = document.createElement('select');
+      laptopSelect.innerHTML = `<option value="${product.id}">${product.title}</option>`;
+      document.getElementById('laptop-select')?.dispatchEvent(new Event('change'));
+      window.location.href = "index.html#contact-form-section";
+    };
+
+  } catch (err) {
+    console.error(err);
+    document.body.innerHTML = `<div class="text-center py-32 text-3xl text-red-600">Greška pri učitavanju</div>`;
+  }
+}
+
+loadProduct();
+</script>
 </body>
 </html>
