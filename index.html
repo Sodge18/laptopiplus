@@ -305,19 +305,38 @@
 <!-- FOOTER -->
 <footer class="bg-gray-800 text-gray-300 border-t border-gray-700">
   <div class="container mx-auto px-6 lg:px-8 py-12">
-    <div class="text-center space-y-4">
-      <p class="text-sm">
-        Laptopi Plus — Laptopi za sve namene
-      </p>
-      <p class="text-xs text-gray-500">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+      
+      <!-- LIJEVA STRANA: Kontakt -->
+      <div class="space-y-3">
+        <p class="text-sm font-medium text-gray-400">Kontaktirajte nas direktno</p>
+        <div class="flex flex-col gap-2">
+          <a href="tel:+381637105383" class="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gray-100 transition text-lg font-semibold">
+            <span class="material-icons text-xl">phone</span>
+            +381 63 710-5383
+          </a>
+          <a href="mailto:info@laptopiplus.rs" class="flex items-center justify-center md:justify-start gap-3 text-white hover:text-gray-100 transition text-lg font-semibold">
+            <span class="material-icons text-xl">email</span>
+            info@laptopiplus.rs
+          </a>
+        </div>
+      </div>
+
+      <!-- SREDINA / DESNO: Tekst + potpis -->
+      <div class="space-y-4">
+        <p class="text-sm">
+          Laptopi Plus — Laptopi za sve namene
+        </p>
+        <p class="text-xs text-gray-500">
           Developed by 
           <a href="https://instagram.com/sodge.studio" 
              target="_blank" 
-             rel="noopener" 
+             rel="noopener"
              class="font-medium text-gray-400 hover:text-white transition underline decoration-gray-500 hover:decoration-white">
             @sodge.studio
           </a>
         </p>
+      </div>
     </div>
   </div>
 </footer>
