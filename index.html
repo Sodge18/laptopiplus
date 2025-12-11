@@ -50,26 +50,20 @@
       });
     </>
     
-    <>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#333333",
-                        "background-light": "#ffffff",
-                        "background-dark": "#1f2937",
-                    },
-                    fontFamily: { display: ["Poppins", "sans-serif"] },
-                    borderRadius: {
-                        DEFAULT: "0.75rem",
-                        xl: "1.25rem",
-                        "2xl": "1.5rem",
-                    },
-                },
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#333333"
             },
-        };
-    </>
+            fontFamily: {
+              display: ["Poppins", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
 
     <style>
         [x-cloak] { display: none !important; }
@@ -361,6 +355,7 @@
   </div>
 </footer>
 
+</script>
 const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
 let allProducts = [];
 
@@ -679,6 +674,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 600);
 });
     
-</>
+</script>
 </body>
 </html>
