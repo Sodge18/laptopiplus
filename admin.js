@@ -325,23 +325,70 @@ addBtn.addEventListener('click', ()=>{
 });
 
 // --- INIT ---
-fetchProducts();
+fetchProductsOptimized();
 
-async function fetchProducts() {
+/**
+ * Fetch sa timeout + retry + lokalni cache + instant UI rendering
+ */
+async function fetchProductsOptimized() {
   showSpinner();
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    products = data.products || data;
-    renderSidebar();
-    if(products.length) {
-      currentIndex = 0;
-      renderProductDetails(0);
-    } else {
-      content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.</div>`;
+
+  // 1) Probaj localStorage instant
+  const cached = localStorage.getItem("products-cache");
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length) {
+        products = parsed;
+        renderSidebar();
+        currentIndex = 0;
+        renderProductDetails(0);
+      }
+    } catch {}
+  }
+
+  // 2) Fetch sa timeout + retry
+  const controller = new AbortController();
+
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, 5000);
+
+  let data;
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = await fetch(API_URL, { signal: controller.signal });
+      clearTimeout(timeout);
+      data = await res.json();
+      break;
+    } catch (err) {
+      console.warn("Fetch attempt failed:", attempt, err);
+      await new Promise(r => setTimeout(r, 500));
     }
-  } catch(err) {
-    console.error(err);
-    content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">Greška pri učitavanju proizvoda.</div>`;
+  }
+
+  if (!data) {
+    if (!products.length) {
+      content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">
+        Server sporo odgovara. Pokušajte ponovo za par sekundi.
+      </div>`;
+    }
+    return;
+  }
+
+  // 3) Upisi u memory i cache
+  products = data.products || data;
+  localStorage.setItem("products-cache", JSON.stringify(products));
+
+  // 4) Render UI
+  renderSidebar();
+  if (products.length) {
+    currentIndex = 0;
+    renderProductDetails(0);
+  } else {
+    content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
+      Još nema proizvoda. Dodajte prvi preko <strong>+ Novi proizvod</strong>.
+    </div>`;
   }
 }
