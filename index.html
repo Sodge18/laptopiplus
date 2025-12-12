@@ -70,26 +70,22 @@
 </header>
 <!-- HERO – SAVRŠEN VERTIKALNI GRADIENT + TALASI PREKO CELOG EKRANA -->
 <section class="relative h-screen flex items-center justify-center text-white overflow-hidden">
-  <!-- GLAVNA POZADINA – mekši vertikalni gradijent -->
-    <div class="absolute inset-0 -z-10 bg-gradient-to-b
-                from-gray-900/90 via-[#0f172a]/80 to-black/90"></div>
-    
-    <!-- SUPTILNI TALASI – mekši prelaz -->
-    <div class="absolute inset-0 -z-10 opacity-40 overflow-hidden">
-      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 400L80 380C160 360 320 320 480 310C640 300 800 320 960 350C1120 380 1280 420 1360 440L1440 460V800H0V400Z"
-              fill="url(#wave1)"/>
-        <defs>
-          <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.15"/>
-            <stop offset="25%" stop-color="#3b82f6" stop-opacity="0.2"/>
-            <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.15"/>
-            <stop offset="75%" stop-color="#3b82f6" stop-opacity="0.1"/>
-            <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.05"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
+  <!-- GLAVNA POZADINA – vertikalni gradijent -->
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-gray-900 via-[#0f172a] to-black"></div>
+  <!-- SUPTILNI TALASI – sada 100% širine i visine -->
+  <div class="absolute inset-0 -z-10 opacity-40 overflow-hidden">
+    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 400L80 380C160 360 320 320 480 310C640 300 800 320 960 350C1120 380 1280 420 1360 440L1440 460V800H0V400Z"
+            fill="url(#wave1)"/>
+      <defs>
+        <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.2"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
   <!-- Sadržaj -->
   <div class="relative z-10 text-center px-6 max-w-6xl mx-auto">
     <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6 leading-none
@@ -120,9 +116,8 @@
       </a>
     </div>
   </div>
-    <!-- Donji prelaz u svetlu pozadinu -->
-    <div class="absolute bottom-0 left-0 right-0 h-32
-        bg-gradient-to-t from-gray-50/70 via-gray-50/30 to-transparent pointer-events-none overflow-hidden"></div>
+  <!-- Donji prelaz u svetlu pozadinu -->
+  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none overflow-hidden"></div>
 </section>
 <!-- CAROUSEL -->
 <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
