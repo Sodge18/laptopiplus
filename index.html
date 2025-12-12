@@ -135,17 +135,19 @@
         </div>
         <!-- Strelice -->
         <button id="prev-btn"
-                class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12
-                       bg-gray-100 p-3 rounded-full shadow-md
-                       hover:bg-gray-200 transition-colors z-10">
-            <span class="material-icons text-gray-800">arrow_back_ios_new</span>
+            class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12
+            bg-gray-800/70 text-white p-3 rounded-full shadow-lg
+            hover:bg-gray-900/80 transition-colors z-10">
+            <span class="material-icons">arrow_back_ios_new</span>
         </button>
+        
         <button id="next-btn"
-                class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12
-                       bg-gray-100 p-3 rounded-full shadow-md
-                       hover:bg-gray-200 transition-colors z-10">
-            <span class="material-icons text-gray-800">arrow_forward_ios</span>
+            class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-12
+            bg-gray-800/70 text-white p-3 rounded-full shadow-lg
+            hover:bg-gray-900/80 transition-colors z-10">
+            <span class="material-icons">arrow_forward_ios</span>
         </button>
+
     </div>
     <div id="pagination-dots" class="flex justify-center items-center mt-12 space-x-2"></div>
 </main>
@@ -389,10 +391,11 @@ function renderCarousel(products) {
     </div>`;
   }).join("");
 
-  dots.innerHTML = products.map((_, i) =>
-    `<button onclick="scrollToSlide(${i})"
-            class="w-3 h-3 rounded-full transition-all ${i===0 ? "bg-primary w-8" : "bg-gray-300 "}"></button>`
-  ).join("");
+    dots.innerHTML = products.map((_, i) =>
+        `<button onclick="scrollToSlide(${i})"
+                class="w-3 h-3 rounded-full transition-all ${i===0 ? "bg-blue-600 w-8" : "bg-gray-600 "}"></button>`
+    ).join("");
+
 
   document.getElementById("prev-btn").onclick = () => scrollCarousel(-1);
   document.getElementById("next-btn").onclick = () => scrollCarousel(1);
