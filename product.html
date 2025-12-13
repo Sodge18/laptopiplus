@@ -110,43 +110,46 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-    <!-- LIJEVO (sticky na desktopu) – galerija + opis proizvoda -->
-    <div class="space-y-12 lg:sticky lg:top-20 lg:self-start">
-      <!-- Naziv samo na desktopu -->
-      <h1 id="title-desktop" class="text-5xl lg:text-6xl font-black mb-8 hidden lg:block"></h1>
 
-      <!-- Galerija (prikazuje se i na telefonu i na desktopu) -->
+    <!-- LIJEVA KOLONA – kupovni dio -->
+    <div class="space-y-12 lg:sticky lg:top-20 lg:self-start">
+      <h1 id="title-desktop" class="text-5xl lg:text-6xl font-black"></h1>
+  
+      <p id="shortDesc-desktop" class="text-xl text-gray-600 leading-relaxed"></p>
+  
+      <p id="price-desktop" class="text-4xl font-black"></p>
+  
       <div class="space-y-6">
         <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
           <img id="mainImage" src="" alt="Laptop" class="w-full h-full object-cover cursor-pointer">
         </div>
         <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
       </div>
-
-      <!-- Opis proizvoda – samo na desktopu ispod galerije -->
-      <div class="hidden lg:block prose prose-lg text-gray-700 leading-relaxed mt-12">
+  
+      <button id="chooseBtn-desktop"
+        class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
+        Izaberi Laptop
+      </button>
+    </div>
+  
+    <!-- DESNA KOLONA – info -->
+    <div class="space-y-16">
+  
+      <!-- Opis proizvoda (desktop) -->
+      <div class="prose prose-lg text-gray-700 leading-relaxed">
         <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
         <div id="fullDescription"></div>
       </div>
-    </div>
-
-    <!-- DESNO – naziv, kratak opis, cijena, dugme, specifikacije (samo na desktopu) -->
-    <div class="space-y-12">
-      <div class="hidden lg:block space-y-8">
-        <p id="shortDesc-desktop" class="text-xl text-gray-600 leading-relaxed"></p>
-        <p id="price-desktop" class="text-5xl font-black mb-12"></p>
-        <button id="chooseBtn-desktop" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
-          Izaberi Laptop
-        </button>
-      </div>
-
+  
       <!-- Specifikacije -->
       <div>
         <h2 class="text-3xl font-bold mb-8">Tehničke specifikacije</h2>
         <div id="specs" class="space-y-4"></div>
       </div>
+  
     </div>
   </div>
+
 
   <!-- Opis proizvoda – samo na telefonu ispod svega -->
   <div class="mt-12 lg:hidden">
