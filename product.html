@@ -263,21 +263,25 @@ async function loadProduct() {
       window.location.href = `index.html?selected=${product.id}#contact`;
     };
 
-    // OSTALI LAPTOPI – uže kartice na telefonu
+    // OSTALI LAPTOPI – horizontalna galerija
     const otherDiv = document.getElementById("otherProducts");
     const otherProducts = allProducts.filter(p => p.id !== id);
-    otherDiv.innerHTML = otherProducts.map(p => {
-      const img = p.images?.[0] || p.image || "https://via.placeholder.com/400?text=Laptop";
-      return `
-        <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-[75%] sm:w-80 lg:w-96 cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
-          <img src="${img}" alt="${p.title}" class="w-full h-full object-cover">
-          <div class="p-4 sm:p-5">
-            <h3 class="text-base sm:text-lg font-bold mb-2 line-clamp-2">${p.title}</h3>
-            <p class="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">${p.shortDesc || ""}</p>
-            <p class="text-lg sm:text-xl font-bold">${p.price ? p.price + "€" : "Cena na upit"}</p>
-          </div>
-        </div>`;
-    }).join("");
+    if (otherProducts.length > 0) {
+      otherDiv.innerHTML = otherProducts.map(p => {
+        const img = p.images?.[0] || p.image || "https://via.placeholder.com/400?text=Laptop";
+        return `
+          <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-[75%] sm:w-64 lg:w-80 min-w-[240px] cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
+            <img src="${img}" alt="${p.title}" class="w-full h-40 object-cover">
+            <div class="p-5">
+              <h3 class="text-lg font-bold mb-2 line-clamp-2">${p.title}</h3>
+              <p class="text-gray-600 text-sm mb-3 line-clamp-2">${p.shortDesc || ""}</p>
+              <p class="text-2xl font-bold">${p.price ? p.price + "€" : "Cena na upit"}</p>
+            </div>
+          </div>`;
+      }).join("");
+    } else {
+      otherDiv.innerHTML = "<p class='text-center text-gray-500 py-8'>Trenutno nema drugih laptopa.</p>";
+    }
 
   } catch (err) {
     console.error(err);
