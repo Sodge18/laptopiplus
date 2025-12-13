@@ -39,19 +39,15 @@
 </head>
 <body class="bg-white text-gray-900 min-h-screen flex flex-col">
 
-<!-- HEADER – "Nazad na početnu" u lijevom ćošku (samo na desktopu) -->
+<!-- HEADER -->
 <header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex items-center justify-between h-16">
-      <!-- LIJEVO: Nazad + Logo (Nazad se vidi samo na md+ ekranima) -->
       <div class="flex items-center gap-6">
-        <!-- "Nazad na početnu" – sakriven na telefonu -->
         <a href="index.html" class="hidden md:flex items-center gap-2 text-gray-700 hover:text-black transition text-lg font-medium">
           <span class="material-symbols-outlined">arrow_back</span>
           Nazad na početnu
         </a>
-
-        <!-- Logo -->
         <a href="index.html" class="flex items-center gap-3">
           <div class="w-9 h-9 flex items-center justify-center bg-primary text-white rounded-lg">
             <span class="material-symbols-outlined text-xl">laptop_mac</span>
@@ -59,8 +55,6 @@
           <span class="text-xl font-bold tracking-tight">Laptopi Plus</span>
         </a>
       </div>
-
-      <!-- DESNO: Kontakt – samo na desktopu -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="tel:+381637105383" class="flex items-center gap-2 hover:text-gray-600 transition">
           <span class="material-symbols-outlined text-lg">phone</span>
@@ -71,8 +65,6 @@
           bojicstefan66@gmail.com
         </a>
       </div>
-
-      <!-- Hamburger za mobilni -->
       <button id="menuBtn" class="md:hidden">
         <span class="material-symbols-outlined text-2xl">menu</span>
       </button>
@@ -98,25 +90,21 @@
 </div>
 
 <main class="container mx-auto px-6 py-12 max-w-7xl flex-grow">
-  <!-- Sadržaj bez "Nazad" linka – jer je sada u headeru -->
+  <!-- Glavni grid – na telefonu sve u jednu kolonu -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-    <!-- LIJEVO: GALERIJA + DETALJAN OPIS – sticky na desktopu -->
-    <div class="space-y-12 lg:sticky lg:top-20 lg:self-start">
+    <!-- LIJEVO (sticky na desktopu) -->
+    <div class="space-y-12 lg:sticky lg:top-20 lg:self-start order-1">
+      <!-- Galerija -->
       <div class="space-y-6">
         <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3] flex items-center justify-center">
           <img id="mainImage" src="" alt="Laptop" class="object-contain max-h-full max-w-full p-8">
         </div>
         <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
       </div>
-
-      <div class="prose prose-lg text-gray-700 leading-relaxed">
-        <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
-        <div id="fullDescription"></div>
-      </div>
     </div>
 
-    <!-- DESNO: SADRŽAJ -->
-    <div class="space-y-12">
+    <!-- DESNO – cijena, dugme, specifikacije -->
+    <div class="space-y-12 order-2">
       <div>
         <h1 id="title" class="text-5xl lg:text-6xl font-black mb-6"></h1>
         <p id="shortDesc" class="text-xl text-gray-600 mb-8 leading-relaxed"></p>
@@ -132,7 +120,15 @@
     </div>
   </div>
 
-  <!-- OSTALI LAPTOPI -->
+  <!-- Detaljan opis – na telefonu ISPOD specifikacija, na desktopu lijevo (već je sticky) -->
+  <div class="mt-12 lg:hidden order-3">
+    <div class="prose prose-lg text-gray-700 leading-relaxed">
+      <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
+      <div id="fullDescription"></div>
+    </div>
+  </div>
+
+  <!-- OSTALI LAPTOPI – uže kartice na telefonu -->
   <div class="mt-24">
     <div class="relative text-center mb-12">
       <div class="absolute inset-0 flex items-center">
@@ -142,7 +138,7 @@
         <h2 class="text-3xl font-bold">Ostali laptopi</h2>
       </div>
     </div>
-    <div class="overflow-x-auto pb-4 horizontal-scroll">
+    <div class="overflow-x-auto pb-4">
       <div id="otherProducts" class="flex gap-6"></div>
     </div>
   </div>
@@ -214,8 +210,10 @@ async function loadProduct() {
            onclick="changeImage(${i})">
     `).join("");
 
+    // Detaljan opis – prikazuje se i lijevo (sticky) i na telefonu ispod specifikacija
     document.getElementById("fullDescription").innerHTML = product.description || "Nema detaljnog opisa.";
 
+    // Specifikacije
     const specsDiv = document.getElementById("specs");
     const specKeys = {
       'CPU': 'Procesor',
@@ -251,12 +249,13 @@ async function loadProduct() {
       window.location.href = `index.html?selected=${product.id}#contact`;
     };
 
+    // OSTALI LAPTOPI – uže kartice na telefonu
     const otherDiv = document.getElementById("otherProducts");
     const otherProducts = allProducts.filter(p => p.id !== id);
     otherDiv.innerHTML = otherProducts.map(p => {
       const img = p.images?.[0] || p.image || "https://via.placeholder.com/400?text=Laptop";
       return `
-        <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-[90%] sm:w-64 lg:w-72 cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
+        <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-[85%] sm:w-64 lg:w-72 cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
           <img src="${img}" alt="${p.title}" class="w-full h-36 sm:h-40 object-cover">
           <div class="p-4 sm:p-5">
             <h3 class="text-base sm:text-lg font-bold mb-2 line-clamp-2">${p.title}</h3>
