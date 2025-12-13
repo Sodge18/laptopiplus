@@ -243,7 +243,7 @@ async function loadProduct() {
     otherDiv.innerHTML = otherProducts.map(p => {
       const img = p.images?.[0] || p.image || "https://via.placeholder.com/400?text=Laptop";
       return `
-        <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-72 cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
+        <div onclick="window.location.href='product.html?selected=${p.id}'" class="other-product flex-shrink-0 w-full sm:w-64 lg:w-72 min-w-[240px] cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden">
           <img src="${img}" alt="${p.title}" class="w-full h-40 object-cover">
           <div class="p-5">
             <h3 class="text-lg font-bold mb-2">${p.title}</h3>
