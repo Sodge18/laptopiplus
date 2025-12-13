@@ -135,12 +135,20 @@ async function loadProduct() {
     };
 
     Object.entries(product.specs || {}).forEach(([key, value]) => {
+      // Pretvori u string i trimuj (da uhvati spaceove)
+      const valStr = (value || "").toString().trim();
+
+      // Preskoči ako je prazno ili besmisleno
+      if (!valStr || valStr === "-" || valStr.toLowerCase() === "n/a" || valStr.toLowerCase() === "nepoznato" || valStr === "null" || valStr === "undefined") {
+        return;
+      }
+
       const label = specKeys[key] || key;
       const div = document.createElement("div");
-      div.className = "flex justify-between py-4 border-b border-gray-200";
+      div.className = "flex justify-between py-4 border-b border-gray-200 last:border-0";
       div.innerHTML = `
         <span class="text-lg text-gray-600">${label}:</span>
-        <span class="text-lg font-semibold">${value}</span>
+        <span class="text-lg font-semibold">${valStr}</span>
       `;
       specsDiv.appendChild(div);
     });
