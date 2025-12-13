@@ -104,14 +104,11 @@
     </a>
   </div>
 
-  <!-- Na telefonu: naslov, kratak opis, cijena, dugme – prije galerije -->
+  <!-- Na telefonu: naslov, kratak opis, cijena – prije galerije -->
   <div class="lg:hidden space-y-8 mb-12">
     <h1 id="title" class="text-4xl font-black"></h1>
     <p id="shortDesc" class="text-xl text-gray-600 leading-relaxed"></p>
     <p id="price" class="text-4xl font-black"></p>
-    <button id="chooseBtn" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
-      Izaberi Laptop
-    </button>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
@@ -124,18 +121,22 @@
         </div>
         <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
       </div>
+
+      <!-- DUGME "Izaberi Laptop" – ispod galerije na svim ekranima -->
+      <div class="mt-8">
+        <button id="chooseBtn" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
+          Izaberi Laptop
+        </button>
+      </div>
     </div>
 
-    <!-- DESNO – specifikacije -->
+    <!-- DESNO – naslov, opis, cijena (samo na desktopu) + specifikacije -->
     <div class="space-y-12 order-2">
-      <!-- Na desktopu: naslov, kratak opis, cijena, dugme – prije specifikacija -->
+      <!-- Na desktopu: naslov, kratak opis, cijena -->
       <div class="hidden lg:block">
         <h1 id="title-lg" class="text-5xl lg:text-6xl font-black mb-6"></h1>
         <p id="shortDesc-lg" class="text-xl text-gray-600 mb-8 leading-relaxed"></p>
         <p id="price-lg" class="text-5xl font-black mb-12"></p>
-        <button id="chooseBtn-lg" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
-          Izaberi Laptop
-        </button>
       </div>
 
       <div>
@@ -145,8 +146,8 @@
     </div>
   </div>
 
-  <!-- Detaljan opis – na telefonu ISPOD specifikacija, na desktopu lijevo (već je sticky) -->
-  <div class="mt-12 lg:hidden order-3">
+  <!-- Detaljan opis – na telefonu ispod specifikacija -->
+  <div class="mt-12 lg:hidden">
     <div class="prose prose-lg text-gray-700 leading-relaxed">
       <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
       <div id="fullDescription"></div>
@@ -235,10 +236,15 @@ async function loadProduct() {
 
     document.title = `${product.title} - Laptopi Plus`;
 
-    // Popuni naslov, opis, cijenu – na telefonu prije galerije
+    // Naslov, kratak opis, cijena – na telefonu prije galerije
     document.getElementById("title").textContent = product.title;
     document.getElementById("shortDesc").textContent = product.shortDesc || "";
     document.getElementById("price").textContent = product.price ? `${product.price}€` : "Cena na upit";
+
+    // Na desktopu – dupliraj za desnu kolonu
+    document.getElementById("title-lg").textContent = product.title;
+    document.getElementById("shortDesc-lg").textContent = product.shortDesc || "";
+    document.getElementById("price-lg").textContent = product.price ? `${product.price}€` : "Cena na upit";
 
     // Galerija
     images = product.images && product.images.length ? product.images : [product.image || "https://via.placeholder.com/800?text=Laptop"];
@@ -286,6 +292,7 @@ async function loadProduct() {
       specsDiv.appendChild(div);
     });
 
+    // Dugme – jedinstveno, ispod galerije
     document.getElementById("chooseBtn").onclick = () => {
       window.location.href = `index.html?selected=${product.id}#contact`;
     };
@@ -332,7 +339,7 @@ document.getElementById('closeMenu')?.addEventListener('click', () => {
 
 document.addEventListener("DOMContentLoaded", loadProduct);
 
-// Lightbox za glavnu galeriju
+// Lightbox
 function openLightbox(index) {
   currentIndex = index;
   document.getElementById("lightboxImage").src = images[currentIndex];
