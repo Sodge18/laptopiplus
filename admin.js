@@ -289,7 +289,7 @@ async function deleteProduct(index){
       if(products.length === 0){
         currentIndex = null;
         content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
-          Počnite sa dodavanjem novih proizvoda klikom na <strong>+ Novi proizvod</strong>.
+          Počnite sa dodavanjem novih proizvoda klikom na <strong>Novi proizvod</strong>.
         </div>`;
       } else {
         currentIndex = Math.min(index, products.length - 1);
