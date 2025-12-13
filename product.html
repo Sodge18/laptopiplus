@@ -36,12 +36,15 @@
 <header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex items-center justify-between h-16">
+      <!-- Logo – tačno kao na index.html -->
       <a href="index.html" class="flex items-center gap-3">
         <div class="w-9 h-9 flex items-center justify-center bg-primary text-white rounded-lg">
           <span class="material-symbols-outlined text-xl">laptop_mac</span>
         </div>
         <span class="text-xl font-bold tracking-tight">Laptopi Plus</span>
       </a>
+
+      <!-- Telefon i email – samo na desktopu (kao na index.html) -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="tel:+381637105383" class="flex items-center gap-2 hover:text-gray-600 transition">
           <span class="material-symbols-outlined text-lg">phone</span>
@@ -52,6 +55,8 @@
           bojicstefan66@gmail.com
         </a>
       </div>
+
+      <!-- Hamburger (za mobilni meni sa kontaktom) -->
       <button id="menuBtn" class="md:hidden">
         <span class="material-symbols-outlined text-2xl">menu</span>
       </button>
@@ -59,7 +64,7 @@
   </div>
 </header>
 
-<!-- Mobilni meni -->
+<!-- Mobilni meni – isti kao na index.html -->
 <div id="mobileMenu" class="fixed inset-0 bg-white z-40 hidden flex-col items-center justify-center gap-12 text-3xl font-bold">
   <button id="closeMenu" class="absolute top-8 right-8 text-5xl">
     <span class="material-symbols-outlined">close</span>
@@ -76,56 +81,50 @@
   </div>
 </div>
 
-<main class="container mx-auto px-6 py-12 max-w-7xl flex-grow relative">
-  <!-- "Nazad na prodavnicu" – fiksiran lijevo (kao sidebar) -->
-  <div class="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
-    <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:text-black transition text-lg font-medium rotate-90 origin-left whitespace-nowrap">
+<main class="container mx-auto px-6 py-12 max-w-7xl flex-grow">
+  <!-- "Nazad" link sada u sadržaju, ispod headera -->
+  <div class="mb-8">
+    <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-black transition text-lg font-medium">
       <span class="material-symbols-outlined">arrow_back</span>
       Nazad na prodavnicu
     </a>
   </div>
 
-  <!-- Na telefonu – "Nazad" normalno iznad sadržaja -->
-  <div class="lg:hidden mb-8">
-    <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:text-black transition text-lg font-medium">
-      <span class="material-symbols-outlined">arrow_back</span>
-      Nazad na prodavnicu
-    </a>
-  </div>
-
-  <!-- Glavni sadržaj – pomjeren udesno da ne preklapa "Nazad" -->
-  <div class="lg:ml-32">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-      <!-- LIJEVO: GALERIJA -->
-      <div class="space-y-6">
-        <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3] flex items-center justify-center">
-          <img id="mainImage" src="" alt="Laptop" class="object-contain max-h-full max-w-full p-8">
-        </div>
-        <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+    <!-- LIJEVO: GALERIJA -->
+    <div class="space-y-6">
+      <!-- Glavna slika -->
+      <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3] flex items-center justify-center">
+        <img id="mainImage" src="" alt="Laptop" class="object-contain max-h-full max-w-full p-8">
       </div>
-      <!-- DESNO: SADRŽAJ -->
-      <div class="space-y-12">
-        <div>
-          <h1 id="title" class="text-5xl lg:text-6xl font-black mb-6"></h1>
-          <p id="shortDesc" class="text-xl text-gray-600 mb-8 leading-relaxed"></p>
-          <p id="price" class="text-5xl font-black mb-12"></p>
-          <button id="chooseBtn" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
-            Izaberi Laptop
-          </button>
-        </div>
-        <div>
-          <h2 class="text-3xl font-bold mb-8">Tehničke specifikacije</h2>
-          <div id="specs" class="space-y-4"></div>
-        </div>
+      <!-- Thumbnailovi -->
+      <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
+    </div>
+    <!-- DESNO: SADRŽAJ -->
+    <div class="space-y-12">
+      <div>
+        <h1 id="title" class="text-5xl lg:text-6xl font-black mb-6"></h1>
+        <p id="shortDesc" class="text-xl text-gray-600 mb-8 leading-relaxed"></p>
+        <p id="price" class="text-5xl font-black mb-12"></p>
+        <!-- Dugme -->
+        <button id="chooseBtn" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
+          Izaberi Laptop
+        </button>
+      </div>
+      <!-- Specifikacije -->
+      <div>
+        <h2 class="text-3xl font-bold mb-8">Tehničke specifikacije</h2>
+        <div id="specs" class="space-y-4"></div>
       </div>
     </div>
   </div>
 </main>
 
-<!-- FOOTER -->
+<!-- FOOTER – isti kao na index.html -->
 <footer class="bg-[#171717] text-gray-400 py-12 border-t border-gray-800 mt-auto">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+      <!-- Lijevo: Kontakt -->
       <div class="space-y-2">
         <a href="tel:+381637105383" class="flex items-center gap-3 text-white hover:text-gray-300 transition text-lg font-medium">
           <span class="material-symbols-outlined text-xl">phone</span>
@@ -136,6 +135,7 @@
           bojicstefan66@gmail.com
         </a>
       </div>
+      <!-- Desno: Tekst + potpis -->
       <div class="space-y-4 text-center md:text-right">
         <p class="text-sm">
           Laptopi Plus — Laptopi za sve namene
@@ -237,7 +237,7 @@ function changeImage(index) {
   });
 }
 
-// Mobilni meni
+// Mobilni meni funkcionalnost
 document.getElementById('menuBtn')?.addEventListener('click', () => {
   document.getElementById('mobileMenu').classList.remove('hidden');
 });
