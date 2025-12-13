@@ -41,6 +41,9 @@
     #mainImage:hover {
       transform: scale(1.05);
     }
+    #mobileMenu {
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 <body class="bg-white text-gray-900 min-h-screen flex flex-col">
@@ -79,7 +82,7 @@
 </header>
 
 <!-- Mobilni meni -->
-<div id="mobileMenu" class="fixed inset-0 bg-white z-40 hidden flex-col items-center justify-center gap-12 text-3xl font-bold">
+<div id="mobileMenu" class="fixed inset-x-0 top-16 bottom-0 bg-white z-40 hidden flex flex-col items-center justify-center gap-12 text-3xl font-bold pt-8">
   <button id="closeMenu" class="absolute top-8 right-8 text-5xl">
     <span class="material-symbols-outlined">close</span>
   </button>
