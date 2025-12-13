@@ -28,11 +28,24 @@
     }
   </script>
   <style>
-    .product-card:hover img {
-      transform: scale(1.05);
+    /* Jači hover efekat */
+    .product-card {
+      transition: all 0.4s ease;
     }
     .product-card:hover {
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: translateY(-12px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+    .product-card:hover .card-bg {
+      background-color: #f0f0f0;
+    }
+    .product-card:hover img {
+      transform: scale(1.08);
+    }
+    .product-card:hover h3 {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
     }
     .invalid-field {
       border-color: #ef4444 !important;
@@ -52,7 +65,6 @@
         </div>
         <span class="text-xl font-bold tracking-tight">Laptopi Plus</span>
       </a>
-
       <!-- Telefon i email – samo na desktopu -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="tel:+381637105383" class="flex items-center gap-2 hover:text-gray-600 transition">
@@ -64,7 +76,6 @@
           bojicstefan66@gmail.com
         </a>
       </div>
-
       <!-- Hamburger -->
       <button id="menuBtn" class="md:hidden">
         <span class="material-symbols-outlined text-2xl">menu</span>
@@ -102,10 +113,10 @@
   </div>
 </section>
 
-<!-- PROIZVODI GRID -->
+<!-- PROIZVODI GRID – 4 u redu na velikom ekranu + bolji hover -->
 <section id="products" class="px-6 pb-24">
   <div class="max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10" id="products-grid">
       <div class="col-span-full text-center py-32">
         <p class="text-gray-500 text-lg">Učitavanje proizvoda...</p>
       </div>
@@ -127,7 +138,6 @@
         <input type="hidden" name="_replyto" value="{{email}}">
         <input type="hidden" name="_autoresponse" value="Hvala na upitu! Uskoro ćemo Vam se javiti sa ponudom. Laptopi Plus">
         <input type="hidden" name="_captcha" value="false">
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <input id="ime" type="text" name="ime" placeholder="Ime" required class="px-6 py-4 border border-gray-300 rounded-lg focus:border-primary focus:outline-none transition">
           <input id="prezime" type="text" name="prezime" placeholder="Prezime" required class="px-6 py-4 border border-gray-300 rounded-lg focus:border-primary focus:outline-none transition">
@@ -180,7 +190,6 @@
   </div>
 </footer>
 
-<!-- JS ostaje isti -->
 <script>
 const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
 let allProducts = [];
@@ -207,15 +216,15 @@ function renderGrid(products) {
   grid.innerHTML = products.map(p => {
     const img = p.images?.[0] || p.image || "https://via.placeholder.com/600?text=No+Image";
     return `
-    <div onclick="goToProduct('${p.id}')" class="product-card group flex flex-col cursor-pointer">
-      <div class="relative w-full aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center p-8 transition-all duration-300 group-hover:bg-gray-200">
-        <img src="${img}" alt="${p.title}" class="object-contain w-full h-full mix-blend-multiply transition-transform duration-500 group-hover:scale-105">
+    <div onclick="goToProduct('${p.id}')" class="product-card group flex flex-col cursor-pointer bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div class="card-bg relative w-full aspect-[4/3] bg-gray-100 flex items-center justify-center p-8 transition-all duration-300">
+        <img src="${img}" alt="${p.title}" class="object-contain w-full h-full mix-blend-multiply transition-transform duration-500">
       </div>
-      <div class="mt-4 space-y-1">
-        <h3 class="text-lg font-semibold group-hover:underline decoration-1 underline-offset-4">${p.title}</h3>
-        <div class="flex justify-between items-center">
-          <p class="text-gray-500 text-sm">${p.shortDesc || "Premium laptop"}</p>
-          <p class="font-medium">${p.price ? p.price + "€" : "Cena na upit"}</p>
+      <div class="p-6 space-y-3">
+        <h3 class="text-xl font-semibold">${p.title}</h3>
+        <p class="text-gray-500 text-sm">${p.shortDesc || "Premium laptop"}</p>
+        <div class="flex justify-between items-end">
+          <p class="text-2xl font-bold">${p.price ? p.price + "€" : "Cena na upit"}</p>
         </div>
       </div>
     </div>`;
