@@ -98,75 +98,41 @@
   </div>
 </div>
 
-<main class="container mx-auto px-6 py-12 max-w-7xl flex-grow">
+<main class="container mx-auto px-6 py-12 max-w-7xl flex-grow space-y-12">
 
-  <!-- MOBILNI REDOSLIJED -->
-  <div class="lg:hidden space-y-6 mb-12">
-    <h1 id="title" class="text-4xl font-black"></h1>
+  <!-- NASLOV, KRATKI OPIS I CIJENA -->
+  <div class="space-y-4">
+    <h1 id="title" class="text-4xl lg:text-6xl font-black"></h1>
     <p id="shortDesc" class="text-xl text-gray-600 leading-relaxed"></p>
     <p id="price" class="text-4xl font-black"></p>
     <button id="chooseBtn"
-      class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
+      class="w-full bg-black text-white font-bold text-xl py-5 rounded-full hover:bg-gray-800 transition shadow-lg">
       Izaberi Laptop
     </button>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-
-    <!-- LIJEVA KOLONA – DESKTOP -->
-    <div class="hidden lg:block space-y-6 sticky top-20 self-start">
-
-      <h1 id="title-desktop" class="text-5xl lg:text-6xl font-black"></h1>
-
-      <p id="shortDesc-desktop"
-         class="text-xl text-gray-600 leading-relaxed"></p>
-
-      <p id="price-desktop"
-         class="text-4xl font-black"></p>
-
-      <div class="space-y-6">
-        <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
-          <img id="mainImage" src="" alt="Laptop"
-               class="w-full h-full object-cover cursor-pointer">
-        </div>
-        <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
-      </div>
-
+  <!-- GALERIJA -->
+  <div class="space-y-6">
+    <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
+      <img id="mainImage" src="" alt="Laptop" class="w-full h-full object-cover cursor-pointer">
     </div>
-
-    <!-- DESNA KOLONA – DESKTOP -->
-    <div class="hidden lg:block space-y-16">
-
-      <!-- Opis + dugme -->
-      <div class="prose prose-lg text-gray-700 leading-relaxed">
-        <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
-        <div id="fullDescription"></div>
-
-        <button id="chooseBtn-desktop"
-          class="w-full bg-black text-white font-bold text-xl py-5 rounded-full hover:bg-gray-800 transition shadow-lg mt-8">
-          Izaberi Laptop
-        </button>
-      </div>
-
-      <!-- Specifikacije -->
-      <div>
-        <h2 class="text-3xl font-bold mb-8">Tehničke specifikacije</h2>
-        <div id="specs" class="space-y-4"></div>
-      </div>
-
-    </div>
+    <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
   </div>
 
-  <!-- OPIS – SAMO MOBILNI -->
-  <div class="mt-12 lg:hidden">
-    <div class="prose prose-lg text-gray-700 leading-relaxed">
-      <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
-      <div id="fullDescription-mobile"></div>
-    </div>
+  <!-- OPIS PROIZVODA -->
+  <div class="prose prose-lg text-gray-700 leading-relaxed">
+    <h2 class="text-3xl font-bold mb-6">Opis proizvoda</h2>
+    <div id="fullDescription"></div>
+  </div>
+
+  <!-- SPECIFIKACIJE -->
+  <div>
+    <h2 class="text-3xl font-bold mb-6">Tehničke specifikacije</h2>
+    <div id="specs" class="space-y-4"></div>
   </div>
 
   <!-- OSTALI LAPTOPI -->
-  <div class="mt-24">
+  <div class="mt-12">
     <div class="relative text-center mb-12">
       <div class="absolute inset-0 flex items-center">
         <div class="w-full border-t border-gray-300"></div>
