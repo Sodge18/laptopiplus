@@ -6,7 +6,7 @@
   <title>Laptopi Plus - Laptop</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -32,17 +32,64 @@
 </head>
 <body class="bg-white text-gray-900 min-h-screen flex flex-col">
 
-<!-- HEADER -->
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200">
-  <div class="container mx-auto px-6 py-6 flex items-center justify-between max-w-7xl">
-    <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:text-black transition text-lg font-medium">
-      <span class="material-icons">arrow_back</span>
-      Nazad na prodavnicu
-    </a>
+<!-- HEADER – isti kao na index.html -->
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo – tačno kao na index.html -->
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-9 h-9 flex items-center justify-center bg-primary text-white rounded-lg">
+          <span class="material-symbols-outlined text-xl">laptop_mac</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight">Laptopi Plus</span>
+      </a>
+
+      <!-- Telefon i email – samo na desktopu (kao na index.html) -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="tel:+381637105383" class="flex items-center gap-2 hover:text-gray-600 transition">
+          <span class="material-symbols-outlined text-lg">phone</span>
+          +381 63 710-5383
+        </a>
+        <a href="mailto:bojicstefan66@gmail.com" class="flex items-center gap-2 hover:text-gray-600 transition">
+          <span class="material-symbols-outlined text-lg">email</span>
+          bojicstefan66@gmail.com
+        </a>
+      </div>
+
+      <!-- Hamburger (za mobilni meni sa kontaktom) -->
+      <button id="menuBtn" class="md:hidden">
+        <span class="material-symbols-outlined text-2xl">menu</span>
+      </button>
+    </div>
   </div>
 </header>
 
-<main class="container mx-auto px-6 py-12 max-w-7xl">
+<!-- Mobilni meni – isti kao na index.html -->
+<div id="mobileMenu" class="fixed inset-0 bg-white z-40 hidden flex-col items-center justify-center gap-12 text-3xl font-bold">
+  <button id="closeMenu" class="absolute top-8 right-8 text-5xl">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <div class="space-y-8 text-center">
+    <a href="tel:+381637105383" class="flex items-center justify-center gap-4 hover:text-primary transition text-2xl">
+      <span class="material-symbols-outlined text-3xl">phone</span>
+      +381 63 710-5383
+    </a>
+    <a href="mailto:bojicstefan66@gmail.com" class="flex items-center justify-center gap-4 hover:text-primary transition text-2xl">
+      <span class="material-symbols-outlined text-3xl">email</span>
+      bojicstefan66@gmail.com
+    </a>
+  </div>
+</div>
+
+<main class="container mx-auto px-6 py-12 max-w-7xl flex-grow">
+  <!-- "Nazad" link sada u sadržaju, ispod headera -->
+  <div class="mb-8">
+    <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-black transition text-lg font-medium">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Nazad na prodavnicu
+    </a>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
     <!-- LIJEVO: GALERIJA -->
     <div class="space-y-6">
@@ -50,24 +97,20 @@
       <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-lg aspect-[4/3] flex items-center justify-center">
         <img id="mainImage" src="" alt="Laptop" class="object-contain max-h-full max-w-full p-8">
       </div>
-
       <!-- Thumbnailovi -->
       <div id="thumbnails" class="grid grid-cols-5 gap-4"></div>
     </div>
-
     <!-- DESNO: SADRŽAJ -->
     <div class="space-y-12">
       <div>
         <h1 id="title" class="text-5xl lg:text-6xl font-black mb-6"></h1>
         <p id="shortDesc" class="text-xl text-gray-600 mb-8 leading-relaxed"></p>
         <p id="price" class="text-5xl font-black mb-12"></p>
-
         <!-- Dugme -->
         <button id="chooseBtn" class="w-full bg-black text-white font-bold text-xl py-6 rounded-full hover:bg-gray-800 transition shadow-lg">
           Izaberi Laptop
         </button>
       </div>
-
       <!-- Specifikacije -->
       <div>
         <h2 class="text-3xl font-bold mb-8">Tehničke specifikacije</h2>
@@ -77,7 +120,7 @@
   </div>
 </main>
 
-<!-- FOOTER – Kontakt lijevo -->
+<!-- FOOTER – isti kao na index.html -->
 <footer class="bg-[#171717] text-gray-400 py-12 border-t border-gray-800 mt-auto">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
@@ -128,15 +171,12 @@ async function loadProduct() {
     const product = products.find(p => p.id === id);
     if (!product) throw new Error("Not found");
 
-    // Naslov stranice
     document.title = `${product.title} - Laptopi Plus`;
 
-    // Popuni sadržaj
     document.getElementById("title").textContent = product.title;
     document.getElementById("shortDesc").textContent = product.shortDesc || product.description || "";
     document.getElementById("price").textContent = product.price ? `${product.price}€` : "Cena na upit";
 
-    // Galerija
     images = product.images && product.images.length ? product.images : [product.image || "https://via.placeholder.com/800?text=Laptop"];
     document.getElementById("mainImage").src = images[0];
 
@@ -147,7 +187,6 @@ async function loadProduct() {
            onclick="changeImage(${i})">
     `).join("");
 
-    // Specifikacije
     const specsDiv = document.getElementById("specs");
     const specKeys = {
       'CPU': 'Procesor',
@@ -166,14 +205,10 @@ async function loadProduct() {
     };
 
     Object.entries(product.specs || {}).forEach(([key, value]) => {
-      // Pretvori u string i trimuj (da uhvati spaceove)
       const valStr = (value || "").toString().trim();
-
-      // Preskoči ako je prazno ili besmisleno
       if (!valStr || valStr === "-" || valStr.toLowerCase() === "n/a" || valStr.toLowerCase() === "nepoznato" || valStr === "null" || valStr === "undefined") {
         return;
       }
-
       const label = specKeys[key] || key;
       const div = document.createElement("div");
       div.className = "flex justify-between py-4 border-b border-gray-200 last:border-0";
@@ -184,7 +219,6 @@ async function loadProduct() {
       specsDiv.appendChild(div);
     });
 
-    // Dugme "Izaberi Laptop"
     document.getElementById("chooseBtn").onclick = () => {
       window.location.href = `index.html?selected=${product.id}#contact`;
     };
@@ -202,6 +236,14 @@ function changeImage(index) {
     t.classList.toggle("active", i === index);
   });
 }
+
+// Mobilni meni funkcionalnost
+document.getElementById('menuBtn')?.addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.remove('hidden');
+});
+document.getElementById('closeMenu')?.addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.add('hidden');
+});
 
 document.addEventListener("DOMContentLoaded", loadProduct);
 </script>
