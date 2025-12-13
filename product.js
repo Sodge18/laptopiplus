@@ -42,13 +42,20 @@ function populateProduct(product) {
     // SPECIFIKACIJE
     const specs = document.getElementById("p-specs");
     specs.innerHTML = "";
-    Object.entries(product.specs || {}).forEach(([label, value]) => {
-        specs.innerHTML += `
-            <div class="flex justify-between bg-white p-3 rounded-lg shadow">
-                <span class="font-medium">${label}</span>
-                <span class="font-semibold">${value || "-"}</span>
-            </div>
-        `;
+    Object.entries(product.specs || {}).forEach(([key, value]) => {
+      // Preskoči ako je vrijednost prazna, null, undefined ili "-"
+      if (!value || value === "" || value === "-" || value === "null" || value === "undefined") {
+        return;
+      }
+
+      const label = specKeys[key] || key;
+      const div = document.createElement("div");
+      div.className = "flex justify-between py-4 border-b border-gray-200 last:border-0";
+      div.innerHTML = `
+        <span class="text-lg text-gray-600">${label}:</span>
+        <span class="text-lg font-semibold">${value}</span>
+      `;
+      specsDiv.appendChild(div);
     });
 
     // GALERIJA
