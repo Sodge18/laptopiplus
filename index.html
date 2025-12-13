@@ -211,6 +211,7 @@ async function loadProducts() {
     allProducts = products;
     renderGrid(products);
     populateLaptopDropdown(products);
+    autoSelectFromUrl();  // <-- OVO JE SADA NA PRAVOM MJESTU
   } catch (e) {
     console.error(e);
     document.getElementById("products-grid").innerHTML = '<div class="col-span-full text-center py-32"><p class="text-red-500 text-xl">Greška pri učitavanju proizvoda.</p></div>';
@@ -248,15 +249,6 @@ function populateLaptopDropdown(products) {
     opt.textContent = p.title;
     select.appendChild(opt);
   });
-}
-
-renderGrid(products);
-    populateLaptopDropdown(products);
-    autoSelectFromUrl();  // <-- DODAJ OVO OVDE
-  } catch (e) {
-    console.error(e);
-    document.getElementById("products-grid").innerHTML = '<div class="col-span-full text-center py-32"><p class="text-red-500 text-xl">Greška pri učitavanju proizvoda.</p></div>';
-  }
 }
 
 function goToProduct(id) {
