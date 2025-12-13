@@ -141,11 +141,6 @@
     </div>
     <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12 border border-gray-200">
       <form id="contact-form" novalidate class="space-y-8">
-        <!-- Hidden polja -->
-        <input type="hidden" name="_subject" value="Novi upit sa sajta Laptopi Plus">
-        <input type="hidden" name="_replyto" value="{{email}}">
-        <input type="hidden" name="_autoresponse" value="Hvala na upitu! Uskoro ćemo Vam se javiti sa ponudom. Laptopi Plus">
-        <input type="hidden" name="_captcha" value="false">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <input id="ime" type="text" name="ime" placeholder="Ime" required class="px-6 py-4 border border-gray-300 rounded-lg focus:border-primary focus:outline-none transition">
           <input id="prezime" type="text" name="prezime" placeholder="Prezime" required class="px-6 py-4 border border-gray-300 rounded-lg focus:border-primary focus:outline-none transition">
@@ -162,6 +157,12 @@
         <p class="text-center text-gray-600 pt-6">
           ili pozovite: <a href="tel:+381637105383" class="font-bold hover:text-primary transition">+381 63 710-5383</a>
         </p>
+
+        <!-- Hidden polja – PREMIJEŠTENA NA KRAJ -->
+        <input type="hidden" name="_subject" value="Novi upit sa sajta Laptopi Plus">
+        <input type="hidden" name="_replyto" value="{{email}}">
+        <input type="hidden" name="_autoresponse" value="Hvala na upitu! Uskoro ćemo Vam se javiti sa ponudom. Laptopi Plus">
+        <input type="hidden" name="_captcha" value="false">
       </form>
     </div>
   </div>
