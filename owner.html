@@ -65,11 +65,16 @@ loginBtn.addEventListener("click", () => {
     loginDiv.classList.add("hidden");
     dashboard.classList.remove("hidden");
     fetchHistory();
-    refreshInterval = setInterval(fetchHistory, 5000); // live refresh svakih 5 sekundi
+    refreshInterval = setInterval(fetchHistory, 5000);
   } else {
     Swal.fire({icon:'error', text:'Pogrešna šifra!'});
   }
 });
+
+function hasChanges(before, after) {
+  if (!before || !after) return true;
+  return Object.keys(after).some(key => JSON.stringify(before[key]) !== JSON.stringify(after[key]));
+}
 
 async function fetchHistory(){
   try {
@@ -77,18 +82,16 @@ async function fetchHistory(){
     const data = await res.json();
     const history = Array.isArray(data) ? data : [];
 
-    // Sortiraj po timestampu (najnovije prvo)
     history.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     historyBody.innerHTML = history.map((entry, idx) => {
-      // Snapshot uvijek sadrži sve podatke proizvoda
       const snapshot = {
         id: entry.snapshot?.id || entry.id || "-",
         title: entry.snapshot?.title || "-",
         price: entry.snapshot?.price || "Cena na upit",
         added: entry.snapshot?.added || "-",
         modified: entry.snapshot?.modified || "-",
-        ...entry.snapshot // ostala polja ako postoje
+        ...entry.snapshot
       };
 
       const action = entry.action;
@@ -97,15 +100,20 @@ async function fetchHistory(){
       // Detalji izmjene
       let changeDetails = "-";
       if(action === "UPDATE" && snapshot._before && snapshot._after){
-        const diffs = [];
-        Object.keys(snapshot._after).forEach(key => {
-          const before = snapshot._before[key] ?? "-";
-          const after = snapshot._after[key] ?? "-";
-          if(JSON.stringify(before) !== JSON.stringify(after)){
-            diffs.push(`${key}: "${before}" → "${after}"`);
-          }
-        });
-        if(diffs.length > 0) changeDetails = diffs.join("; ");
+        if(hasChanges(snapshot._before, snapshot._after)){
+          const diffs = [];
+          Object.keys(snapshot._after).forEach(key => {
+            const before = snapshot._before[key] ?? "-";
+            const after = snapshot._after[key] ?? "-";
+            if(JSON.stringify(before) !== JSON.stringify(after)){
+              diffs.push(`${key}: "${before}" → "${after}"`);
+            }
+          });
+          changeDetails = diffs.join("; ") || "-";
+        } else {
+          // Nema stvarne promjene → akcija se ignoriše
+          return '';
+        }
       }
 
       const jsonId = `json-${idx}`;
@@ -114,7 +122,7 @@ async function fetchHistory(){
           <td>${snapshot.id}</td>
           <td>${snapshot.title}</td>
           <td>${action}</td>
-          <td>${snapshot.price}</td>
+          <td>${action === "UPDATE" && !hasChanges(snapshot._before, snapshot._after) ? "-" : snapshot.price}</td>
           <td>${snapshot.added}</td>
           <td>${snapshot.modified}</td>
           <td>${changeDetails}</td>
