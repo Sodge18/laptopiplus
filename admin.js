@@ -48,7 +48,7 @@ function renderProductDetails(index) {
   <div class="grid grid-cols-3 gap-6">
     <div class="col-span-2 space-y-6">
       <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-4 bg-white dark:bg-slate-900 sticky top-0 z-10">
-        <h2 id="productHeader" class="text-slate-900 dark:text-white text-lg font-bold">
+        <h2 class="text-slate-900 dark:text-white text-lg font-bold">
           Detalji proizvoda: ${p.title||''}
         </h2>
       </header>
@@ -57,15 +57,15 @@ function renderProductDetails(index) {
         <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Product Details</h3>
         <div class="space-y-4">
           <div>
-            <label for="title" class="text-sm font-medium text-slate-700 dark:text-slate-300">Naziv proizvoda</label>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Naziv proizvoda</label>
             <input id="title" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.title||''}"/>
           </div>
           <div>
-            <label for="shortDesc" class="text-sm font-medium text-slate-700 dark:text-slate-300">Kratak opis</label>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Kratak opis</label>
             <input id="shortDesc" type="text" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white" value="${p.shortDesc||''}"/>
           </div>
           <div>
-            <label for="description" class="text-sm font-medium text-slate-700 dark:text-slate-300">Detaljan opis</label>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Detaljan opis</label>
             <textarea id="description" rows="5" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white">${p.description||''}</textarea>
           </div>
         </div>
@@ -206,7 +206,7 @@ function renderProductDetails(index) {
     products[currentIndex].tag = btn.dataset.tag;
   });
 
-  // --- SAVE &  ---
+  // --- SAVE & DELETE ---
   document.getElementById('saveBtn').addEventListener('click', ()=>saveProduct(currentIndex));
   document.getElementById('deleteBtn').addEventListener('click', ()=>deleteProduct(currentIndex));
 }
@@ -220,7 +220,7 @@ function showSpinner() {
   `;
 }
 
-// --- SAVE OPTIMIZED ---
+// --- SAVE PRODUCT ---
 async function saveProduct(index){
   const p = products[index];
   const title = document.getElementById('title').value.trim();
@@ -256,7 +256,7 @@ async function saveProduct(index){
   }
 }
 
-// --- DELETE PROIZVODA ---
+// --- DELETE PRODUCT ---
 async function deleteProduct(index){
   if(index === null || !products[index]) return;
   const p = products[index];
@@ -271,7 +271,6 @@ async function deleteProduct(index){
   }).then(async result => {
     if(!result.isConfirmed) return;
 
-    // pokaži spinner u contentu dok briše
     showSpinner();
 
     try {
@@ -282,10 +281,8 @@ async function deleteProduct(index){
 
       if(!res.ok) throw new Error(`Server returned ${res.status}`);
 
-      // nakon uspešnog brisanja ukloni iz niza
       products.splice(index, 1);
 
-      // resetuj currentIndex
       if(products.length === 0){
         currentIndex = null;
         content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
@@ -327,64 +324,32 @@ addBtn.addEventListener('click', ()=>{
 // --- INIT ---
 fetchProductsOptimized();
 
-/**
- * Fetch sa timeout + retry + lokalni cache + instant UI rendering
- */
 async function fetchProductsOptimized() {
   showSpinner();
 
-  // 1) Probaj localStorage instant
-  const cached = localStorage.getItem("products-cache");
-  if (cached) {
-    try {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length) {
-        products = parsed;
-        renderSidebar();
-        currentIndex = 0;
-        renderProductDetails(0);
-      }
-    } catch {}
-  }
+  // clear old cache to avoid inconsistent formats
+  localStorage.removeItem("products-cache");
 
-  // 2) Fetch sa timeout + retry
-  const controller = new AbortController();
-
-  const timeout = setTimeout(() => {
-    controller.abort();
-  }, 5000);
-
+  // fetch API
   let data;
-
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const res = await fetch(API_URL, { signal: controller.signal });
-      clearTimeout(timeout);
-      data = await res.json();
-      break;
-    } catch (err) {
-      console.warn("Fetch attempt failed:", attempt, err);
-      await new Promise(r => setTimeout(r, 500));
-    }
-  }
-
-  if (!data) {
-    if (!products.length) {
-      content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">
-        Server sporo odgovara. Pokušajte ponovo za par sekundi.
-      </div>`;
-    }
+  try {
+    const res = await fetch(API_URL);
+    data = await res.json();
+  } catch(err) {
+    console.error(err);
+    content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">
+      Greška pri učitavanju proizvoda.
+    </div>`;
     return;
   }
 
-  // 3) Upisi u memory i cache
-  products = data.products || data;
-  localStorage.setItem("products-cache", JSON.stringify(products));
+  // ensure array
+  products = Array.isArray(data.products) ? data.products : [];
+  localStorage.setItem("products-cache", JSON.stringify({ products }));
 
-  // 4) Render UI
-  renderSidebar();
-  if (products.length) {
+  if(products.length){
     currentIndex = 0;
+    renderSidebar();
     renderProductDetails(0);
   } else {
     content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">
