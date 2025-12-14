@@ -91,19 +91,24 @@ export default {
 
       if (index > -1) {
         // UPDATE
+        const before = { ...products[index] }; // snapshot prije izmjene
         products[index] = {
           ...products[index],
           ...body,
           id,
           modified: new Date().toISOString()
         };
+        const after = { ...products[index] }; // snapshot poslije izmjene
 
         await logHistory({
           id,
           action: "UPDATE",
           title: products[index].title || "",
           timestamp: new Date().toISOString(),
-          snapshot: products[index]
+          snapshot: {
+            _before: before,
+            _after: after
+          }
         });
       } else {
         // ADD
