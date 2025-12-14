@@ -57,10 +57,14 @@ function renderSidebar() {
   });
 }
 
-// --- RENDER CURRENT PRODUCT ---
+// --- RENDER CURRENT PRODUCT SA NOVIM DIZAJNOM ---
 function renderCurrentProduct() {
   if (currentIndex === null || !products[currentIndex]) {
-    content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Nema proizvoda. Dodajte novi klikom na + Novi proizvod.</div>`;
+    content.innerHTML = `
+      <div class="text-center mt-20 text-gray-500 text-lg">
+        Nema proizvoda. Dodajte novi klikom na <strong>+ Novi proizvod</strong>.
+      </div>
+    `;
     return;
   }
 
@@ -70,70 +74,81 @@ function renderCurrentProduct() {
   specsList.forEach(label => { if (!(label in p.specs)) p.specs[label] = ""; });
 
   content.innerHTML = `
-  <div class="grid grid-cols-3 gap-6">
-    <div class="col-span-2 space-y-6">
-      <div>
-        <label>Naziv proizvoda</label>
-        <input id="title" value="${p.title||''}" class="input-field"/>
-      </div>
-      <div>
-        <label>Kratak opis</label>
-        <input id="shortDesc" value="${p.shortDesc||''}" class="input-field"/>
-      </div>
-      <div>
-        <label>Detaljan opis</label>
-        <textarea id="description" class="input-field">${p.description||''}</textarea>
-      </div>
-      <div>
-        <h3>Specifikacije</h3>
-        <div id="specsContainer">
-          ${specsList.map(label => `
-            <div class="spec-row">
-              <span class="spec-label">${label}</span>
-              <input class="spec-value" data-label="${label}" value="${p.specs[label]}"/>
-            </div>
-          `).join("")}
+    <div class="grid grid-cols-3 gap-6">
+      <div class="col-span-2 space-y-6">
+        <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4 bg-white dark:bg-slate-900 sticky top-0 z-10">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">
+            Detalji proizvoda: ${p.title || ''}
+          </h2>
+        </header>
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Naziv proizvoda</label>
+            <input id="title" value="${p.title||''}" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white"/>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Kratak opis</label>
+            <input id="shortDesc" value="${p.shortDesc||''}" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white"/>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Detaljan opis</label>
+            <textarea id="description" rows="5" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white">${p.description||''}</textarea>
+          </div>
         </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">Specifikacije</h3>
+          <div id="specsContainer" class="space-y-2">
+            ${specsList.map(label => `
+              <div class="flex gap-2 items-center">
+                <span class="spec-label flex-1 font-semibold text-slate-700 dark:text-slate-300">${label}</span>
+                <input type="text" class="spec-value flex-1 rounded-lg border p-1 dark:bg-slate-800 dark:text-white" data-label="${label}" value="${p.specs[label]}"/>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-1 space-y-6">
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">Slike</h3>
+          <div class="mb-2 text-sm text-slate-600 dark:text-slate-400" id="imageCount">Trenutni broj slika: ${p.images.length}</div>
+          <div id="imageCarousel" class="flex gap-2 overflow-x-auto pb-2">
+            ${(p.images||[]).map((src,i)=>`
+              <div class="relative flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                <img src="${src}" class="w-full h-full object-cover"/>
+                <button class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" data-index="${i}" title="Obriši sliku">×</button>
+              </div>
+            `).join('')}
+          </div>
+          <button id="imageUpload" class="w-full py-2 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary text-slate-500 dark:text-slate-400">+ Nova fotografija</button>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">Cena €</h3>
+          <input id="price" value="${p.price==='Cena na upit'?'':p.price}" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:border-primary focus:ring-primary dark:text-white"/>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">Tagovi</h3>
+          <div id="tagContainer" class="flex flex-wrap gap-2">
+            ${TAGS.map(tag => `<button type="button" data-tag="${tag}" class="tag-btn px-3 py-1 rounded-lg ${tag===p.tag?'active':''}">${tag}</button>`).join('')}
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button id="saveBtn" class="bg-indigo-500 text-white px-4 py-2 rounded-lg flex-1">Sačuvaj</button>
+          <button id="deleteBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg flex-1">Obriši</button>
+        </div>
+
+        <span class="save-confirm hidden" id="saveConfirm">Sačuvano!</span>
       </div>
     </div>
-
-    <div class="col-span-1 space-y-4">
-      <div>
-        <h3>Slike (${(p.images||[]).length})</h3>
-        <div id="imageCarousel" class="flex gap-2 overflow-x-auto">
-          ${(p.images||[]).map((src,i)=>`
-            <div class="relative">
-              <img src="${src}" class="w-32 h-32 object-cover"/>
-              <button data-index="${i}" class="delete-image-btn">×</button>
-            </div>
-          `).join("")}
-        </div>
-        <button id="imageUpload">+ Nova slika</button>
-      </div>
-
-      <div>
-        <label>Cena €</label>
-        <input id="price" value="${p.price==='Cena na upit'?'':p.price}" class="input-field"/>
-      </div>
-
-      <div>
-        <h3>Tagovi</h3>
-        <div id="tagContainer">
-          ${TAGS.map(tag => `<button data-tag="${tag}" class="tag-btn${tag===p.tag?' active':''}">${tag}</button>`).join("")}
-        </div>
-      </div>
-
-      <div class="flex gap-2">
-        <button id="saveBtn">Sačuvaj</button>
-        <button id="deleteBtn">Obriši</button>
-      </div>
-    </div>
-  </div>
   `;
 
-  // --- EVENTI ---
   bindEvents();
 }
+
 
 // --- BIND EVENTS ---
 function bindEvents() {
