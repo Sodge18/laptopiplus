@@ -8,10 +8,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 body { font-family:'Inter',sans-serif; background:#f6f7f8; color:#111; }
-.table { width:100%; border-collapse:collapse; }
-.table th, .table td { border:1px solid #ddd; padding:8px; text-align:left; }
+.table { width:100%; border-collapse:collapse; font-size:0.875rem; }
+.table th, .table td { border:1px solid #ddd; padding:8px; text-align:left; vertical-align:top; }
 .table th { background:#197fe6; color:white; }
 .hidden { display:none; }
+.json-cell { font-family: monospace; white-space: pre-wrap; word-break: break-word; max-width:400px; }
 </style>
 </head>
 <body class="p-6">
@@ -22,21 +23,23 @@ body { font-family:'Inter',sans-serif; background:#f6f7f8; color:#111; }
 <div id="loginDiv">
   <label class="block mb-1">Šifra:</label>
   <input type="password" id="ownerPassword" class="border p-2 rounded mb-2" placeholder="Unesite šifru">
-  <button id="loginBtn" class="bg-primary text-white px-4 py-2 rounded">Prijava</button>
+  <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Prijava</button>
 </div>
 
 <!-- Dashboard -->
-<div id="dashboard" class="hidden">
-  <table class="table mb-4">
+<div id="dashboard" class="hidden overflow-x-auto">
+  <table class="table mb-4 min-w-max">
     <thead>
       <tr>
         <th>ID</th>
         <th>Naziv</th>
-        <th>Status</th>
+        <th>Akcija</th>
         <th>Cijena</th>
         <th>Datum dodavanja</th>
         <th>Datum izmjene</th>
-        <th>Napomena</th>
+        <th>Detalji izmjene</th>
+        <th>Vrijeme događaja</th>
+        <th>Snapshot (JSON)</th>
       </tr>
     </thead>
     <tbody id="historyBody">
@@ -61,7 +64,7 @@ loginBtn.addEventListener("click", () => {
     loginDiv.classList.add("hidden");
     dashboard.classList.remove("hidden");
     fetchHistory();
-    refreshInterval = setInterval(fetchHistory, 5000); // osvježavanje svakih 5s
+    refreshInterval = setInterval(fetchHistory, 5000); // live refresh svakih 5 sekundi
   } else {
     Swal.fire({icon:'error', text:'Pogrešna šifra!'});
   }
@@ -83,7 +86,6 @@ async function fetchHistory(){
       
       let changeDetails = "";
       if(action === "UPDATE" && snapshot._before && snapshot._after){
-        // napravi listu šta se promijenilo
         const diffs = [];
         Object.keys(snapshot._after).forEach(key => {
           const before = snapshot._before[key] ?? "-";
@@ -103,8 +105,9 @@ async function fetchHistory(){
           <td>${snapshot.price || "Cena na upit"}</td>
           <td>${snapshot.added || "-"}</td>
           <td>${snapshot.modified || "-"}</td>
-          <td>${changeDetails}</td>
+          <td>${changeDetails || "-"}</td>
           <td>${time}</td>
+          <td class="json-cell"><pre>${JSON.stringify(snapshot, null, 2)}</pre></td>
         </tr>
       `;
     }).join('');
