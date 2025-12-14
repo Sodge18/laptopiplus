@@ -24,61 +24,9 @@
     }
     .ornament { border-top: 2px solid #64b5f6; width: 120px; margin: 1rem auto; }
     .login-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 2px solid #64b5f6; box-shadow: 0 0 30px rgba(100,181,246,0.3); }
-
-    /* Animirane zvijezde - isti kao prije, ali sa više zvijezda */
-    .stars-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: -1;
-    }
-    .stars-layer {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: transparent;
-    }
-    #stars-small { 
-      box-shadow: 
-        100px 200px 1px #fff, 200px 400px 1px #fff, 300px 100px 1px #fff, 400px 600px 1px #fff,
-        500px 800px 1px #fff, 600px 300px 1px #fff, 700px 900px 1px #fff, 800px 500px 1px #fff,
-        900px 700px 1px #fff, 1000px 200px 1px #fff, 1100px 1000px 1px #fff, 1200px 400px 1px #fff,
-        1300px 600px 1px #fff, 1400px 800px 1px #fff, 1500px 300px 1px #fff, 50px 500px 1px #fff,
-        150px 700px 1px #fff, 250px 900px 1px #fff, 350px 100px 1px #fff, 450px 300px 1px #fff,
-        1600px 100px 1px #fff, 1700px 400px 1px #fff, 1800px 700px 1px #fff, 1900px 900px 1px #fff,
-        50px 1100px 1px #fff, 150px 1300px 1px #fff, 250px 1500px 1px #fff, 350px 1700px 1px #fff,
-        450px 100px 1px #fff, 550px 300px 1px #fff, 650px 500px 1px #fff, 750px 700px 1px #fff,
-        850px 900px 1px #fff, 950px 1100px 1px #fff,
-        /* Dodaj još po želji – ovo je već dosta gusto */
-        1050px 1300px 1px #fff, 1150px 1500px 1px #fff, 1250px 1700px 1px #fff, 1350px 100px 1px #fff;
-      animation: twinkle 4s infinite alternate;
-    }
-    #stars-medium { 
-      box-shadow: 
-        200px 500px 2px #fff, 800px 1000px 2px #fff, 1400px 200px 2px #fff, 100px 800px 2px #fff,
-        600px 1200px 2px #fff, 1100px 400px 2px #fff, 1600px 900px 2px #fff, 300px 1400px 2px #fff,
-        900px 600px 2px #fff, 1300px 1100px 2px #fff;
-      animation: twinkle 6s infinite alternate-reverse;
-    }
-    #stars-large { 
-      box-shadow: 
-        400px 300px 3px #fff, 1200px 800px 3px #fff, 900px 1200px 3px #fff, 1500px 500px 3px #fff,
-        700px 1500px 3px #fff;
-      animation: twinkle 8s infinite alternate;
-      filter: drop-shadow(0 0 4px rgba(255,255,255,0.8));
-    }
-    @keyframes twinkle {
-      0% { opacity: 0.4; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1.2); }
-    }
   </style>
 </head>
 <body class="p-4 md:p-8">
-
-  <!-- Zvijezde u pozadini -->
-  <div class="stars-bg">
-    <div class="stars-layer" id="stars-small"></div>
-    <div class="stars-layer" id="stars-medium"></div>
-    <div class="stars-layer" id="stars-large"></div>
-  </div>
 
   <div class="relative z-10">
 
