@@ -13,6 +13,7 @@ body { font-family:'Inter',sans-serif; background:#f6f7f8; color:#111; }
 .table th { background:#197fe6; color:white; }
 .hidden { display:none; }
 .json-cell { font-family: monospace; white-space: pre-wrap; word-break: break-word; max-width:400px; }
+.toggle-btn { cursor:pointer; color:#197fe6; text-decoration:underline; }
 </style>
 </head>
 <body class="p-6">
@@ -79,12 +80,22 @@ async function fetchHistory(){
     // Sortiraj po timestampu (najnovije prvo)
     history.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    historyBody.innerHTML = history.map(entry => {
-      const snapshot = entry.snapshot || {};
+    historyBody.innerHTML = history.map((entry, idx) => {
+      // Snapshot uvijek sadrži sve podatke proizvoda
+      const snapshot = {
+        id: entry.snapshot?.id || entry.id || "-",
+        title: entry.snapshot?.title || "-",
+        price: entry.snapshot?.price || "Cena na upit",
+        added: entry.snapshot?.added || "-",
+        modified: entry.snapshot?.modified || "-",
+        ...entry.snapshot // ostala polja ako postoje
+      };
+
       const action = entry.action;
       const time = new Date(entry.timestamp).toLocaleString("sr-RS", {hour12:false});
-      
-      let changeDetails = "";
+
+      // Detalji izmjene
+      let changeDetails = "-";
       if(action === "UPDATE" && snapshot._before && snapshot._after){
         const diffs = [];
         Object.keys(snapshot._after).forEach(key => {
@@ -94,20 +105,24 @@ async function fetchHistory(){
             diffs.push(`${key}: "${before}" → "${after}"`);
           }
         });
-        changeDetails = diffs.join("; ");
+        if(diffs.length > 0) changeDetails = diffs.join("; ");
       }
 
+      const jsonId = `json-${idx}`;
       return `
         <tr>
-          <td>${snapshot.id || "-"}</td>
-          <td>${snapshot.title || "-"}</td>
+          <td>${snapshot.id}</td>
+          <td>${snapshot.title}</td>
           <td>${action}</td>
-          <td>${snapshot.price || "Cena na upit"}</td>
-          <td>${snapshot.added || "-"}</td>
-          <td>${snapshot.modified || "-"}</td>
-          <td>${changeDetails || "-"}</td>
+          <td>${snapshot.price}</td>
+          <td>${snapshot.added}</td>
+          <td>${snapshot.modified}</td>
+          <td>${changeDetails}</td>
           <td>${time}</td>
-          <td class="json-cell"><pre>${JSON.stringify(snapshot, null, 2)}</pre></td>
+          <td>
+            <span class="toggle-btn" onclick="document.getElementById('${jsonId}').classList.toggle('hidden')">Prikaži/sakrij</span>
+            <pre id="${jsonId}" class="json-cell hidden">${JSON.stringify(snapshot, null, 2)}</pre>
+          </td>
         </tr>
       `;
     }).join('');
