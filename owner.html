@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html calc="sr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,77 +7,91 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Fantasy fontovi (jasno čitljivi, ali sa mističnom notom) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&family=Almendra:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f6f7f8; color: #111; }
+    body { font-family: 'Cinzel', serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; }
+    h1, h2 { font-family: 'Almendra', serif; }
+    .fantasy-heading { font-family: 'Uncial Antiqua', cursive; letter-spacing: 2px; }
     .json-cell { font-family: monospace; white-space: pre-wrap; word-break: break-word; }
-    .toggle-btn { cursor: pointer; color: #197fe6; text-decoration: underline; }
+    .toggle-btn { cursor: pointer; color: #64b5f6; text-decoration: underline; }
     @media (max-width: 768px) {
       .mobile-table { display: block; }
       .mobile-table thead { display: none; }
       .mobile-table tbody, .mobile-table tr, .mobile-table td { display: block; width: 100%; }
-      .mobile-table tr { margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .mobile-table tr { margin-bottom: 1.5rem; padding: 1.5rem; background: rgba(30,30,50,0.8); border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.6); border: 1px solid #333; }
       .mobile-table td { border: none; padding: 0.5rem 0; position: relative; padding-left: 50%; text-align: right; }
-      .mobile-table td:before { content: attr(data-label); position: absolute; left: 0; width: 50%; padding-left: 1rem; font-weight: bold; text-align: left; color: #197fe6; }
+      .mobile-table td:before { content: attr(data-label); position: absolute; left: 0; width: 50%; padding-left: 1rem; font-weight: bold; text-align: left; color: #64b5f6; }
     }
+    .ornament { border-top: 2px solid #64b5f6; width: 120px; margin: 1rem auto; }
+    .login-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 2px solid #64b5f6; box-shadow: 0 0 30px rgba(100,181,246,0.3); }
   </style>
 </head>
 <body class="p-4 md:p-8">
   <div class="max-w-7xl mx-auto">
-    <h1 class="text-3xl font-bold mb-8 text-center md:text-left">Owner Dashboard - Istorija Laptopa</h1>
 
-    <!-- Login -->
-    <div id="loginDiv" class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
-      <label class="block text-lg mb-2">Šifra:</label>
-      <input type="password" id="ownerPassword" class="border border-gray-300 p-3 rounded-lg w-full mb-4" placeholder="Unesite šifru">
-      <button id="loginBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg w-full transition">Prijava</button>
+    <!-- Login - Dark Fantasy tema -->
+    <div id="loginDiv" class="flex items-center justify-center min-h-screen">
+      <div class="login-card p-10 rounded-xl max-w-md w-full text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 fantasy-heading text-[#64b5f6]">Zabranjena Komora</h1>
+        <p class="text-lg mb-6 italic text-gray-300">„Ulazite u zonu vlasnika... gdje se čuvaju tajne drevnih artefakata i njihove sudbine.“</p>
+        <div class="ornament"></div>
+        <p class="text-sm mb-8 text-gray-400">Samo onaj koji poznaje pravu runu može proći.</p>
+
+        <label class="block text-xl mb-3 text-[#64b5f6]">Izgovorite šifru:</label>
+        <input type="password" id="ownerPassword" class="border-2 border-[#64b5f6] bg-[#16213e] p-4 rounded-lg w-full mb-6 text-white placeholder-gray-500 focus:outline-none focus:border-white transition" placeholder="Runska riječ...">
+        <button id="loginBtn" class="bg-[#64b5f6] hover:bg-[#42a5f5] text-black font-bold px-8 py-4 rounded-lg w-full transition transform hover:scale-105 shadow-lg">
+          <i class="fas fa-key mr-2"></i> Otvorite Vrata
+        </button>
+      </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard" class="hidden">
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <h2 class="text-2xl font-semibold">Istorija promjena</h2>
-          <div class="flex flex-wrap gap-3">
-            <select id="actionFilter" class="border border-gray-300 rounded-lg px-4 py-2">
-              <option value="">Sve akcije</option>
-              <option value="CREATE">Dodavanje</option>
-              <option value="UPDATE">Izmjena</option>
-              <option value="DELETE">Brisanje</option>
+      <div class="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-xl shadow-2xl p-8 mb-6 border border-[#333]">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
+          <h2 class="text-3xl md:text-4xl font-bold fantasy-heading text-[#64b5f6]">Hronike Artefakata</h2>
+          <div class="flex flex-wrap gap-4">
+            <select id="actionFilter" class="bg-[#16213e] border border-[#64b5f6] rounded-lg px-5 py-3 text-white focus:outline-none focus:border-white transition">
+              <option value="">Sve sudbine</option>
+              <option value="CREATE">Rođenje artefakta</option>
+              <option value="UPDATE">Preobražaj</option>
+              <option value="DELETE">Uništenje</option>
             </select>
-            <button id="refreshBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
-              <i class="fas fa-sync-alt"></i> Osveži
+            <button id="refreshBtn" class="bg-[#64b5f6] hover:bg-[#42a5f5] text-black px-5 py-3 rounded-lg transition flex items-center gap-2 font-semibold">
+              <i class="fas fa-sync-alt"></i> Osvježi svitak
             </button>
-            <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
-              <i class="fas fa-sign-out-alt"></i> Odjava
+            <button id="logoutBtn" class="bg-red-800 hover:bg-red-900 text-white px-5 py-3 rounded-lg transition flex items-center gap-2 font-semibold">
+              <i class="fas fa-sign-out-alt"></i> Napustite komoru
             </button>
           </div>
         </div>
 
         <!-- Responsive Table -->
         <div class="overflow-x-auto">
-          <table class="min-w-full bg-white border border-gray-200 rounded-lg mobile-table">
-            <thead class="bg-blue-600 text-white">
+          <table class="min-w-full bg-[#1a1a2e] border border-[#333] rounded-lg mobile-table">
+            <thead class="bg-[#16213e] text-[#64b5f6]">
               <tr>
                 <th class="px-6 py-4 text-left">ID</th>
-                <th class="px-6 py-4 text-left">Naziv</th>
-                <th class="px-6 py-4 text-left">Akcija</th>
+                <th class="px-6 py-4 text-left">Naziv Artefakta</th>
+                <th class="px-6 py-4 text-left">Sudbina</th>
                 <th class="px-6 py-4 text-left">Cijena</th>
-                <th class="px-6 py-4 text-left">Dodato</th>
-                <th class="px-6 py-4 text-left">Izmjenjeno</th>
-                <th class="px-6 py-4 text-left">Detalji izmjene</th>
-                <th class="px-6 py-4 text-left">Vrijeme</th>
-                <th class="px-6 py-4 text-left">Snapshot</th>
+                <th class="px-6 py-4 text-left">Rođen</th>
+                <th class="px-6 py-4 text-left">Preobražen</th>
+                <th class="px-6 py-4 text-left">Detalji preobražaja</th>
+                <th class="px-6 py-4 text-left">Vrijeme zapisa</th>
+                <th class="px-6 py-4 text-left">Puni svitak</th>
               </tr>
             </thead>
-            <tbody id="historyBody" class="divide-y divide-gray-200">
-              <!-- Podaci se dinamički ubacuju -->
+            <tbody id="historyBody" class="divide-y divide-[#333]">
+              <!-- Podaci -->
             </tbody>
           </table>
         </div>
 
-        <div id="noData" class="text-center py-10 text-gray-500 hidden">
-          <i class="fas fa-inbox text-6xl mb-4"></i>
-          <p class="text-xl">Nema podataka za prikaz.</p>
+        <div id="noData" class="text-center py-16 text-gray-400 hidden">
+          <i class="fas fa-scroll text-7xl mb-6 opacity-50"></i>
+          <p class="text-2xl italic">Hronike su prazne... još nema zapisa o sudbinama artefakata.</p>
         </div>
       </div>
     </div>
@@ -103,10 +117,17 @@
       if (ownerPassword.value === OWNER_PASS) {
         loginDiv.classList.add("hidden");
         dashboard.classList.remove("hidden");
-        fetchHistory();
-        refreshInterval = setInterval(fetchHistory, 10000); // Osvežavanje svakih 10 sekundi
+        fetchHistory(); // Prvo učitavanje odmah
+        refreshInterval = setInterval(fetchHistory, 15000); // Svakih 15 sekundi
       } else {
-        Swal.fire({ icon: 'error', title: 'Greška', text: 'Pogrešna šifra!' });
+        Swal.fire({
+          icon: 'error',
+          title: 'Runska riječ je pogrešna!',
+          text: 'Vrata ostaju zatvorena...',
+          background: '#1a1a2e',
+          color: '#e0e0e0',
+          confirmButtonColor: '#64b5f6'
+        });
       }
     }
 
@@ -118,6 +139,8 @@
     });
 
     refreshBtn.addEventListener("click", fetchHistory);
+
+    // GLAVNO POBOLJŠANJE: Filter odmah primjenjuje promjene bez refresh dugmeta
     actionFilter.addEventListener("change", fetchHistory);
 
     function hasChanges(before, after) {
@@ -169,33 +192,41 @@
               });
               changeDetails = diffs.join("<br>");
             } else {
-              return ''; // Preskoči ako nema stvarnih promjena
+              return '';
             }
           }
 
           const jsonId = `json-${idx}`;
-          const actionColor = action === "CREATE" ? "text-green-600" : action === "UPDATE" ? "text-blue-600" : "text-red-600";
+          const actionText = action === "CREATE" ? "Rođenje" : action === "UPDATE" ? "Preobražaj" : "Uništenje";
+          const actionColor = action === "CREATE" ? "text-green-400" : action === "UPDATE" ? "text-blue-400" : "text-red-500";
 
           return `
-            <tr class="hover:bg-gray-50 transition">
+            <tr class="hover:bg-[#16213e] transition">
               <td data-label="ID" class="px-6 py-4">${snapshot.id}</td>
               <td data-label="Naziv" class="px-6 py-4 font-medium">${snapshot.title}</td>
-              <td data-label="Akcija" class="px-6 py-4"><span class="${actionColor} font-semibold">${action}</span></td>
+              <td data-label="Sudbina" class="px-6 py-4"><span class="${actionColor} font-bold">${actionText}</span></td>
               <td data-label="Cijena" class="px-6 py-4">${snapshot.price}</td>
-              <td data-label="Dodato" class="px-6 py-4">${snapshot.added}</td>
-              <td data-label="Izmjenjeno" class="px-6 py-4">${snapshot.modified}</td>
+              <td data-label="Rođen" class="px-6 py-4">${snapshot.added}</td>
+              <td data-label="Preobražen" class="px-6 py-4">${snapshot.modified}</td>
               <td data-label="Detalji" class="px-6 py-4 text-sm">${changeDetails}</td>
               <td data-label="Vrijeme" class="px-6 py-4 text-sm">${time}</td>
-              <td data-label="Snapshot" class="px-6 py-4">
-                <span class="toggle-btn" onclick="document.getElementById('${jsonId}').classList.toggle('hidden')">Prikaži/sakrij JSON</span>
-                <pre id="${jsonId}" class="json-cell hidden bg-gray-100 p-4 rounded mt-2 text-xs overflow-x-auto">${JSON.stringify(snapshot, null, 2)}</pre>
+              <td data-label="Svitak" class="px-6 py-4">
+                <span class="toggle-btn" onclick="document.getElementById('${jsonId}').classList.toggle('hidden')">Prikaži/sakrij svitak</span>
+                <pre id="${jsonId}" class="json-cell hidden bg-[#0f0f1a] p-4 rounded mt-2 text-xs overflow-x-auto border border-[#333]">${JSON.stringify(snapshot, null, 2)}</pre>
               </td>
             </tr>
           `;
         }).join('');
       } catch (err) {
         console.error(err);
-        Swal.fire({ icon: 'error', title: 'Greška', text: 'Neuspjelo učitavanje istorije!' });
+        Swal.fire({
+          icon: 'error',
+          title: 'Drevni svitak je oštećen!',
+          text: 'Neuspjelo čitanje hronika.',
+          background: '#1a1a2e',
+          color: '#e0e0e0',
+          confirmButtonColor: '#64b5f6'
+        });
       }
     }
 
