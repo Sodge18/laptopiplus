@@ -27,10 +27,8 @@
   </style>
 </head>
 <body class="p-4 md:p-8">
-
   <div class="relative z-10">
-
-    <!-- Login ekran - centriran, ograničena širina -->
+    <!-- Login ekran -->
     <div id="loginDiv" class="flex items-center justify-center min-h-screen">
       <div class="login-card p-10 rounded-xl max-w-md w-full text-center mx-4">
         <h1 class="text-4xl md:text-5xl font-bold mb-4 fantasy-heading text-[#64b5f6]">Zabranjena Komora</h1>
@@ -45,7 +43,7 @@
       </div>
     </div>
 
-    <!-- Dashboard - puna širina -->
+    <!-- Dashboard -->
     <div id="dashboard" class="hidden">
       <div class="bg-gradient-to-br from-[#1a1a2e]/90 to-[#16213e]/90 rounded-xl shadow-2xl p-6 md:p-8 mb-6 border border-[#333] mx-4 md:mx-8">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
@@ -66,7 +64,6 @@
           </div>
         </div>
 
-        <!-- Tabela na punu širinu -->
         <div class="overflow-x-auto">
           <table class="min-w-full w-full bg-[#1a1a2e]/80 border border-[#333] rounded-lg mobile-table">
             <thead class="bg-[#16213e] text-[#64b5f6]">
@@ -74,7 +71,6 @@
                 <th class="px-6 py-4 text-left">ID</th>
                 <th class="px-6 py-4 text-left">Naziv Artefakta</th>
                 <th class="px-6 py-4 text-left">Sudbina</th>
-                <th class="px-6 py-4 text-left">Cijena</th>
                 <th class="px-6 py-4 text-left">Rođen</th>
                 <th class="px-6 py-4 text-left">Preobražen</th>
                 <th class="px-6 py-4 text-left">Detalji preobražaja</th>
@@ -96,7 +92,6 @@
     </div>
   </div>
 
-  <!-- JavaScript ostaje isti -->
   <script>
     const OWNER_PASS = "siteowner123";
     const loginDiv = document.getElementById("loginDiv");
@@ -142,7 +137,7 @@
     actionFilter.addEventListener("change", fetchHistory);
 
     function hasChanges(before, after) {
-      if (!before || !after) return true;
+      if (!before || !after) return false;
       return Object.keys(after).some(key => JSON.stringify(before[key]) !== JSON.stringify(after[key]));
     }
 
@@ -165,56 +160,73 @@
         noData.classList.add("hidden");
 
         historyBody.innerHTML = filtered.map((entry, idx) => {
-          const snapshot = {
-            id: entry.snapshot?.id || entry.id || "-",
-            title: entry.snapshot?.title || "-",
-            price: entry.snapshot?.price || "Cena na upit",
-            added: entry.snapshot?.added || "-",
-            modified: entry.snapshot?.modified || "-",
-            ...entry.snapshot
-          };
-
           const action = entry.action || "UNKNOWN";
           const time = new Date(entry.timestamp).toLocaleString("sr-RS", { hour12: false });
 
+          // Osnovni podaci iz snapshot-a (after za CREATE/UPDATE, ili direktno za DELETE)
+          const snapshot = entry.snapshot || {};
+          const id = snapshot.id || entry.id || "-";
+          const title = snapshot.title || "-";
+          const added = snapshot.added || "-";
+          const modified = snapshot.modified || "-";
+
+          let actionText, actionColor;
+          if (action === "CREATE") {
+            actionText = "Rođenje";
+            actionColor = "text-green-400";
+          } else if (action === "UPDATE") {
+            actionText = "Preobražaj";
+            actionColor = "text-blue-400";
+          } else if (action === "DELETE") {
+            actionText = "Uništenje";
+            actionColor = "text-red-500";
+          } else {
+            actionText = action;
+            actionColor = "text-gray-400";
+          }
+
           let changeDetails = "-";
-          if (action === "UPDATE" && snapshot._before && snapshot._after) {
-            if (hasChanges(snapshot._before, snapshot._after)) {
-              const diffs = [];
-              Object.keys(snapshot._after).forEach(key => {
-                const before = snapshot._before[key] ?? "-";
-                const after = snapshot._after[key] ?? "-";
-                if (JSON.stringify(before) !== JSON.stringify(after)) {
-                  diffs.push(`${key}: "${before}" → "${after}"`);
-                }
-              });
-              changeDetails = diffs.join("<br>");
-            } else {
-              return '';
-            }
+
+          if (action === "UPDATE" && snapshot._before && snapshot._after && hasChanges(snapshot._before, snapshot._after)) {
+            const diffs = [];
+            // Prvo dodaj naziv laptopa
+            diffs.push(`<strong>Naziv laptopa:</strong> "${snapshot._after.title || title}"`);
+
+            // Zatim ostale promjene
+            Object.keys(snapshot._after).forEach(key => {
+              if (key.startsWith('_')) return; // preskoči _before, _after
+              const before = snapshot._before[key] ?? "-";
+              const after = snapshot._after[key] ?? "-";
+              if (JSON.stringify(before) !== JSON.stringify(after)) {
+                diffs.push(`${key}: "${before}" → "${after}"`);
+              }
+            });
+            changeDetails = diffs.join("<br>");
+          } else if (action === "UPDATE") {
+            // Ako nema promjena, ne prikazuj red
+            return '';
           }
 
           const jsonId = `json-${idx}`;
-          const actionText = action === "CREATE" ? "Rođenje" : action === "UPDATE" ? "Preobražaj" : "Uništenje";
-          const actionColor = action === "CREATE" ? "text-green-400" : action === "UPDATE" ? "text-blue-400" : "text-red-500";
+          const fullSnapshot = { ...snapshot, action, timestamp: entry.timestamp };
 
           return `
             <tr class="hover:bg-[#16213e] transition">
-              <td data-label="ID" class="px-6 py-4">${snapshot.id}</td>
-              <td data-label="Naziv" class="px-6 py-4 font-medium">${snapshot.title}</td>
+              <td data-label="ID" class="px-6 py-4">${id}</td>
+              <td data-label="Naziv" class="px-6 py-4 font-medium">${title}</td>
               <td data-label="Sudbina" class="px-6 py-4"><span class="${actionColor} font-bold">${actionText}</span></td>
-              <td data-label="Cijena" class="px-6 py-4">${snapshot.price}</td>
-              <td data-label="Rođen" class="px-6 py-4">${snapshot.added}</td>
-              <td data-label="Preobražen" class="px-6 py-4">${snapshot.modified}</td>
+              <td data-label="Rođen" class="px-6 py-4">${added}</td>
+              <td data-label="Preobražen" class="px-6 py-4">${modified}</td>
               <td data-label="Detalji" class="px-6 py-4 text-sm">${changeDetails}</td>
               <td data-label="Vrijeme" class="px-6 py-4 text-sm">${time}</td>
               <td data-label="Svitak" class="px-6 py-4">
                 <span class="toggle-btn" onclick="document.getElementById('${jsonId}').classList.toggle('hidden')">Prikaži/sakrij svitak</span>
-                <pre id="${jsonId}" class="json-cell hidden bg-[#0f0f1a] p-4 rounded mt-2 text-xs overflow-x-auto border border-[#333]">${JSON.stringify(snapshot, null, 2)}</pre>
+                <pre id="${jsonId}" class="json-cell hidden bg-[#0f0f1a] p-4 rounded mt-2 text-xs overflow-x-auto border border-[#333]">${JSON.stringify(fullSnapshot, null, 2)}</pre>
               </td>
             </tr>
           `;
         }).join('');
+
       } catch (err) {
         console.error(err);
         Swal.fire({
