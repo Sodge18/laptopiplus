@@ -46,7 +46,7 @@ body { font-family:'Inter',sans-serif; background:#f6f7f8; color:#111; }
 </div>
 
 <script>
-const OWNER_PASS = "siteowner123"; // promijeni na nešto sigurno
+const OWNER_PASS = "siteowner123";
 
 const loginDiv = document.getElementById("loginDiv");
 const dashboard = document.getElementById("dashboard");
@@ -54,11 +54,15 @@ const loginBtn = document.getElementById("loginBtn");
 const ownerPassword = document.getElementById("ownerPassword");
 const historyBody = document.getElementById("historyBody");
 
+let refreshInterval = null;
+
 loginBtn.addEventListener("click", () => {
   if(ownerPassword.value === OWNER_PASS){
     loginDiv.classList.add("hidden");
     dashboard.classList.remove("hidden");
     fetchHistory();
+    // Start auto-refresh
+    refreshInterval = setInterval(fetchHistory, 5000); // svake 5 sekundi
   } else {
     Swal.fire({icon:'error', text:'Pogrešna šifra!'});
   }
@@ -67,30 +71,43 @@ loginBtn.addEventListener("click", () => {
 // --- Fetch istorije ---
 async function fetchHistory(){
   try {
-    const res = await fetch('https://products-api.sergej-kaldesic.workers.dev'); // <--- root
+    const res = await fetch('https://products-api.sergej-kaldesic.workers.dev?history=true');
     const data = await res.json();
-    const products = data.products || [];
+    const history = Array.isArray(data) ? data : [];
 
-    products.sort((a,b) => new Date(b.added || 0) - new Date(a.added || 0));
+    // Sortiraj po vremenu (zadnje izmjene ili dodavanje)
+    history.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    historyBody.innerHTML = products.map(l => `
-      <tr>
-        <td>${l.id}</td>
-        <td>${l.title}</td>
-        <td>${l.status || 'N/A'}</td>
-        <td>${l.price || 'Cena na upit'}</td>
-        <td>${l.added || '-'}</td>
-        <td>${l.modified || '-'}</td>
-        <td>${l.note || ''}</td>
-      </tr>
-    `).join('');
+    historyBody.innerHTML = history.map(entry => {
+      const snapshot = entry.snapshot || {};
+      const status = entry.action === "DELETE" ? "Obrisan" : (snapshot.status || entry.action);
+      const added = snapshot.added || "-";
+      const modified = snapshot.modified || "-";
+      return `
+        <tr>
+          <td>${snapshot.id || "-"}</td>
+          <td>${snapshot.title || "-"}</td>
+          <td>${status}</td>
+          <td>${snapshot.price || "Cena na upit"}</td>
+          <td>${added}</td>
+          <td>${modified}</td>
+          <td>${snapshot.note || ""}</td>
+        </tr>
+      `;
+    }).join('');
 
   } catch(err){
     console.error(err);
     Swal.fire({icon:'error', text:'Greška pri učitavanju istorije!'});
   }
 }
+
+// Opcionalno: kad zatvoriš dashboard, zaustavi refresh
+window.addEventListener("beforeunload", () => {
+  if(refreshInterval) clearInterval(refreshInterval);
+});
 </script>
+
 
 </body>
 </html>
