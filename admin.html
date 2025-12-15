@@ -1,98 +1,91 @@
 <!DOCTYPE html>
 <html class="light" lang="sr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Admin Panel - Laptopi Plus</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: { "primary": "#197fe6", "background-light": "#f6f7f8", "background-dark": "#111921" },
-      fontFamily: { "display": ["Inter", "sans-serif"] },
-      borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-    },
-  },
-}
-</script>
-<style>
-body { font-family:'Inter',sans-serif; }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.material-symbols-outlined.active { font-variation-settings: 'FILL' 1; }
-.save-confirm { display:none; font-weight:bold; margin-left:8px; }
-.product-image-preview { width:100%; border-radius:.75rem; object-fit:cover; }
-.tag-btn { padding:.25rem .75rem; border-radius:.75rem; border:1px solid #cbd5e1; cursor:pointer; transition:.2s; }
-.tag-btn.active { background-color:#197fe6;color:white;border-color:#197fe6; }
-button.product-tab { width:100%; text-align:left; padding:.5rem 1rem; margin-bottom:.5rem; border-radius:.75rem; border:1px solid #e2e8f0; background-color:white; color:#1e293b; transition: background 0.2s; }
-button.product-tab.active { background-color:#197fe6; color:white; border-color:#197fe6; }
-button.product-tab:hover { background-color:#e0f2ff; }
-input, textarea { border-radius:.75rem; border:1px solid #cbd5e1; background-color:#f8fafc; padding:.5rem; width:100%; color:#1e293b; }
-input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197fe6; }
-
-/* SPINNER */
-.loader {
-  border-top-color: #197fe6;
-  border-right-color: #ccc;
-  border-bottom-color: #ccc;
-  border-left-color: #ccc;
-  animation: spin 1s linear infinite;
-  border-width: 8px;
-  border-style: solid;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-.flex-center { display:flex; justify-content:center; align-items:center; height:100%; }
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Laptopi Plus</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#197fe6", "background-light": "#f6f7f8", "background-dark": "#111921" },
+          fontFamily: { "display": ["Inter", "sans-serif"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family:'Inter',sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .material-symbols-outlined.active { font-variation-settings: 'FILL' 1; }
+    .save-confirm { display:none; font-weight:bold; margin-left:8px; }
+    .product-image-preview { width:100%; border-radius:.75rem; object-fit:cover; }
+    .tag-btn { padding:.25rem .75rem; border-radius:.75rem; border:1px solid #cbd5e1; cursor:pointer; transition:.2s; }
+    .tag-btn.active { background-color:#197fe6;color:white;border-color:#197fe6; }
+    button.product-tab { width:100%; text-align:left; padding:.5rem 1rem; margin-bottom:.5rem; border-radius:.75rem; border:1px solid #e2e8f0; background-color:white; color:#1e293b; transition: background 0.2s; }
+    button.product-tab.active { background-color:#197fe6; color:white; border-color:#197fe6; }
+    button.product-tab:hover { background-color:#e0f2ff; }
+    input, textarea { border-radius:.75rem; border:1px solid #cbd5e1; background-color:#f8fafc; padding:.5rem; width:100%; color:#1e293b; }
+    input:focus, textarea:focus { outline:none; border-color:#197fe6; ring:1px #197fe6; }
+    /* SPINNER */
+    .loader {
+      border-top-color: #197fe6;
+      border-right-color: #ccc;
+      border-bottom-color: #ccc;
+      border-left-color: #ccc;
+      animation: spin 1s linear infinite;
+      border-width: 8px;
+      border-style: solid;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .flex-center { display:flex; justify-content:center; align-items:center; height:100%; }
+  </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
-
-<div class="flex h-screen">
-
-  <!-- SIDEBAR -->
-  <aside class="w-80 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
-    <div class="p-4 flex flex-col h-full">
-      <div class="flex items-center gap-3 mb-4 p-2">
-        <div class="bg-primary/20 text-primary p-2 rounded-lg">
-          <span class="material-symbols-outlined">laptop_chromebook</span>
+  <div class="flex h-screen">
+    <!-- SIDEBAR -->
+    <aside class="w-80 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+      <div class="p-4 flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-4 p-2">
+          <div class="bg-primary/20 text-primary p-2 rounded-lg">
+            <span class="material-symbols-outlined">laptop_chromebook</span>
+          </div>
+          <div class="flex flex-col">
+            <h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">Laptopi Plus</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Product Management</p>
+          </div>
         </div>
-        <div class="flex flex-col">
-          <h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">Laptopi Plus</h1>
-          <p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Product Management</p>
+        <div class="px-2 mb-4">
+          <button id="add-product-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="text-sm font-medium">Novi proizvod</span>
+          </button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-2" id="product-sidebar">
+          <!-- Dinamički proizvodi -->
         </div>
       </div>
-
-      <div class="px-2 mb-4">
-        <button id="add-product-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
-          <span class="material-symbols-outlined">add_circle</span>
-          <span class="text-sm font-medium">Novi proizvod</span>
-        </button>
+    </aside>
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+      <div class="p-8 flex-1" id="product-details">
+        <div class="text-center mt-20 text-gray-500 text-lg">
+          Počnite sa dodavanjem novih proizvoda klikom na <strong>Novi proizvod</strong>.
+        </div>
       </div>
+    </main>
+  </div>
 
-      <div class="flex-1 overflow-y-auto px-2" id="product-sidebar">
-        <!-- Dinamički proizvodi -->
-      </div>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 flex flex-col overflow-y-auto">
-    <div class="p-8 flex-1" id="product-details">
-      <div class="text-center mt-20 text-gray-500 text-lg">
-        Počnite sa dodavanjem novih proizvoda klikom na <strong>Novi proizvod</strong>.
-      </div>
-    </div>
-  </main>
-
-</div>
-
-<script src="admin.js"></script>
+  <!-- Učitavanje JavaScript logike iz posebnog fajla -->
+  <script src="admin.js"></script>
 </body>
 </html>
