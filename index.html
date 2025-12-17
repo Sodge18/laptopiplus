@@ -2,12 +2,14 @@
 <html lang="sr" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laptopi Plus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <!-- Tailwind + Fontovi -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <title>Laptopi Plus</title>
+  
   <script>
     tailwind.config = {
       theme: {
@@ -27,8 +29,8 @@
       }
     }
   </script>
+  
   <style>
-    /* Jači hover efekat */
     .product-card {
       transition: all 0.4s ease;
     }
@@ -54,13 +56,15 @@
       box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
     }
   </style>
+  
 </head>
 <body class="bg-white text-primary font-sans antialiased">
 
-<!-- HEADER – Telefon i email umjesto menija -->
+<!-- HEADER -->
 <header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex items-center justify-between h-16">
+      
       <!-- Logo -->
       <a href="#" class="flex items-center gap-3">
         <div class="w-9 h-9 flex items-center justify-center bg-primary text-white rounded-lg">
@@ -68,6 +72,7 @@
         </div>
         <span class="text-xl font-bold tracking-tight">Laptopi Plus</span>
       </a>
+      
       <!-- Telefon i email – samo na desktopu -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="tel:+381637105383" class="flex items-center gap-2 hover:text-gray-600 transition">
@@ -79,15 +84,17 @@
           bojicstefan66@gmail.com
         </a>
       </div>
+      
       <!-- Hamburger -->
       <button id="menuBtn" class="md:hidden">
         <span class="material-symbols-outlined text-2xl">menu</span>
       </button>
+      
     </div>
   </div>
 </header>
 
-<!-- Mobilni meni – sa kontaktom -->
+<!-- MENU (MOBILE) -->
 <div id="mobileMenu" class="fixed inset-x-0 top-16 bottom-0 bg-white z-40 hidden flex flex-col items-center justify-center gap-12 text-3xl font-bold pt-8 overflow-y-auto">
   <button id="closeMenu" class="absolute top-8 right-8 text-5xl">
     <span class="material-symbols-outlined">close</span>
@@ -116,9 +123,10 @@
   </div>
 </section>
 
-<!-- PROIZVODI GRID -->
+<!-- PRODUCTS GRID -->
 <section id="products" class="px-6 pb-24">
   <div class="max-w-7xl mx-auto">
+    
     <!-- Naslov iznad grida -->
     <div class="text-center mb-12">
       <h2 class="text-3xl md:text-4xl font-bold text-primary">
@@ -132,10 +140,11 @@
         <p class="text-gray-500 text-lg">Učitavanje proizvoda...</p>
       </div>
     </div>
+    
   </div>
 </section>
 
-<!-- KONTAKT FORMA – PLAVA POZADINA KAO FOOTER -->
+<!-- CONTACT FORM -->
 <section id="contact" class="py-24 bg-[#171717]">
   <div class="max-w-2xl mx-auto px-6">
     <div class="text-center mb-12">
@@ -166,15 +175,17 @@
         <input type="hidden" name="_replyto" value="{{email}}">
         <input type="hidden" name="_autoresponse" value="Hvala na upitu! Uskoro ćemo Vam se javiti sa ponudom. Laptopi Plus">
         <input type="hidden" name="_captcha" value="false">
+        
       </form>
     </div>
   </div>
 </section>
 
-<!-- FOOTER – Kontakt lijevo -->
+<!-- FOOTER -->
 <footer class="bg-[#171717] text-gray-400 py-12 border-t border-gray-800">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+      
       <!-- Lijevo: Kontakt -->
       <div class="space-y-2">
         <a href="tel:+381637105383" class="flex items-center gap-3 text-white hover:text-gray-300 transition text-lg font-medium">
@@ -186,6 +197,7 @@
           bojicstefan66@gmail.com
         </a>
       </div>
+      
       <!-- Desno: Tekst + potpis -->
       <div class="space-y-4 text-center md:text-right">
         <p class="text-sm">
@@ -198,6 +210,7 @@
           </a>
         </p>
       </div>
+      
     </div>
   </div>
 </footer>
@@ -220,6 +233,7 @@ async function loadProducts() {
     document.getElementById("products-grid").innerHTML = '<div class="col-span-full text-center py-32"><p class="text-red-500 text-xl">Greška pri učitavanju proizvoda.</p></div>';
   }
 }
+
 function renderGrid(products) {
   const grid = document.getElementById("products-grid");
   if (!products.length) {
@@ -243,6 +257,7 @@ function renderGrid(products) {
     </div>`;
   }).join("");
 }
+
 function populateLaptopDropdown(products) {
   const select = document.getElementById("laptop-select");
   select.innerHTML = '<option value="">Izaberite laptop...</option>';
@@ -257,12 +272,15 @@ function populateLaptopDropdown(products) {
 function goToProduct(id) {
   window.location.href = `product.html?selected=${id}#contact`;
 }
+
 document.getElementById('menuBtn')?.addEventListener('click', () => {
   document.getElementById('mobileMenu').classList.remove('hidden');
 });
+
 document.getElementById('closeMenu')?.addEventListener('click', () => {
   document.getElementById('mobileMenu').classList.add('hidden');
 });
+
 const form = document.getElementById("contact-form");
 form.addEventListener("submit", async e => {
   e.preventDefault();
@@ -310,6 +328,7 @@ form.addEventListener("submit", async e => {
     alert("Došlo je do greške prilikom slanja. Pokušajte ponovo ili pozovite direktno.");
   }
 });
+
 function autoSelectFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const selectedId = params.get('selected');
