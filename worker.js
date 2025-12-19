@@ -4,7 +4,7 @@ export default {
   
     const AUTH_TOKEN = env.AUTH_TOKEN;
     const IMGUR_CLIENT_ID = env.IMGUR_CLIENT_ID;
-    const ALLOWED_ORIGIN = env.ALLOWED_ORIGIN || "*"; // Kasnije promijeni na tvoj pages.dev domen
+    const ALLOWED_ORIGIN = env.ALLOWED_ORIGIN || "*";
 
     const corsHeaders = {
       "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
@@ -60,11 +60,9 @@ export default {
       return new Response(raw, { headers: corsHeaders });
     }
 
-    // // AUTH ZA SVE OSTALO
-    // const authError = checkAuth();  
-    // if (authError) return authError;
-
-    // UPLOAD
+    // ======================
+    // ✅ UPLOAD (FIXED)
+    // ======================
     if (request.method === "POST" && url.pathname.endsWith("/upload")) {
       if (!IMGUR_CLIENT_ID) {
         return new Response(JSON.stringify({ error: "Imgur not configured" }), {
@@ -72,28 +70,44 @@ export default {
           headers: corsHeaders
         });
       }
-      const formData = await request.formData();
-      const image = formData.get("image");
-      if (!image) {
-        return new Response(JSON.stringify({ error: "No image" }), {
+
+      const incoming = await request.formData();
+      const image = incoming.get("image");
+
+      if (!image || typeof image === "string") {
+        return new Response(JSON.stringify({ error: "Invalid image" }), {
           status: 400,
           headers: corsHeaders
         });
       }
+
+      // 🔥 KLJUČNA POPRAVKA: rebuild FormData
+      const imgurForm = new FormData();
+      imgurForm.append("image", image, image.name);
+
       const imgurRes = await fetch("https://api.imgur.com/3/image", {
         method: "POST",
-        headers: { "Authorization": `Client-ID ${IMGUR_CLIENT_ID}` },
-        body: formData
+        headers: {
+          "Authorization": `Client-ID ${IMGUR_CLIENT_ID}`
+        },
+        body: imgurForm
       });
+
       const data = await imgurRes.json();
-      if (data.success) {
-        return new Response(JSON.stringify({ link: data.data.link }), { headers: corsHeaders });
-      } else {
-        return new Response(JSON.stringify({ error: "Imgur upload failed", details: data }), {
+
+      if (!data.success || !data.data?.link) {
+        return new Response(JSON.stringify({
+          error: "Imgur upload failed",
+          details: data
+        }), {
           status: 500,
           headers: corsHeaders
         });
       }
+
+      return new Response(JSON.stringify({
+        link: data.data.link
+      }), { headers: corsHeaders });
     }
 
     // POST (add/update/clear)
@@ -104,17 +118,22 @@ export default {
         await logHistory({ action: "CLEAR_ALL", timestamp: new Date().toISOString() });
         return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
       }
+
       let raw = await KV.get(PRODUCTS_KEY) || "[]";
       let products = [];
       try { products = JSON.parse(raw); } catch {}
       if (!Array.isArray(products)) products = [];
+
       const id = body.id || crypto.randomUUID();
       const index = products.findIndex(p => p.id === id);
+
       if (index > -1) {
         const before = { ...products[index] };
         products[index] = { ...products[index], ...body, id, modified: new Date().toISOString() };
         await logHistory({
-          id, action: "UPDATE", title: products[index].title || "",
+          id,
+          action: "UPDATE",
+          title: products[index].title || "",
           timestamp: new Date().toISOString(),
           snapshot: { _before: before, _after: products[index] }
         });
@@ -122,11 +141,14 @@ export default {
         const newProduct = { ...body, id, added: new Date().toISOString(), modified: null };
         products.push(newProduct);
         await logHistory({
-          id, action: "ADD", title: newProduct.title || "",
+          id,
+          action: "ADD",
+          title: newProduct.title || "",
           timestamp: new Date().toISOString(),
           snapshot: newProduct
         });
       }
+
       await KV.put(PRODUCTS_KEY, JSON.stringify(products));
       return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
     }
@@ -140,18 +162,23 @@ export default {
           headers: corsHeaders
         });
       }
+
       let raw = await KV.get(PRODUCTS_KEY) || "[]";
       let products = [];
       try { products = JSON.parse(raw); } catch {}
       if (!Array.isArray(products)) products = [];
+
       const deleted = products.find(p => p.id === id);
       if (deleted) {
         await logHistory({
-          id, action: "DELETE", title: deleted.title || "",
+          id,
+          action: "DELETE",
+          title: deleted.title || "",
           timestamp: new Date().toISOString(),
           snapshot: deleted
         });
       }
+
       products = products.filter(p => p.id !== id);
       await KV.put(PRODUCTS_KEY, JSON.stringify(products));
       return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
