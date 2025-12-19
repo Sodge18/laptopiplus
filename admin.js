@@ -224,7 +224,7 @@ function bindEvents() {
     };
   });
 
-  document.getElementById("imageUpload").onclick = () => {
+ document.getElementById("imageUpload").onclick = () => {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
@@ -240,21 +240,22 @@ function bindEvents() {
     try {
       for (let file of files) {
         const formData = new FormData();
-        formData.append('image', file);  // ImgBB koristi 'image' parametar
+        formData.append('reqtype', 'fileupload');
+        formData.append('fileToUpload', file);
 
         try {
-          const res = await fetch('https://api.imgbb.com/1/upload?expiration=0&name=' + encodeURIComponent(file.name), {
+          const res = await fetch('https://catbox.moe/user/api.php', {
             method: 'POST',
             body: formData
           });
 
-          const data = await res.json();
+          const url = await res.text();  // catbox vraća samo čisti URL kao tekst
 
-          if (data.success && data.data && data.data.url) {
-            p.images.push(data.data.url);  // direct URL!
+          if (url && url.startsWith('https://files.catbox.moe/')) {
+            p.images.push(url.trim());  // direct URL!
             renderCurrentProduct();  // refresh prikaz
           } else {
-            console.error('Greška od ImgBB API-ja:', data);
+            console.error('Loš odgovor od catbox:', url);
             alert(`Greška pri uploadu slike ${file.name}`);
           }
         } catch (err) {
