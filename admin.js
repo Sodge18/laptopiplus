@@ -15,7 +15,7 @@ function escapeHTML(str) {
 const API_URL = "https://products-api.sergej-kaldesic.workers.dev/";
 let products = [];
 let currentIndex = null;
-let authToken = null; // Čuvamo token ovdje
+let authToken = null;
 
 // DOM elementi
 const sidebarDesktop = document.getElementById("sidebar-desktop");
@@ -30,24 +30,25 @@ const bottomMenuBtn = document.getElementById("bottomMenuBtn");
 
 // --- INIT sa AUTH ---
 async function init() {
-  // Prompt za token (možeš ga kasnije čuvati u localStorage)
   authToken = prompt("Unesite admin token (Bearer token):")?.trim();
-
   if (!authToken) {
     alert("Niste unijeli token!");
     return;
   }
 
   await fetchProducts();
-  openSidebarBtn.addEventListener("click", openMobileSidebar);
-  closeSidebarBtn.addEventListener("click", closeMobileSidebar);
-  mobileOverlay.addEventListener("click", closeMobileSidebar);
-  bottomMenuBtn.addEventListener("click", openMobileSidebar);
+  openSidebarBtn?.addEventListener("click", openMobileSidebar);
+  closeSidebarBtn?.addEventListener("click", closeMobileSidebar);
+  mobileOverlay?.addEventListener("click", closeMobileSidebar);
+  bottomMenuBtn?.addEventListener("click", openMobileSidebar);
   document.getElementById("add-product-desktop")?.addEventListener("click", addNewProduct);
   document.getElementById("add-product-mobile")?.addEventListener("click", addNewProduct);
-  document.getElementById("bottomAddBtn").addEventListener("click", addNewProduct);
+  document.getElementById("bottomAddBtn")?.addEventListener("click", addNewProduct);
+  document.getElementById("bottomSaveBtn")?.addEventListener("click", saveProduct);
+  document.getElementById("bottomDeleteBtn")?.addEventListener("click", deleteProduct);
 }
 
+// --- SIDEBAR ---
 function openMobileSidebar() {
   mobileSidebar.classList.add("open");
   mobileOverlay.classList.add("open");
@@ -58,31 +59,24 @@ function closeMobileSidebar() {
   mobileOverlay.classList.remove("open");
 }
 
-// --- FETCH PRODUCTS (sa cachingom) ---
+// --- FETCH PRODUCTS ---
 async function fetchProducts() {
   content.innerHTML = `<div class="flex justify-center items-center h-full"><div class="loader"></div></div>`;
   try {
-    // Javni GET ne treba header (samo za history ili admin operacije treba Bearer)
-    const res = await fetch(API_URL, {
-      headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
+    const res = await fetch(API_URL, { headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {} });
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
     const data = await res.json();
     products = Array.isArray(data.products) ? data.products : [];
-    if (products.length) currentIndex = 0;
+    currentIndex = products.length ? 0 : null;
     renderSidebars();
     renderCurrentProduct();
   } catch (err) {
-    console.error("Greška pri fetch-u:", err);
+    console.error(err);
     content.innerHTML = `<div class="text-center mt-20 text-red-500 text-lg">Greška pri učitavanju proizvoda: ${err.message}</div>`;
   }
 }
 
-// --- RENDER SIDEBARS (optimizovano sa diff-om) ---
+// --- RENDER SIDEBARS ---
 function renderSidebars() {
   const sidebars = [sidebarDesktop, sidebarMobile];
   sidebars.forEach(sidebar => {
@@ -105,25 +99,23 @@ function renderSidebars() {
   });
 }
 
-// --- RENDER CURRENT PRODUCT (podijeljeno na helper-e) ---
+// --- RENDER CURRENT PRODUCT ---
 function renderCurrentProduct() {
   if (currentIndex === null || !products[currentIndex]) {
-    content.innerHTML = `
-      <div class="text-center mt-20 text-gray-500 text-lg">
-        Nema proizvoda.<br><br>
-        Dodajte novi klikom na <strong>Novi proizvod</strong>.
-      </div>
-    `;
+    content.innerHTML = `<div class="text-center mt-20 text-gray-500 text-lg">Nema proizvoda.<br><br>Dodajte novi klikom na <strong>Novi proizvod</strong>.</div>`;
     mobileTitle.textContent = "Laptopi Plus Admin";
     document.getElementById("bottomSaveBtn")?.classList.add("hidden");
     document.getElementById("bottomDeleteBtn")?.classList.add("hidden");
     return;
   }
+
   const p = products[currentIndex];
   mobileTitle.textContent = escapeHTML(p.title || "Novi proizvod");
+
   const specsList = ["CPU","RAM","GPU","Memorija","Ekran","Baterija","OS","Težina","Dimenzije","Portovi","Bežične konekcije","Kamera","Audio"];
   if (!p.specs) p.specs = {};
   specsList.forEach(l => { if (!(l in p.specs)) p.specs[l] = ""; });
+
   const TAGS = ["Novo", "Poslovni", "Gamer", "Premium"];
 
   content.innerHTML = `
@@ -140,17 +132,57 @@ function renderCurrentProduct() {
       <p class="save-confirm text-center text-lg" id="saveConfirm">Sačuvano!</p>
     </div>
   `;
+
+  document.getElementById("saveBtn")?.addEventListener("click", saveProduct);
+  document.getElementById("deleteBtn")?.addEventListener("click", deleteProduct);
   document.getElementById("bottomSaveBtn")?.classList.remove("hidden");
   document.getElementById("bottomDeleteBtn")?.classList.remove("hidden");
+
   bindEvents();
 }
 
-// Ostale funkcije (renderBasicInfo, renderSpecs, renderImages, renderPriceAndTags, bindEvents, saveProduct, deleteProduct, addNewProduct) ostaju iste kao u tvojoj verziji!
+// --- RENDER HELPERS ---
+function renderBasicInfo(p) {
+  return `
+    <div class="space-y-4">
+      <input id="title" placeholder="Naziv proizvoda" value="${escapeHTML(p.title || "")}" />
+      <input id="shortDesc" placeholder="Kratki opis" value="${escapeHTML(p.shortDesc || "")}" />
+      <textarea id="description" placeholder="Detaljan opis">${escapeHTML(p.description || "")}</textarea>
+    </div>
+  `;
+}
 
-// --- BIND EVENTS (ostaje isto, samo sam osigurao da radi) ---
+function renderSpecs(list, specs) {
+  return `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    ${list.map(spec => `<input placeholder="${spec}" value="${escapeHTML(specs[spec] || "")}" id="spec-${spec}" />`).join('')}
+  </div>`;
+}
+
+function renderImages(images) {
+  return `
+    <div class="flex flex-wrap gap-4">
+      ${images.map(img => `<img src="${img}" class="w-32 h-32 object-cover rounded-xl" />`).join('')}
+      <button id="imageUpload" class="w-32 h-32 flex items-center justify-center border-2 border-dashed border-slate-300 rounded-xl text-primary font-bold text-lg">+</button>
+    </div>
+  `;
+}
+
+function renderPriceAndTags(p, tags) {
+  return `
+    <div class="space-y-4">
+      <input id="price" placeholder="Cena" value="${escapeHTML(p.price || "")}" />
+      <div class="flex flex-wrap gap-2">
+        ${tags.map(tag => `<button class="tag-btn ${p.tag === tag ? "active" : ""}" data-tag="${tag}">${tag}</button>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// --- BIND EVENTS ---
 function bindEvents() {
   if (currentIndex === null) return;
   const p = products[currentIndex];
+
   ["title","shortDesc","description","price"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.oninput = debounce(() => {
@@ -164,24 +196,38 @@ function bindEvents() {
       else if (id === "price") p.price = val || "Cena na upit";
     }, 300);
   });
-  // ... (ostali event listeneri isti)
+
+  document.querySelectorAll(".tag-btn").forEach(btn => {
+    btn.onclick = () => {
+      p.tag = btn.dataset.tag;
+      document.querySelectorAll(".tag-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    };
+  });
+
+  // Specs input binding
+  Object.keys(p.specs).forEach(key => {
+    const el = document.getElementById(`spec-${key}`);
+    if (el) el.oninput = debounce(() => { p.specs[key] = el.value.trim(); }, 300);
+  });
+
+  // Image upload
+  const imgBtn = document.getElementById("imageUpload");
+  if (imgBtn) imgBtn.onclick = handleImageUpload;
 }
 
-// SAVE / DELETE / ADD (dodaj Bearer token)
+// --- SAVE / DELETE / ADD ---
 async function saveProduct() {
   if (currentIndex === null) return;
   const p = products[currentIndex];
-  if (!p.title || !p.shortDesc || !p.description || !p.tag || !p.images.length) {
+  if (!p.title || !p.shortDesc || !p.description || !p.tag || !p.images?.length) {
     Swal.fire({icon:"warning", title:"Nedostaju podaci", text:"Popunite sva obavezna polja i dodajte bar jednu sliku."});
     return;
   }
   try {
     const res = await fetch(`${API_URL}?id=${p.id}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`
-      },
+      headers: {"Content-Type":"application/json","Authorization":`Bearer ${authToken}`},
       body: JSON.stringify(p)
     });
     if (!res.ok) throw new Error("Save failed");
@@ -223,8 +269,25 @@ async function deleteProduct() {
   }
 }
 
-// Image upload (dodaj Bearer token)
-document.getElementById("imageUpload").onclick = () => {
+function addNewProduct() {
+  const newProd = {
+    id: crypto.randomUUID(),
+    title: "",
+    shortDesc: "",
+    description: "",
+    price: "",
+    tag: "",
+    specs: {},
+    images: []
+  };
+  products.push(newProd);
+  currentIndex = products.length - 1;
+  renderSidebars();
+  renderCurrentProduct();
+}
+
+// --- IMAGE UPLOAD ---
+async function handleImageUpload() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
@@ -235,6 +298,7 @@ document.getElementById("imageUpload").onclick = () => {
     const uploadBtn = document.getElementById("imageUpload");
     uploadBtn.innerHTML = "Uploadujem...";
     uploadBtn.disabled = true;
+    const p = products[currentIndex];
     try {
       for (let file of files) {
         const formData = new FormData();
@@ -261,7 +325,7 @@ document.getElementById("imageUpload").onclick = () => {
     }
   };
   input.click();
-};
+}
 
-// Pozovi init
+// --- START ---
 init();
