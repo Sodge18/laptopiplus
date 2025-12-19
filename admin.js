@@ -287,6 +287,7 @@ function addNewProduct() {
 }
 
 // --- IMAGE UPLOAD ---
+// --- IMAGE UPLOAD SA BOLJIM ERROR HANDLINGOM I AUTOMATSKIM SAVE-OM ---
 async function handleImageUpload() {
   const input = document.createElement("input");
   input.type = "file";
@@ -308,14 +309,23 @@ async function handleImageUpload() {
         const formData = new FormData();
         formData.append('image', file);
 
-        const res = await fetch(`${API_URL}upload`, {
+        const res = await fetch(`${API_URL}upload`, {  // tačan URL: /upload
           method: 'POST',
-          headers: { "Authorization": `Bearer ${authToken}` },
+          headers: {
+            "Authorization": `Bearer ${authToken}`
+          },
           body: formData
         });
 
+        // OVO JE KLJUČNO – provjeri status prije json()
         if (!res.ok) {
-          Swal.fire({icon: "error", text: `Greška pri uploadu ${file.name} (status: ${res.status})`});
+          const errorText = await res.text().catch(() => "No response body");
+          console.error("Upload greška:", res.status, errorText);
+          Swal.fire({
+            icon: "error",
+            title: "Greška pri uploadu",
+            text: `${file.name} – Status: ${res.status} (${errorText || "Unauthorized ili greška"})`
+          });
           continue;
         }
 
@@ -325,27 +335,29 @@ async function handleImageUpload() {
           p.images.push(data.link);
           successCount++;
         } else {
-          Swal.fire({icon: "error", text: `Imgur greška za ${file.name}`});
+          console.error("Imgur greška:", data);
+          Swal.fire({icon: "error", text: `Imgur nije vratio link za ${file.name}`});
         }
       }
 
-      // Rerenderuj da vidiš nove slike odmah
       renderCurrentProduct();
 
-      // AUTOMATSKI SAČUVAJ ako je bilo uspješnih uploada
       if (successCount > 0) {
-        await saveProduct(); // <--- OVO JE BILO NEDOSTAJALO!
+        await saveProduct();
         Swal.fire({
           icon: "success",
-          title: "Slike dodate!",
-          text: `${successCount} slika uspješno uploadovano i sačuvano.`,
-          timer: 3000
+          title: "Uspješno!",
+          text: `${successCount} slika uploadovano i sačuvano!`
         });
       }
 
     } catch (err) {
-      console.error(err);
-      Swal.fire({icon: "error", title: "Greška", text: "Nešto je pošlo po zlu pri uploadu."});
+      console.error("Unexpected error:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Neočekivana greška",
+        text: "Provjeri konzolu (F12 → Console) za detalje."
+      });
     } finally {
       uploadBtn.innerHTML = "+";
       uploadBtn.disabled = false;
@@ -353,6 +365,5 @@ async function handleImageUpload() {
   };
   input.click();
 }
-
 // --- START ---
 init();
