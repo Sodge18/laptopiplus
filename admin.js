@@ -225,22 +225,50 @@ function bindEvents() {
   });
 
   document.getElementById("imageUpload").onclick = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.multiple = true;
-    input.onchange = e => {
-      [...e.target.files].forEach(file => {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          p.images.push(ev.target.result);
-          renderCurrentProduct();
-        };
-        reader.readAsDataURL(file);
-      });
-    };
-    input.click();
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.multiple = true;
+  input.onchange = async e => {
+    const files = [...e.target.files];
+    if (files.length === 0) return;
+
+    const uploadBtn = document.getElementById("imageUpload");
+    uploadBtn.innerHTML = "Uploadujem...";
+    uploadBtn.disabled = true;
+
+    try {
+      for (let file of files) {
+        const formData = new FormData();
+        formData.append('image', file);  // ImgBB koristi 'image' parametar
+
+        try {
+          const res = await fetch('https://api.imgbb.com/1/upload?expiration=0&name=' + encodeURIComponent(file.name), {
+            method: 'POST',
+            body: formData
+          });
+
+          const data = await res.json();
+
+          if (data.success && data.data && data.data.url) {
+            p.images.push(data.data.url);  // direct URL!
+            renderCurrentProduct();  // refresh prikaz
+          } else {
+            console.error('Greška od ImgBB API-ja:', data);
+            alert(`Greška pri uploadu slike ${file.name}`);
+          }
+        } catch (err) {
+          console.error(err);
+          alert(`Greška pri uploadu slike ${file.name}`);
+        }
+      }
+    } finally {
+      uploadBtn.innerHTML = "+";
+      uploadBtn.disabled = false;
+    }
   };
+  input.click();
+};
 
   document.getElementById("saveBtn").onclick = saveProduct;
   document.getElementById("bottomSaveBtn").onclick = saveProduct;
